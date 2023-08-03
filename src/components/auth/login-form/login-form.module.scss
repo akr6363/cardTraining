@@ -1,54 +1,43 @@
 
-form {
+.form {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
-}
 
-.inputEmail {
-  margin-bottom: 1.125rem;
-}
-
-.inputPassword {
-  margin-bottom: 0.375rem;
-}
-
-.forgotPasswordLink {
-  cursor: pointer;
-
-  display: inline-block;
-  align-self: end;
-
-  margin-bottom: 60px;
-  padding: 6px 12px ;
-
-&:hover {
-  a {
-    text-decoration: underline;
+  .inputEmail {
+    margin-bottom: 1.125rem;
   }
-}
 
+  .inputPassword {
+    margin-bottom: 0.375rem;
+  }
 
-  a {
-    all: unset;
+  .forgotPasswordLink {
+    cursor: pointer;
+
+    display: inline-block;
+    align-self: end;
+
+    margin-bottom: 60px;
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    &:hover {
+      text-decoration: underline;
+    }
 
     &:focus {
       outline: 1px solid var(--color-info-700);
-      outline-offset: 3px;
-
     }
-
   }
 }
 
-a {
-  all: unset;
+.text {
+  color: var(--color-light-900)
 }
 
-.signUpLink {
+.link {
   margin-top: 7px;
-  color:  var(--color-accent-500);
   text-decoration: underline;
-
-
 }

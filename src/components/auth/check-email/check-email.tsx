@@ -15,13 +15,13 @@ export type CheckEmailProps = {
 export const CheckEmail: FC<CheckEmailProps> = ({ email }) => {
   return (
     <Card title={'Check Email'}>
-      <div>
+      <div className={s.img}>
         <img src={checkEmailImg} alt="" />
       </div>
       <Typography variant={'Body_2'} className={s.desc}>
         We’ve sent an Email with instructions to {email}
       </Typography>
-      <Button as={Link} variant={'primary'} className={s.link} to={'/sing-in'}>
+      <Button as={Link} variant={'primary'} className={s.link} to={'/sing-in'} fullWidth={true}>
         Back to Sign In
       </Button>
     </Card>

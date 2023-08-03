@@ -2,6 +2,7 @@ import { FC } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
 import { z } from 'zod'
 
 import { Button } from '../../ui/button'
@@ -39,7 +40,7 @@ export const RecoverPassword: FC<RecoverPasswordProps> = ({ onSend }) => {
 
   return (
     <Card title={'Forgot your password?'}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
         <ControlledTextField
           control={control}
           name={'email'}
@@ -52,8 +53,10 @@ export const RecoverPassword: FC<RecoverPasswordProps> = ({ onSend }) => {
         </Typography>
         <Button type="submit">Send Instructions</Button>
       </form>
-      <Typography variant={'Body_2'}>Did you remember your password?</Typography>
-      <Button as={'a'} variant={'link'} className={s.link} href={'#'}>
+      <Typography variant={'Body_2'} className={s.text}>
+        Did you remember your password?
+      </Typography>
+      <Button as={Link} variant={'link'} className={s.link} to={'/login-in'}>
         Try logging in
       </Button>
     </Card>

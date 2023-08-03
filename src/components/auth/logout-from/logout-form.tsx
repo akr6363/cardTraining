@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { DevTool } from '@hookform/devtools'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
 import { z } from 'zod'
 
 import { Button } from '../../ui/button'
@@ -49,7 +50,7 @@ export const LogoutForm: FC<LogoutFormProps> = ({ onLogout }) => {
 
   return (
     <Card title={'Sign Up'}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
         <DevTool control={control} />
         <ControlledTextField
           control={control}
@@ -76,10 +77,10 @@ export const LogoutForm: FC<LogoutFormProps> = ({ onLogout }) => {
         />
         <Button type="submit">Sign Up</Button>
       </form>
-      <Typography variant={'Body_2'} color={'var(--color-light-900)'}>
+      <Typography variant={'Body_2'} className={s.text}>
         Already have an account?
       </Typography>
-      <Button as={'a'} variant={'link'} className={s.signInLink} href={'#'}>
+      <Button as={Link} variant={'link'} className={s.link} to={'/sign-in'}>
         Sign In
       </Button>
     </Card>
