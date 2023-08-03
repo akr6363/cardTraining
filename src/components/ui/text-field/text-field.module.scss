@@ -1,6 +1,18 @@
 .root {
   display: flex;
   flex-direction: column;
+
+  .label {
+    color: var(--color-dark-100);
+
+    &:disabled {
+      color: var(--color-dark-300);
+    }
+  }
+
+  .error {
+    color: var(--color-danger-300)
+  }
 }
 
 .inputContainer {

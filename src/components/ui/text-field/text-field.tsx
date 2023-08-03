@@ -60,11 +60,8 @@ export const TextField: FC<TextFieldProps> = ({
 
   return (
     <div className={clsx(s.root, className)}>
-      {!search && (
-        <Typography
-          variant={'Body_2'}
-          color={rest.disabled ? 'var(--color-dark-300)' : 'var(--color-dark-100)'}
-        >
+      {label && (
+        <Typography variant={'Body_2'} className={s.label}>
           {label}
         </Typography>
       )}
@@ -91,7 +88,7 @@ export const TextField: FC<TextFieldProps> = ({
         )}
       </div>
       {errorMessage && (
-        <Typography variant={'Caption'} color="var(--color-danger-300)">
+        <Typography variant={'Caption'} className={s.error}>
           {errorMessage}
         </Typography>
       )}

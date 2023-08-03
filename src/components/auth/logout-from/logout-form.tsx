@@ -23,7 +23,7 @@ const logoutSchema = z
     path: ['confirm'],
   })
 
-export type FormValues = z.infer<typeof logoutSchema>
+type FormValues = z.infer<typeof logoutSchema>
 
 export type LogoutFormProps = {
   onLogout: (data: FormValues) => void

@@ -58,7 +58,6 @@ export const Search = {
           value={text}
           onChange={e => setText(e.currentTarget.value)}
           onClearClick={() => setText('')}
-          label={args.label}
           placeholder={args.placeholder}
           disabled={args.disabled}
           errorMessage={args.errorMessage}
@@ -67,7 +66,6 @@ export const Search = {
     )
   },
   args: {
-    label: 'Input',
     placeholder: 'Search...',
     search: true,
     disabled: false,

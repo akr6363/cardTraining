@@ -19,7 +19,7 @@ const loginSchema = z.object({
   rememberMe: z.boolean(),
 })
 
-export type FormValues = z.infer<typeof loginSchema>
+type FormValues = z.infer<typeof loginSchema>
 
 export type LoginFormProps = {
   onLogin: (data: FormValues) => void
