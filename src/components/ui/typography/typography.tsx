@@ -23,7 +23,7 @@ type TypographyProps<T extends ElementType = 'p'> = {
   as?: T
   variant?: Variant
   text?: string
-  color?: string
+  className?: string
 } & ComponentPropsWithoutRef<T>
 
 export const Typography = <T extends ElementType = 'p'>({
@@ -31,17 +31,15 @@ export const Typography = <T extends ElementType = 'p'>({
   children,
   variant = 'h2',
   text = '',
-  color = 'var(--color-light-100)',
   style,
+  className,
   ...restProps
 }: PropsWithChildren<TypographyProps<T>>) => {
   const Component = as || getTag(variant)
-  const className = clsx(s.typography, s[variant.toLowerCase()])
-
-  color = Component === 'a' ? 'var(--color-info-500)' : color
+  const classNames = clsx(s.typography, s[variant.toLowerCase()], className)
 
   return (
-    <Component className={className} style={{ color, ...style }} {...restProps}>
+    <Component className={classNames} {...restProps}>
       {children || text}
     </Component>
   )
