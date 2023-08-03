@@ -8,7 +8,7 @@ import s from './checkbox.module.scss'
 
 export type CheckboxProps = {
   checked?: boolean
-  onChange?: (checked: boolean) => void
+  onValueChange?: (checked: boolean) => void
   disabled?: boolean
   required?: boolean
   label?: string
@@ -17,7 +17,7 @@ export type CheckboxProps = {
 
 export const Checkbox: FC<CheckboxProps> = ({
   checked,
-  onChange,
+  onValueChange,
   disabled,
   required,
   label,
@@ -38,7 +38,7 @@ export const Checkbox: FC<CheckboxProps> = ({
           <CheckboxRadix.Root
             className={classNames.root}
             checked={checked}
-            onCheckedChange={onChange}
+            onCheckedChange={onValueChange}
             disabled={disabled}
             required={required}
             id={id}

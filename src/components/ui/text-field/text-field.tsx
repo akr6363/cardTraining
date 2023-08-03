@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode, KeyboardEvent, FC } from 'react'
+import { ComponentProps, ReactNode, KeyboardEvent, FC, useState } from 'react'
 
 import { clsx } from 'clsx'
 
@@ -6,7 +6,7 @@ import { Typography } from '../typography'
 
 import s from './text-field.module.scss'
 
-import { Close, Search, PasswordEye } from '@/assets/icons/components'
+import { Close, Search, PasswordEye, EyeOff } from '@/assets/icons/components'
 
 export type TextFieldProps = {
   value?: string
@@ -17,6 +17,7 @@ export type TextFieldProps = {
   password?: boolean
   onEnter?: (e: KeyboardEvent<HTMLInputElement>) => void
   onClearClick?: () => void
+  className?: string
 } & ComponentProps<'input'>
 
 export const TextField: FC<TextFieldProps> = ({
@@ -26,14 +27,31 @@ export const TextField: FC<TextFieldProps> = ({
   placeholder,
   password,
   onClearClick,
+  className,
   ...rest
 }) => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+
   let iconStart: ReactNode | null = null
 
   if (search) iconStart = <Search color={'var(--color-dark-100)'} size={20} />
   let iconEnd: ReactNode | null = null
 
-  if (password) iconEnd = <PasswordEye color={'var(--color-light-100)'} size={20} />
+  if (password) {
+    iconEnd = isPasswordVisible ? (
+      <EyeOff
+        color={'var(--color-light-100)'}
+        size={20}
+        onClick={() => setIsPasswordVisible(false)}
+      />
+    ) : (
+      <PasswordEye
+        color={'var(--color-light-100)'}
+        size={20}
+        onClick={() => setIsPasswordVisible(true)}
+      />
+    )
+  }
 
   const isShowClearButton = onClearClick && rest?.value?.length! > 0
   const dataIconStart = iconStart ? 'start' : ''
@@ -41,7 +59,7 @@ export const TextField: FC<TextFieldProps> = ({
   const dataIcon = dataIconStart + dataIconEnd
 
   return (
-    <div className={s.root}>
+    <div className={clsx(s.root, className)}>
       {!search && (
         <Typography
           variant={'Body_2'}
@@ -52,7 +70,7 @@ export const TextField: FC<TextFieldProps> = ({
       )}
       <div className={s.inputContainer}>
         <input
-          type={password ? 'password' : 'text'}
+          type={password && !isPasswordVisible ? 'password' : 'text'}
           className={clsx(s.input, errorMessage && s.error)}
           data-icon={dataIcon}
           placeholder={placeholder}

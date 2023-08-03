@@ -60,7 +60,7 @@ export const Select: FC<ShowOnPageSelectProps> = ({
   )
 }
 
-const SelectItem = forwardRef(
+export const SelectItem = forwardRef(
   (
     { children, className, value, ...props }: SelectItemProps,
     forwardedRef: ForwardedRef<HTMLDivElement>

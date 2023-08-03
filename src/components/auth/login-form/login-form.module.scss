@@ -1,0 +1,54 @@
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.inputEmail {
+  margin-bottom: 1.125rem;
+}
+
+.inputPassword {
+  margin-bottom: 0.375rem;
+}
+
+.forgotPasswordLink {
+  cursor: pointer;
+
+  display: inline-block;
+  align-self: end;
+
+  margin-bottom: 60px;
+  padding: 6px 12px ;
+
+&:hover {
+  a {
+    text-decoration: underline;
+  }
+}
+
+
+  a {
+    all: unset;
+
+    &:focus {
+      outline: 1px solid var(--color-info-700);
+      outline-offset: 3px;
+
+    }
+
+  }
+}
+
+a {
+  all: unset;
+}
+
+.signUpLink {
+  margin-top: 7px;
+  color:  var(--color-accent-500);
+  text-decoration: underline;
+
+
+}

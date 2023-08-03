@@ -1,0 +1,28 @@
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.inputEmail {
+  margin-bottom: 1.125rem;
+}
+
+.inputPassword {
+  margin-bottom: 1.125rem;
+}
+
+.inputConfirmPassword {
+  margin-bottom: 3.375rem;
+}
+
+
+a {
+  all: unset;
+}
+
+.signInLink {
+  margin-top: 7px;
+  text-decoration: underline;
+}

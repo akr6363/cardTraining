@@ -129,13 +129,14 @@
   padding: 6px 12px;
 
   font-size: var(--font-size-s, 1rem);
-  color: var(--primary-500, #8C61FF);
+  color: var(--color-accent-500);
 
   background-color: rgb(255 255 255 / 0%);
 
-  &:active {
-    color: var(--primary-700, #704ECC);
+  &:visited {
+    color:  var(--color-accent-500);
   }
+
 
   &:hover {
     color: var(--primary-300, #A280FF);
@@ -148,7 +149,14 @@
     border-radius: 130px;
   }
 
+  &:active {
+    color: var(--color-accent-500);
+  
+  }
+
   &:disabled {
     color: var(--primary-900, #382766);
   }
+
+
 }
