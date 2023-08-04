@@ -1,0 +1,65 @@
+.card {
+  padding: 2.0625rem 2.5rem;
+}
+
+.photoBlock {
+  position: relative;
+  margin-bottom: 6px;
+
+  .photo {
+    overflow: hidden;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+  }
+
+  .editPhotoBtn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    gap: 0;
+
+    padding: 4px;
+
+  }
+}
+
+.infoBlock {
+    display: flex;
+   flex-direction: column;
+    align-items: center;
+
+
+  .nameBlock {
+    display: flex;
+    align-items: center;
+
+    .editNameBtn {
+      gap: 0;
+      margin-left: 9px;
+      padding: 4px;
+
+      &:hover {
+        span svg{
+          color: var(--color-accent-300);
+        }
+      }
+    }
+  }
+
+  .email {
+    margin-bottom: 13px;
+    color: var(--color-dark-100);
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+
+.inputName {
+  margin-bottom: 2.25rem;
+}
+}
+
