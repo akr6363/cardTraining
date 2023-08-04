@@ -15,8 +15,11 @@ import { ControlledCheckbox } from '@/components/ui/controlled/controlled-checkb
 import { ControlledTextField } from '@/components/ui/controlled/controlled-text-field/controlled-text-field.tsx'
 
 const loginSchema = z.object({
-  email: z.string().nonempty().email(),
-  password: z.string().nonempty().min(3, 'Password must be more than 3 characters'),
+  email: z.string().nonempty('The field is required').email(),
+  password: z
+    .string()
+    .nonempty('The field is required')
+    .min(3, 'Password must be more than 3 characters'),
   rememberMe: z.boolean(),
 })
 
