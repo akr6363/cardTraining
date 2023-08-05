@@ -6,7 +6,7 @@ import {
   Navigate,
 } from 'react-router-dom'
 
-import { useGetDecksQuery } from '@/services/base-api.ts'
+import { Decks } from '@/pages/decks/decks.tsx'
 
 const publicRoutes: RouteObject[] = [
   {
@@ -18,7 +18,7 @@ const publicRoutes: RouteObject[] = [
 const privateRoutes: RouteObject[] = [
   {
     path: '/',
-    element: <div>hello</div>,
+    element: <Decks />,
   },
 ]
 
@@ -31,11 +31,6 @@ const router = createBrowserRouter([
 ])
 
 export const Router = () => {
-  const { isLoading, data } = useGetDecksQuery()
-
-  if (isLoading) return <div>Loading...</div>
-  console.log(data)
-
   return <RouterProvider router={router} />
 }
 
@@ -44,3 +39,16 @@ function PrivateRoutes() {
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />
 }
+
+// const router = createBrowserRouter([
+//   {
+//     element: <Layout />,
+//     children: [
+//       {
+//         element: <PrivateRoutes />,
+//         children: privateRoutes,
+//       },
+//       ...publicRoutes,
+//     ],
+//   },
+// ])
