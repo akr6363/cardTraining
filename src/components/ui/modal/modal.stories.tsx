@@ -1,3 +1,6 @@
+import { useState } from 'react'
+
+import { action } from '@storybook/addon-actions'
 import type { Meta, StoryObj } from '@storybook/react'
 
 import { Modal, ModalProps } from '@/components/ui'
@@ -13,10 +16,33 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Primary: Story = {
-  render: (args: ModalProps) => (
-    <Modal>
-      <div>dsf</div>
-    </Modal>
-  ),
-  args: {},
+  render: (args: ModalProps) => {
+    const [isOpen, setIsOpen] = useState(args.isOpen)
+    const onCloseHandler = () => {
+      setIsOpen(false)
+      args.onClose
+    }
+
+    return (
+      <>
+        <button onClick={() => setIsOpen(true)}>open</button>
+        <Modal
+          isOpen={isOpen}
+          onClose={onCloseHandler}
+          title={args.title}
+          actionTitle={args.actionTitle}
+          onAction={args.onAction}
+        >
+          <div>dsf</div>
+        </Modal>
+      </>
+    )
+  },
+  args: {
+    title: 'Add New Pack',
+    onAction: action('add pack'),
+    actionTitle: 'Add New Pack',
+    onClose: action('close'),
+    isOpen: false,
+  },
 }
