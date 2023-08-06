@@ -30,13 +30,14 @@ export const Decks = () => {
   const itemsPerPage = useAppSelector(state => state.decksSlice.itemsPerPage)
 
   // const [itemsPerPage, setItemsPerPage] = useState(20)
-  const { isLoading, data, refetch } = useGetDecksQuery({
+  const { isLoading, data } = useGetDecksQuery({
     itemsPerPage,
     orderBy: 'created-desc',
     // authorId: 'af9721b3-1995-4f2a-b48a-f0bc4d39395f',
   })
 
-  const [createDeck, { isLoading: isCreateDeckLoading }] = useCreateDecksMutation()
+  const [createDeck] = useCreateDecksMutation()
+  //const [createDeck, { isLoading: isCreateDeckLoading }] = useCreateDecksMutation()
 
   const handleCreateClicked = () => createDeck({ name: cardName })
 
