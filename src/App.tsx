@@ -1,10 +1,12 @@
-import { Typography, Header } from '@/components/ui'
+import { Provider } from 'react-redux'
+
+import { Router } from '@/router.tsx'
+import { store } from '@/services/store.ts'
 
 export function App() {
   return (
-    <div>
-      <Header />
-      <Typography variant="Link_1" text="link" as="a" href="#" />
-    </div>
+    <Provider store={store}>
+      <Router />
+    </Provider>
   )
 }
