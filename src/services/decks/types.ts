@@ -34,4 +34,5 @@ export type Deck = {
 
 export type CreateDeckArgs = {
   name: string
+  isPrivate?: boolean
 }
