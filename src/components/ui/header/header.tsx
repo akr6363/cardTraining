@@ -40,7 +40,7 @@ export const Header: FC<HeaderProps> = ({ isLogin = false, userName, userPhoto }
             </button>
           </div>
         ) : (
-          <Button />
+          <Button>Sign In</Button>
         )}
       </div>
     </div>

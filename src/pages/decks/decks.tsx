@@ -47,7 +47,7 @@ export const Decks = () => {
     dispatch(decksSlice.actions.setItemsPerPage(itemsPerPage))
 
   return (
-    <div>
+    <div className={'container'}>
       <TextField value={cardName} onChange={e => setCardName(e.currentTarget.value)} />
       <Button onClick={() => handleCreateClicked()}>itemsPerPage:10</Button>
       <Button onClick={() => setItemsPerPage(10)}>itemsPerPage:10</Button>
