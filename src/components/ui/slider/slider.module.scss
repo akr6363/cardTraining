@@ -4,6 +4,11 @@
   gap: 12px;
   align-items: center;
 
+
+  .title {
+    margin-bottom: 0.3125rem;
+  }
+
   .valueInput {
     input {
       display: flex;

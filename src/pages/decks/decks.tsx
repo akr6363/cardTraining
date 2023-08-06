@@ -1,79 +1,104 @@
-import { useState } from 'react'
+import { clsx } from 'clsx'
 
-import { Delete, Edit, Learn } from '@/assets/icons/components'
-import { Button, Cell, EditBlock, Table, TextField } from '@/components/ui'
+import s from './decks.module.scss'
+
+import { Delete } from '@/assets/icons/components'
+import { Button, Pagination, Slider, Typography } from '@/components/ui'
+import { Tabs, TabType } from '@/components/ui/tabs'
+import DecksTable from '@/pages/decks/decks-table/decks-table.tsx'
+import { SearchInput } from '@/pages/decks/search-input.tsx'
+import { useGetDecksQuery } from '@/services/decks/decks-api.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
-import { useCreateDecksMutation, useGetDecksQuery } from '@/services/decks/decks.ts'
 import { useAppDispatch, useAppSelector } from '@/services/store.ts'
 
-const columnsPacks = [
-  { title: 'Name', sortKey: 'name', width: '26%' },
-  { title: 'Cards', sortKey: 'cards', width: '14%' },
-  { title: 'Last Update', sortKey: 'update', width: '20%' },
-  { title: 'Created by', sortKey: 'author', width: '29%' },
-  { title: '', sortKey: 'edit', width: '11%' },
+const tabs: TabType[] = [
+  { title: 'My Cards', value: 'my-cards' },
+  { title: 'All Cards', value: 'all-cards' },
 ]
 
 export const Decks = () => {
-  const [cardName, setCardName] = useState('')
-  //const [skip, setSkip] = useState(true)
-  // const { isLoading, data } = useGetDecksQuery(undefined, {
-  //   skip: skip,
-  // })
-  // const [initializeQuery, { isLoading, data }] = useLazyGetDecksQuery()
-
-  // console.log(data)
-  // const initializeQuery = () => {
-  //   setSkip(false)
-  // }
   const dispatch = useAppDispatch()
+  const minCardsCount = useAppSelector(state => state.decksSlice.minCardsCount)
+  const maxCardsCount = useAppSelector(state => state.decksSlice.maxCardsCount)
+  const authorId = useAppSelector(state => state.decksSlice.authorId)
+  const orderBy = useAppSelector(state => state.decksSlice.orderBy)
+  const name = useAppSelector(state => state.decksSlice.name)
   const itemsPerPage = useAppSelector(state => state.decksSlice.itemsPerPage)
+  const currentPage = useAppSelector(state => state.decksSlice.currentPage)
+  const meId = useAppSelector(state => state.authSlice.id)
 
-  // const [itemsPerPage, setItemsPerPage] = useState(20)
   const { isLoading, data } = useGetDecksQuery({
+    minCardsCount,
+    maxCardsCount,
+    authorId,
+    orderBy,
+    name,
     itemsPerPage,
-    orderBy: 'created-desc',
-    // authorId: 'af9721b3-1995-4f2a-b48a-f0bc4d39395f',
+    currentPage,
   })
 
-  const [createDeck] = useCreateDecksMutation()
-  //const [createDeck, { isLoading: isCreateDeckLoading }] = useCreateDecksMutation()
+  const onPacksCardsChange = (value: string) => {
+    if (value === 'my-cards') {
+      dispatch(decksSlice.actions.setAuthorId(meId))
+    }
+    if (value === 'all-cards') {
+      dispatch(decksSlice.actions.setAuthorId(''))
+    }
+  }
+  const onNumberOfCardsChange = (values: [number, number]) => {
+    dispatch(decksSlice.actions.setMinCardsCount(values[0]))
+    dispatch(decksSlice.actions.setMaxCardsCount(values[1]))
+  }
+  const onClearFilers = () => {
+    if (data) {
+      dispatch(decksSlice.actions.clearFilters({ maxCardsCount: data.maxCardsCount }))
+    }
+  }
+  const onAddPack = () => {}
+  const onPageChange = (page: number) => {
+    dispatch(decksSlice.actions.setCurrentPage(page))
+  }
+  const onItemsPerPageChange = (itemsPerPage: string) => {
+    dispatch(decksSlice.actions.setItemsPerPage(Number(itemsPerPage)))
+  }
 
-  const handleCreateClicked = () => createDeck({ name: cardName })
-
-  if (isLoading) return <div>Loading...</div>
-
-  const setItemsPerPage = (itemsPerPage: number) =>
-    dispatch(decksSlice.actions.setItemsPerPage(itemsPerPage))
-
-  return (
-    <div className={'container'}>
-      <TextField value={cardName} onChange={e => setCardName(e.currentTarget.value)} />
-      <Button onClick={() => handleCreateClicked()}>itemsPerPage:10</Button>
-      <Button onClick={() => setItemsPerPage(10)}>itemsPerPage:10</Button>
-      <Button onClick={() => setItemsPerPage(20)}>itemsPerPage:20</Button>
-      <Button onClick={() => setItemsPerPage(30)}>itemsPerPage:30</Button>
-      {/*isLoading: {isLoading.toString()}*/}
-      {/*<Button onClick={() => initializeQuery()}> decks</Button>*/}
-      <Table columns={columnsPacks}>
-        {data?.items.map(el => {
-          return (
-            <tr key={el.id}>
-              <Cell>{el.name}</Cell>
-              <Cell>{el.cardsCount}</Cell>
-              <Cell>{new Date(el.updated).toLocaleString('en-GB')}</Cell>
-              <Cell>{el.author.name}</Cell>
-              <Cell>
-                <EditBlock>
-                  <Learn size={16} />
-                  <Edit size={16} />
-                  <Delete size={16} />
-                </EditBlock>
-              </Cell>
-            </tr>
-          )
-        })}
-      </Table>
+  return isLoading || !data ? (
+    <div>Loading...</div>
+  ) : (
+    <div className={clsx('container', s.container)}>
+      <div className={s.header}>
+        <Typography variant={'Large'}>Packs list</Typography>
+        <Button onClick={onAddPack}>Add New Pack</Button>
+      </div>
+      <div className={s.containerFilter}>
+        <SearchInput searchValue={name} />
+        <Tabs
+          tabs={tabs}
+          value={authorId ? 'my-cards' : 'all-cards'}
+          title={'Show packs cards'}
+          onValueChange={onPacksCardsChange}
+          defaultValue={'all-cards'}
+        />
+        <Slider
+          defaultValue={[minCardsCount, data.maxCardsCount]}
+          value={[minCardsCount, maxCardsCount]}
+          onChange={onNumberOfCardsChange}
+          max={data.maxCardsCount}
+          title={'Number of cards'}
+        />
+        <Button variant={'secondary'} icon={<Delete size={16} />} onClick={onClearFilers}>
+          Clear Filter
+        </Button>
+      </div>
+      <DecksTable data={data} />
+      <Pagination
+        page={data.pagination.currentPage}
+        selectOptions={['10', '20', '30']}
+        selectCurrent={itemsPerPage.toString()}
+        onSelectChange={onItemsPerPageChange}
+        count={data.pagination.totalPages}
+        onChange={onPageChange}
+      />
     </div>
   )
 }

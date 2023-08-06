@@ -16,7 +16,7 @@ export type Author = {
   id: string
   name: string
 }
-export interface Deck {
+export type Deck = {
   id: string
   userId: string
   name: string
