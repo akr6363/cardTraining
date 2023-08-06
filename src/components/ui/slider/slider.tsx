@@ -6,8 +6,6 @@ import { clsx } from 'clsx'
 import s from './slider.module.scss'
 
 import { TextField, Typography } from '@/components/ui'
-import { decksSlice } from '@/services/decks/decks.slice.ts'
-import { useAppDispatch } from '@/services/store.ts'
 
 export type SliderProps = {
   defaultValue: [number, number]
@@ -31,11 +29,6 @@ export const Slider: FC<SliderProps> = ({
     setValues(newValues)
     onChange(newValues)
   }
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    dispatch(decksSlice.actions.setMaxCardsCount(max))
-  }, [])
 
   useEffect(() => {
     setValues(value)
