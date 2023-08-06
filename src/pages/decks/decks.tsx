@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { clsx } from 'clsx'
 
 import s from './decks.module.scss'
@@ -36,6 +38,12 @@ export const Decks = () => {
     itemsPerPage,
     currentPage,
   })
+
+  useEffect(() => {
+    if (data) {
+      dispatch(decksSlice.actions.setMaxCardsCount(data.maxCardsCount))
+    }
+  }, [data?.maxCardsCount])
 
   const onPacksCardsChange = (value: string) => {
     if (value === 'my-cards') {
