@@ -6,6 +6,7 @@ import {
   Navigate,
 } from 'react-router-dom'
 
+import { Header } from '@/components/ui'
 import { Decks } from '@/pages/decks/decks.tsx'
 
 const publicRoutes: RouteObject[] = [
@@ -21,13 +22,26 @@ const privateRoutes: RouteObject[] = [
     element: <Decks />,
   },
 ]
+const Layout = () => {
+  return (
+    <>
+      <Header />
+      <Outlet />
+    </>
+  )
+}
 
 const router = createBrowserRouter([
   {
-    element: <PrivateRoutes />,
-    children: privateRoutes,
+    element: <Layout />,
+    children: [
+      {
+        element: <PrivateRoutes />,
+        children: privateRoutes,
+      },
+      ...publicRoutes,
+    ],
   },
-  ...publicRoutes,
 ])
 
 export const Router = () => {
@@ -39,16 +53,3 @@ function PrivateRoutes() {
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />
 }
-
-// const router = createBrowserRouter([
-//   {
-//     element: <Layout />,
-//     children: [
-//       {
-//         element: <PrivateRoutes />,
-//         children: privateRoutes,
-//       },
-//       ...publicRoutes,
-//     ],
-//   },
-// ])
