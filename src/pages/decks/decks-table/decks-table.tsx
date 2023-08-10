@@ -25,6 +25,7 @@ const DecksTable: FC<Props> = ({ data }) => {
   // const [showModal, setShowModal] = useState(true)
   const editedUserId = useAppSelector(state => state.decksSlice.editedUserId)
   const deletedUserId = useAppSelector(state => state.decksSlice.deletedUserId)
+  const meId = useAppSelector(state => state.authSlice.id)
   const dispatch = useAppDispatch()
   const onClickEdit = (id: string) => {
     dispatch(decksSlice.actions.setEditedUserId(id))
@@ -48,12 +49,16 @@ const DecksTable: FC<Props> = ({ data }) => {
               <Cell>
                 <EditBlock>
                   <Learn size={16} />
-                  <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>
-                    <Edit size={16} />
-                  </Button>
-                  <Button variant={'icon'} onClick={() => onClickDelete(el.id)}>
-                    <Delete size={16} />
-                  </Button>
+                  {meId === el.author.id && (
+                    <>
+                      <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>
+                        <Edit size={16} />
+                      </Button>
+                      <Button variant={'icon'} onClick={() => onClickDelete(el.id)}>
+                        <Delete size={16} />
+                      </Button>
+                    </>
+                  )}
                 </EditBlock>
               </Cell>
             </tr>
