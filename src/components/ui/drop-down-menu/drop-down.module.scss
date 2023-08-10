@@ -64,6 +64,10 @@
       margin-left: 0.5rem;
     }
 
+    .itemText {
+      color: var(--color-light-100);
+    }
+
     &:hover,
     &:focus {
       background-color: var(--color-dark-500);
