@@ -6,7 +6,7 @@ import { Typography } from '@/components/ui'
 
 export type ButtonProps<T extends ElementType = 'button'> = {
   as?: T
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'link'
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'link' | 'icon'
   fullWidth?: boolean
   className?: string
   children?: ReactNode
