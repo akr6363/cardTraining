@@ -41,7 +41,7 @@ export const DropDownItem: FC<DropDownItemProps> = ({ icon, children }) => {
           {children}
         </Typography>
       </DropdownMenu.Item>
-      <DropdownMenu.Separator className={s.DropdownMenuSeparator} />
+      <span className={s.sep}></span>
     </>
   )
 }

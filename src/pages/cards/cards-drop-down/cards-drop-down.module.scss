@@ -17,3 +17,17 @@
     transition: color 0.2s ease-in-out;
   }
 }
+
+.btn {
+  all: unset;
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.link {
+  position: relative;
+  width: 100%;
+  text-decoration: none;
+}
+
