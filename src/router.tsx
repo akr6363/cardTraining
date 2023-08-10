@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import {
   createBrowserRouter,
   RouteObject,
@@ -8,6 +10,9 @@ import {
 
 import { Header } from '@/components/ui'
 import { Decks } from '@/pages/decks/decks.tsx'
+import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
+import { authSlice } from '@/services/auth/auth-slice.ts'
+import { useAppDispatch } from '@/services/store.ts'
 
 const publicRoutes: RouteObject[] = [
   {
@@ -45,6 +50,15 @@ const router = createBrowserRouter([
 ])
 
 export const Router = () => {
+  const dispatch = useAppDispatch()
+  const { data } = useAuthMeQuery({})
+
+  useEffect(() => {
+    if (data) {
+      dispatch(authSlice.actions.setAuthData(data))
+    }
+  }, [data])
+
   return <RouterProvider router={router} />
 }
 

@@ -1,0 +1,25 @@
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2.0625rem;
+  padding-bottom: 2.0625rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.table {
+  margin-bottom: 30px;
+}
+
+.containerFilter {
+  display: flex;
+  gap: 10px;
+  align-items: end;
+  justify-content: space-between;
+
+  margin-bottom: 2.25rem;
+}

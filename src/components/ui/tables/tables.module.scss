@@ -24,6 +24,8 @@
   display: flex;
   gap: 0.625rem;
   align-items: center;
+  justify-content: center;
+
   word-wrap: break-word;
 
   .imgContainer {
@@ -51,23 +53,5 @@
 .editBlock {
   display: flex;
   gap: 0.625rem;
-
-  .button {
-    all: unset;
-
-    cursor: pointer;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    svg {
-      transition: color 0.2s ease-in-out;
-    }
-
-    &:hover svg {
-      color: var(--color-accent-500);
-      transition: color 0.2s ease-in-out;
-    }
-  }
+  justify-content: center;
 }
