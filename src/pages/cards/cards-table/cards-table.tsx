@@ -7,11 +7,12 @@ import { CardRes } from '@/services/cards/types.ts'
 
 type Props = {
   data: CardRes
+  isMy?: boolean
 }
-export const CardsTable: FC<Props> = ({ data }) => {
+export const CardsTable: FC<Props> = ({ data, isMy }) => {
   return (
     <>
-      <Table columns={columns} className={s.table}>
+      <Table columns={isMy ? columnsMyDeck : columns} className={s.table}>
         {data.items.map(el => {
           return (
             <tr key={el.id}>
@@ -21,12 +22,14 @@ export const CardsTable: FC<Props> = ({ data }) => {
               <Cell>
                 <Rating value={el.grade} />
               </Cell>
-              <Cell>
-                <EditBlock>
-                  <Edit size={16} />
-                  <Delete size={16} />
-                </EditBlock>
-              </Cell>
+              {isMy && (
+                <Cell>
+                  <EditBlock>
+                    <Edit size={16} />
+                    <Delete size={16} />
+                  </EditBlock>
+                </Cell>
+              )}
             </tr>
           )
         })}
@@ -35,10 +38,16 @@ export const CardsTable: FC<Props> = ({ data }) => {
   )
 }
 
-const columns = [
+const columnsMyDeck = [
   { title: 'Question', sortKey: 'question', width: '30%' },
   { title: 'Answer', sortKey: 'answer', width: '30%' },
   { title: 'Last Update', sortKey: 'update', width: '13%' },
   { title: 'Grade', sortKey: 'grade', width: '17%' },
   { title: '', sortKey: 'edit', width: '10%' },
+]
+const columns = [
+  { title: 'Question', sortKey: 'question', width: '30%' },
+  { title: 'Answer', sortKey: 'answer', width: '30%' },
+  { title: 'Last Update', sortKey: 'update', width: '20%' },
+  { title: 'Grade', sortKey: 'grade', width: '20%' },
 ]

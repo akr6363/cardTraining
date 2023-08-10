@@ -1,0 +1,43 @@
+.container {
+  padding-top: 1.5rem;
+  padding-bottom: 2.0625rem;
+}
+
+.title {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.deckImg {
+  overflow: hidden;
+  width: 170px;
+  height: 107px;
+  margin-bottom: 25px;
+
+  img {
+    display: block;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.search {
+  margin-bottom: 24px;
+}
+
+.table {
+  margin-bottom: 24px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btnBack {
+  margin-bottom: 33px;
+  padding: 2px 0;
+}
