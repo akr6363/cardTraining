@@ -14,18 +14,9 @@ export type ModalProps = {
   onClose?: () => void
   isOpen: boolean
   title: string
-  actionTitle: string
-  onAction: () => void
 }
 
-export const Modal: FC<PropsWithChildren<ModalProps>> = ({
-  isOpen,
-  onClose,
-  title,
-  children,
-  actionTitle,
-  onAction,
-}) => {
+export const Modal: FC<PropsWithChildren<ModalProps>> = ({ isOpen, onClose, title, children }) => {
   function handleModalClosed() {
     onClose?.()
   }
@@ -43,13 +34,10 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
               </button>
             </Dialog.Close>
           </div>
-          <div className={s.body}>{children}</div>
-          <div className={s.footer}>
-            <Dialog.Close asChild>
+          <div className={s.body}>
+            {children}
+            <Dialog.Close asChild className={s.cancel}>
               <Button variant={'secondary'}>Cancel</Button>
-            </Dialog.Close>
-            <Dialog.Close asChild>
-              <Button onClick={onAction}>{actionTitle}</Button>
             </Dialog.Close>
           </div>
         </Dialog.Content>

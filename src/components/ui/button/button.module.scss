@@ -133,3 +133,22 @@
     outline: none;
   }
 }
+
+.icon {
+  all: unset;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    transition: color 0.2s ease-in-out;
+  }
+
+  &:hover svg {
+    color: var(--color-accent-500);
+    transition: color 0.2s ease-in-out;
+  }
+}

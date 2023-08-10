@@ -17,15 +17,28 @@ export type TabsProps = {
   children?: ReactNode
   onValueChange?: (value: string) => void
   title?: string
+  value?: string
 }
 
-export const Tabs: FC<TabsProps> = ({ tabs, defaultValue, children, onValueChange, title }) => {
+export const Tabs: FC<TabsProps> = ({
+  tabs,
+  defaultValue,
+  children,
+  onValueChange,
+  title,
+  value,
+}) => {
   return (
-    <>
+    <div>
       <Typography variant={'Body_2'} className={s.title}>
         {title}
       </Typography>
-      <T.Root className={s.root} defaultValue={defaultValue} onValueChange={onValueChange}>
+      <T.Root
+        className={s.root}
+        defaultValue={defaultValue}
+        onValueChange={onValueChange}
+        value={value}
+      >
         <T.List className={s.list}>
           {tabs.map(t => (
             <T.Trigger className={s.trigger} value={t.value} key={t.value} disabled={t.disabled}>
@@ -37,7 +50,7 @@ export const Tabs: FC<TabsProps> = ({ tabs, defaultValue, children, onValueChang
         </T.List>
         {children}
       </T.Root>
-    </>
+    </div>
   )
 }
 

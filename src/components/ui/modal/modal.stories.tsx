@@ -26,13 +26,7 @@ export const Primary: Story = {
     return (
       <>
         <button onClick={() => setIsOpen(true)}>open</button>
-        <Modal
-          isOpen={isOpen}
-          onClose={onCloseHandler}
-          title={args.title}
-          actionTitle={args.actionTitle}
-          onAction={args.onAction}
-        >
+        <Modal isOpen={isOpen} onClose={onCloseHandler} title={args.title}>
           <div>dsf</div>
         </Modal>
       </>
@@ -40,8 +34,6 @@ export const Primary: Story = {
   },
   args: {
     title: 'Add New Pack',
-    onAction: action('add pack'),
-    actionTitle: 'Add New Pack',
     onClose: action('close'),
     isOpen: false,
   },

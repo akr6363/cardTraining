@@ -12,6 +12,7 @@ export type CheckboxProps = {
   disabled?: boolean
   required?: boolean
   label?: string
+  className?: string
   id?: string
 }
 
@@ -22,9 +23,10 @@ export const Checkbox: FC<CheckboxProps> = ({
   required,
   label,
   id,
+  className,
 }) => {
   const classNames = {
-    container: s.container,
+    container: clsx(s.container, className),
     buttonWrapper: clsx(s.buttonWrapper, disabled && s.disabled),
     root: s.root,
     indicator: s.indicator,

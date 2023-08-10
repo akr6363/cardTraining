@@ -16,7 +16,7 @@ export type Author = {
   id: string
   name: string
 }
-export interface Deck {
+export type Deck = {
   id: string
   userId: string
   name: string
@@ -34,4 +34,9 @@ export interface Deck {
 
 export type CreateDeckArgs = {
   name: string
+  isPrivate?: boolean
 }
+export type UpdateDeckArgs = {
+  name: string
+  isPrivate?: boolean
+} & { id: string }
