@@ -75,7 +75,7 @@ export const Cards = () => {
         <div className={s.top}>
           <div className={s.title}>
             <Typography variant={'Large'}>{deck.name}</Typography>
-            {meId === deck.userId && <CardsDropDown />}
+            {meId === deck.userId && <CardsDropDown deckId={id} />}
           </div>
           {meId === deck.userId ? (
             <Button
