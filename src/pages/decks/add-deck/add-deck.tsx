@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -17,21 +17,32 @@ type FormValues = z.infer<typeof logoutSchema>
 
 export type AddNewPackFormProps = {
   onCreate: (name: string, isPrivate?: boolean) => void
+  defaultValue?: FormValues
+  isEdit?: boolean
 }
 
-export const AddNewPackForm: FC<AddNewPackFormProps> = ({ onCreate }) => {
+export const AddNewPackForm: FC<AddNewPackFormProps> = ({
+  onCreate,
+  defaultValue,
+  isEdit = false,
+}) => {
   const {
+    setValue,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(logoutSchema),
     mode: 'onSubmit',
-    defaultValues: {
-      name: '',
-      private: false,
-    },
+    defaultValues: { name: '', private: false },
   })
+
+  useEffect(() => {
+    if (defaultValue) {
+      setValue('name', defaultValue.name)
+      setValue('private', defaultValue.private)
+    }
+  }, [])
 
   const onSubmit = (data: FormValues) => {
     onCreate(data.name, data.private)
@@ -53,7 +64,7 @@ export const AddNewPackForm: FC<AddNewPackFormProps> = ({ onCreate }) => {
         className={s.private}
       />
       <Button type="submit" className={s.addBtn}>
-        Add New Pack
+        {isEdit ? 'Save Changes ' : 'Add New Pack'}
       </Button>
     </form>
   )
