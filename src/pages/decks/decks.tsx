@@ -79,6 +79,13 @@ export const Decks = () => {
     setShowModal(false)
   }
 
+  const onChangeSearch = (value: string) => {
+    dispatch(decksSlice.actions.setName(value))
+  }
+  const onClearSearch = () => {
+    dispatch(decksSlice.actions.setName(''))
+  }
+
   return isLoading || !data ? (
     <div>Loading...</div>
   ) : (
@@ -92,7 +99,11 @@ export const Decks = () => {
           <Button onClick={() => setShowModal(true)}>Add New Pack</Button>
         </div>
         <div className={s.containerFilter}>
-          <SearchInput searchValue={name} />
+          <SearchInput
+            searchValue={name}
+            onClearSearch={onClearSearch}
+            onChangeSearch={onChangeSearch}
+          />
           <Tabs
             tabs={tabs}
             value={authorId ? 'my-cards' : 'all-cards'}
