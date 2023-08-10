@@ -25,15 +25,15 @@ type Props = {
 
 const DecksTable: FC<Props> = ({ data }) => {
   // const [showModal, setShowModal] = useState(true)
-  const editedUserId = useAppSelector(state => state.decksSlice.editedUserId)
-  const deletedUserId = useAppSelector(state => state.decksSlice.deletedUserId)
+  const editedUserId = useAppSelector(state => state.decksSlice.editedDeckId)
+  const deletedUserId = useAppSelector(state => state.decksSlice.deletedDeckId)
   const meId = useAppSelector(state => state.authSlice.id)
   const dispatch = useAppDispatch()
   const onClickEdit = (id: string) => {
-    dispatch(decksSlice.actions.setEditedUserId(id))
+    dispatch(decksSlice.actions.setEditedDeckId(id))
   }
   const onClickDelete = (id: string) => {
-    dispatch(decksSlice.actions.setDeletedUserId(id))
+    dispatch(decksSlice.actions.setDeletedDeckId(id))
   }
 
   return (

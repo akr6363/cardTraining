@@ -35,6 +35,7 @@ export type Deck = {
 export type CreateDeckArgs = {
   name: string
   isPrivate?: boolean
+  cover?: string
 }
 export type UpdateDeckArgs = {
   name: string

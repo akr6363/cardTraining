@@ -1,17 +1,33 @@
 import { FC } from 'react'
 
 import { Delete, Edit } from '@/assets/icons/components'
-import { Cell, EditBlock, Rating, Table } from '@/components/ui'
+import { Button, Cell, Rating, Table } from '@/components/ui'
+import { DeleteCardModal } from '@/pages/cards/cards-table/deleted-card-modal/delete-card-modal.tsx'
+import { EditCardModal } from '@/pages/cards/cards-table/edit-card-modal/edit-card-modal.tsx'
 import s from '@/pages/cards/cards.module.scss'
+import { cardsSlice } from '@/services/cards/cards.slice.ts'
 import { CardRes } from '@/services/cards/types.ts'
+import { useAppDispatch, useAppSelector } from '@/services/store.ts'
 
 type Props = {
   data: CardRes
   isMy?: boolean
 }
 export const CardsTable: FC<Props> = ({ data, isMy }) => {
+  const dispatch = useAppDispatch()
+  const editedCardId = useAppSelector(state => state.cardsSlice.editedCardId)
+  const deletedCardId = useAppSelector(state => state.cardsSlice.deletedCardId)
+  const onClickEdit = (id: string) => {
+    dispatch(cardsSlice.actions.setEditedCardId(id))
+  }
+  const onClickDelete = (id: string) => {
+    dispatch(cardsSlice.actions.setDeletedCardId(id))
+  }
+
   return (
     <>
+      {editedCardId && <EditCardModal cardId={editedCardId}></EditCardModal>}
+      {deletedCardId && <DeleteCardModal cardId={deletedCardId}></DeleteCardModal>}
       <Table columns={isMy ? columnsMyDeck : columns} className={s.table}>
         {data.items.map(el => {
           return (
@@ -24,10 +40,12 @@ export const CardsTable: FC<Props> = ({ data, isMy }) => {
               </Cell>
               {isMy && (
                 <Cell>
-                  <EditBlock>
+                  <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>
                     <Edit size={16} />
+                  </Button>
+                  <Button variant={'icon'} onClick={() => onClickDelete(el.id)}>
                     <Delete size={16} />
-                  </EditBlock>
+                  </Button>
                 </Cell>
               )}
             </tr>

@@ -24,10 +24,15 @@ export type Card = {
   grade: number
 }
 
-// export type CreateDeckArgs = {
-//   name: string
-//   isPrivate?: boolean
-// }
+export type CreateCardArgs = {
+  id: string
+  question: string
+  answer: string
+  questionImg?: string
+  answerImg?: string
+  questionVideo?: string
+  answerVideo?: string
+}
 // export type UpdateDeckArgs = {
 //   name: string
 //   isPrivate?: boolean

@@ -8,9 +8,9 @@ export const Rating: FC<EditBlockProps> = ({ value }) => {
   const starArr = []
 
   for (let i = 0; i < 5; i++) {
-    let star = <Star color={'var(--color-warning-300)'} />
+    let star = <Star color={'var(--color-warning-300)'} key={i} />
 
-    if (value - 1 < i) star = <StarOutline color={'var(--color-warning-300)'} />
+    if (value - 1 < i) star = <StarOutline color={'var(--color-warning-300)'} key={i} />
     starArr.push(star)
   }
 

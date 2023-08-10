@@ -6,6 +6,8 @@ const initialState = {
   orderBy: '',
   itemsPerPage: 10,
   currentPage: 1,
+  editedCardId: '',
+  deletedCardId: '',
 }
 
 export const cardsSlice = createSlice({
@@ -22,6 +24,12 @@ export const cardsSlice = createSlice({
     setQuestion: (state, action: PayloadAction<string>) => {
       state.question = action.payload
       state.currentPage = 1
+    },
+    setEditedCardId: (state, action: PayloadAction<string>) => {
+      state.editedCardId = action.payload
+    },
+    setDeletedCardId: (state, action: PayloadAction<string>) => {
+      state.deletedCardId = action.payload
     },
   },
 })
