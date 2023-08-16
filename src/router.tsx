@@ -2,16 +2,15 @@ import { useEffect } from 'react'
 
 import {
   createBrowserRouter,
-  Navigate,
-  Outlet,
   RouteObject,
   RouterProvider,
+  Outlet,
+  Navigate,
 } from 'react-router-dom'
 
 import { Header } from '@/components/ui'
 import { Cards } from '@/pages/cards/cards.tsx'
 import { Decks } from '@/pages/decks/decks.tsx'
-import SignInPage from '@/pages/sign-in/sign-in.tsx'
 import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
 import { authSlice } from '@/services/auth/auth-slice.ts'
 import { useAppDispatch } from '@/services/store.ts'
@@ -19,7 +18,7 @@ import { useAppDispatch } from '@/services/store.ts'
 const publicRoutes: RouteObject[] = [
   {
     path: '/login',
-    element: <SignInPage />,
+    element: <div>login</div>,
   },
 ]
 
@@ -56,21 +55,20 @@ const router = createBrowserRouter([
 ])
 
 export const Router = () => {
-  return <RouterProvider router={router} />
-}
-
-function PrivateRoutes() {
   const dispatch = useAppDispatch()
-  const { data, isLoading } = useAuthMeQuery({})
+  const { data } = useAuthMeQuery({})
 
   useEffect(() => {
     if (data) {
       dispatch(authSlice.actions.setAuthData(data))
     }
   }, [data])
-  if (isLoading) return <div>Loading...</div>
 
-  const isAuthenticated = !!data
+  return <RouterProvider router={router} />
+}
+
+function PrivateRoutes() {
+  const isAuthenticated = true
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />
 }

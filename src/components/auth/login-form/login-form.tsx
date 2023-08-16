@@ -1,5 +1,6 @@
 import { FC } from 'react'
 
+import { DevTool } from '@hookform/devtools'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
@@ -26,10 +27,9 @@ type FormValues = z.infer<typeof loginSchema>
 
 export type LoginFormProps = {
   onLogin: (data: FormValues) => void
-  isSubmit?: boolean
 }
 
-export const LoginForm: FC<LoginFormProps> = ({ onLogin, isSubmit }) => {
+export const LoginForm: FC<LoginFormProps> = ({ onLogin }) => {
   const {
     handleSubmit,
     control,
@@ -47,6 +47,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onLogin, isSubmit }) => {
   return (
     <Card title={'Sign In'}>
       <form onSubmit={handleSubmit(onLogin)} className={s.form}>
+        <DevTool control={control} />
         <ControlledTextField
           control={control}
           name={'email'}
@@ -66,9 +67,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onLogin, isSubmit }) => {
         <Link to={'/new-password'} className={s.forgotPasswordLink}>
           <Typography variant={'Body_2'}>Forgot Password?</Typography>
         </Link>
-        <Button type="submit" disabled={isSubmit}>
-          Sign In
-        </Button>
+        <Button type="submit">Sign In</Button>
       </form>
       <Typography variant={'Body_2'} className={s.text}>
         Don&lsquo;t have an account?
