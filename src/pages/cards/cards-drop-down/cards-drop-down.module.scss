@@ -1,0 +1,33 @@
+
+.triggerBtn {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+
+  &:focus {
+    outline: 0.0625rem solid var(--color-info-700);
+  }
+
+  svg {
+    transition: color 0.2s ease-in-out;
+  }
+
+  &:hover svg {
+    color: var(--color-accent-500);
+    transition: color 0.2s ease-in-out;
+  }
+}
+
+.btn {
+  all: unset;
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.link {
+  position: relative;
+  width: 100%;
+  text-decoration: none;
+}
+

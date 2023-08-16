@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom'
 
 import { Header } from '@/components/ui'
+import { Cards } from '@/pages/cards/cards.tsx'
 import { Decks } from '@/pages/decks/decks.tsx'
 import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
 import { authSlice } from '@/services/auth/auth-slice.ts'
@@ -25,6 +26,10 @@ const privateRoutes: RouteObject[] = [
   {
     path: '/',
     element: <Decks />,
+  },
+  {
+    path: '/:id',
+    element: <Cards />,
   },
 ]
 const Layout = () => {

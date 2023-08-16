@@ -27,7 +27,7 @@ const decksApi = baseApi.injectEndpoints({
             method: 'GET',
           }
         },
-        // providesTags: ['Decks'],
+        providesTags: ['Deck'],
       }),
       createDecks: builder.mutation<Deck, CreateDeckArgs>({
         query: ({ name }) => {
@@ -47,7 +47,7 @@ const decksApi = baseApi.injectEndpoints({
             body: { name, isPrivate },
           }
         },
-        invalidatesTags: ['DecksUpdate'],
+        invalidatesTags: ['DecksUpdate', 'Deck'],
       }),
       deleteDecks: builder.mutation<Omit<Deck, 'author'>, { id: string }>({
         query: ({ id }) => {

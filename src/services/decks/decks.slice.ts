@@ -8,8 +8,8 @@ const initialState = {
   name: '',
   itemsPerPage: 10,
   currentPage: 1,
-  editedUserId: '',
-  deletedUserId: '',
+  editedDeckId: '',
+  deletedDeckId: '',
 }
 
 export const decksSlice = createSlice({
@@ -51,11 +51,11 @@ export const decksSlice = createSlice({
       state.itemsPerPage = 10
       state.currentPage = 1
     },
-    setEditedUserId: (state, action: PayloadAction<string>) => {
-      state.editedUserId = action.payload
+    setEditedDeckId: (state, action: PayloadAction<string>) => {
+      state.editedDeckId = action.payload
     },
-    setDeletedUserId: (state, action: PayloadAction<string>) => {
-      state.deletedUserId = action.payload
+    setDeletedDeckId: (state, action: PayloadAction<string>) => {
+      state.deletedDeckId = action.payload
     },
   },
 })

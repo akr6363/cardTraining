@@ -1,5 +1,7 @@
 import { FC } from 'react'
 
+import { NavLink } from 'react-router-dom'
+
 import { Delete, Edit, Learn } from '@/assets/icons/components'
 import { Button, Cell, EditBlock, Table } from '@/components/ui'
 import { DeleteModal } from '@/pages/decks/decks-table/delete-modal/delete-modal.tsx'
@@ -23,15 +25,15 @@ type Props = {
 
 const DecksTable: FC<Props> = ({ data }) => {
   // const [showModal, setShowModal] = useState(true)
-  const editedUserId = useAppSelector(state => state.decksSlice.editedUserId)
-  const deletedUserId = useAppSelector(state => state.decksSlice.deletedUserId)
+  const editedUserId = useAppSelector(state => state.decksSlice.editedDeckId)
+  const deletedUserId = useAppSelector(state => state.decksSlice.deletedDeckId)
   const meId = useAppSelector(state => state.authSlice.id)
   const dispatch = useAppDispatch()
   const onClickEdit = (id: string) => {
-    dispatch(decksSlice.actions.setEditedUserId(id))
+    dispatch(decksSlice.actions.setEditedDeckId(id))
   }
   const onClickDelete = (id: string) => {
-    dispatch(decksSlice.actions.setDeletedUserId(id))
+    dispatch(decksSlice.actions.setDeletedDeckId(id))
   }
 
   return (
@@ -42,9 +44,13 @@ const DecksTable: FC<Props> = ({ data }) => {
         {data.items.map(el => {
           return (
             <tr key={el.id}>
-              <Cell>{el.name}</Cell>
+              <Cell className={s.nameCell} img={el.cover}>
+                <Button as={NavLink} to={`/${el.id}`} variant={'link'}>
+                  {el.name}
+                </Button>
+              </Cell>
               <Cell>{el.cardsCount}</Cell>
-              <Cell>{new Date(el.updated).toLocaleString('en-GB')}</Cell>
+              <Cell>{new Date(el.updated).toLocaleDateString('en-GB')}</Cell>
               <Cell>{el.author.name}</Cell>
               <Cell>
                 <EditBlock>
