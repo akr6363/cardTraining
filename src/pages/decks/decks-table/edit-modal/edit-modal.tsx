@@ -14,7 +14,7 @@ export const EditModal: FC<ModalProps> = ({ deckId }) => {
   const [updateDeck] = useUpdateDecksMutation()
 
   const onModalClose = () => {
-    dispatch(decksSlice.actions.setEditedDeckId(''))
+    dispatch(decksSlice.actions.setEditedUserId(''))
   }
   const onEditDeck = (name: string, isPrivate?: boolean) => {
     updateDeck({ name, isPrivate, id: deckId })

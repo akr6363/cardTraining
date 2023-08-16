@@ -1,7 +1,5 @@
 import { FC } from 'react'
 
-import { useNavigate, useParams } from 'react-router-dom'
-
 import s from './delete-modal.module.scss'
 
 import { Button, Modal, Typography } from '@/components/ui'
@@ -17,12 +15,8 @@ export const DeleteModal: FC<ModalProps> = ({ deckId }) => {
   const { isLoading, data } = useGetDecksByIdQuery({
     id: deckId,
   })
-  const params = useParams()
-  const navigate = useNavigate()
-
   const onModalClose = () => {
-    if (params.id) navigate('/')
-    dispatch(decksSlice.actions.setDeletedDeckId(''))
+    dispatch(decksSlice.actions.setDeletedUserId(''))
   }
   const onDeleteDeck = () => {
     deleteDeck({ id: deckId })
