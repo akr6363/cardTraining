@@ -22,7 +22,7 @@ export type Deck = {
   name: string
   isPrivate: boolean
   shots: number
-  cover?: any
+  cover?: string
   rating: number
   isDeleted?: any
   isBlocked?: any
@@ -35,6 +35,7 @@ export type Deck = {
 export type CreateDeckArgs = {
   name: string
   isPrivate?: boolean
+  cover?: string
 }
 export type UpdateDeckArgs = {
   name: string

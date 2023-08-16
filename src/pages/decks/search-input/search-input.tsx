@@ -1,22 +1,19 @@
 import { FC, useEffect, useState } from 'react'
 
 import { TextField } from '@/components/ui'
-import { decksSlice } from '@/services/decks/decks.slice.ts'
-import { useAppDispatch } from '@/services/store.ts'
 
 type Props = {
   searchValue: string
+  onChangeSearch: (value: string) => void
+  onClearSearch: () => void
 }
-export const SearchInput: FC<Props> = ({ searchValue }) => {
-  const dispatch = useAppDispatch()
+export const SearchInput: FC<Props> = ({ searchValue, onClearSearch, onChangeSearch }) => {
   const [value, setValue] = useState('')
   const [timerId, setTimerId] = useState<number | null>(null)
-  const onChangeSearch = (value: string) => {
-    dispatch(decksSlice.actions.setName(value))
-  }
-  const onClearSearch = () => {
+
+  const onClearSearchHandler = () => {
+    onClearSearch()
     setValue('')
-    dispatch(decksSlice.actions.setName(''))
   }
 
   useEffect(() => {
@@ -40,7 +37,7 @@ export const SearchInput: FC<Props> = ({ searchValue }) => {
       value={value}
       placeholder={'Input search'}
       onChange={e => setValue(e.currentTarget.value)}
-      onClearClick={onClearSearch}
+      onClearClick={onClearSearchHandler}
     />
   )
 }

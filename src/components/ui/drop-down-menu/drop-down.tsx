@@ -37,9 +37,11 @@ export const DropDownItem: FC<DropDownItemProps> = ({ icon, children }) => {
     <>
       <DropdownMenu.Item className={s.DropdownMenuItem}>
         <div className={s.icon}>{icon}</div>
-        <Typography variant={'Caption'}>{children}</Typography>
+        <Typography variant={'Caption'} className={s.itemText}>
+          {children}
+        </Typography>
       </DropdownMenu.Item>
-      <DropdownMenu.Separator className={s.DropdownMenuSeparator} />
+      <span className={s.sep}></span>
     </>
   )
 }

@@ -24,8 +24,6 @@
   display: flex;
   gap: 0.625rem;
   align-items: center;
-  justify-content: center;
-
   word-wrap: break-word;
 
   .imgContainer {
@@ -53,5 +51,5 @@
 .editBlock {
   display: flex;
   gap: 0.625rem;
-  justify-content: center;
+  margin: 0 auto;
 }
