@@ -13,7 +13,7 @@ const DOTS = '...'
 
 export const usePagination = ({ siblings = 1, count, page, onChange }: ParamType) => {
   const paginationRange = useMemo(() => {
-    // кол-во отображаемых элементов пагинации: sibling*2 + firstPage + lastPage + page + 2*dots
+    // кол-во отображаемых элементов пагинации: sibling*2 + firstPage + lastPage + page.tsx + 2*dots
     const totalPageNumbers = siblings * 2 + 5
 
     // 1: если totalPageNumbers больше общего числа страниц возвращаем массив от 1 до totalPageCount

@@ -12,7 +12,7 @@ const cardsApi = baseApi.injectEndpoints({
             params: args,
           }
         },
-        providesTags: ['CreateCard', 'EditCard', 'DeleteCard'],
+        providesTags: ['Cards'],
       }),
       getCardById: builder.query<Card, { id: string }>({
         query: ({ id }) => {
@@ -30,7 +30,7 @@ const cardsApi = baseApi.injectEndpoints({
             body: { answer, question },
           }
         },
-        invalidatesTags: ['CreateCard'],
+        invalidatesTags: ['Cards'],
       }),
       editCard: builder.mutation<Card, CreateCardArgs>({
         query: ({ id, answer, question }) => {
@@ -40,7 +40,7 @@ const cardsApi = baseApi.injectEndpoints({
             body: { answer, question },
           }
         },
-        invalidatesTags: ['EditCard'],
+        invalidatesTags: ['Cards'],
       }),
       deleteCard: builder.mutation<any, { cardId: string }>({
         query: ({ cardId }) => {
@@ -49,7 +49,7 @@ const cardsApi = baseApi.injectEndpoints({
             method: 'DELETE',
           }
         },
-        invalidatesTags: ['DeleteCard'],
+        invalidatesTags: ['Cards'],
       }),
     }
   },

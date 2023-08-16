@@ -16,7 +16,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    
+    "sourceMap": true,
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

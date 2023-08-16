@@ -24,7 +24,9 @@ const authApi = baseApi.injectEndpoints({
             body: args,
           }
         },
+        invalidatesTags: ['Me'],
       }),
+
       logout: builder.mutation<unknown, void>({
         query: () => {
           return {
@@ -45,7 +47,6 @@ const authApi = baseApi.injectEndpoints({
             patchResult.undo()
           }
         },
-        invalidatesTags: ['Me'],
       }),
     }
   },

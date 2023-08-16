@@ -28,13 +28,14 @@ export const Decks = () => {
   const name = useAppSelector(state => state.decksSlice.name)
   const itemsPerPage = useAppSelector(state => state.decksSlice.itemsPerPage)
   const currentPage = useAppSelector(state => state.decksSlice.currentPage)
+  const orderBy = useAppSelector(state => state.decksSlice.orderBy)
   const meId = useAppSelector(state => state.authSlice.id)
 
   const { isLoading, data } = useGetDecksQuery({
     minCardsCount,
     maxCardsCount,
     authorId,
-    orderBy: 'created-desc',
+    orderBy,
     name,
     itemsPerPage,
     currentPage,

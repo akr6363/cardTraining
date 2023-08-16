@@ -4,7 +4,7 @@ const initialState = {
   minCardsCount: 0,
   maxCardsCount: 0,
   authorId: '',
-  orderBy: '',
+  orderBy: 'created-desc',
   name: '',
   itemsPerPage: 10,
   currentPage: 1,
