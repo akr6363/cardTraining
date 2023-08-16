@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { useState } from 'react'
 
 import { clsx } from 'clsx'
 import { NavLink, useParams } from 'react-router-dom'
@@ -50,13 +50,10 @@ export const Cards = () => {
   const [addCard] = useAddCardMutation()
   const onAddCard = (question: string, answer: string) => {
     addCard({ id, answer, question })
+
+    // addCard({ name: packName, isPrivate: isPrivate })
     setShowModal(false)
   }
-
-  const onClickAdd = () => {
-    setShowModal(true)
-  }
-  const isMy = meId === deck?.userId
 
   return isLoading || !data || !deck || isLoadingDeck ? (
     <div>Loading...</div>
@@ -78,57 +75,44 @@ export const Cards = () => {
         <div className={s.top}>
           <div className={s.title}>
             <Typography variant={'Large'}>{deck.name}</Typography>
-            {isMy && <CardsDropDown deckId={id} />}
+            {meId === deck.userId && <CardsDropDown deckId={id} />}
           </div>
-          {data.items.length > 0 &&
-            (isMy ? (
-              <AddCardButton onClick={onClickAdd} />
-            ) : (
-              <Button as={NavLink} to={'#'}>
-                Learn to Pack
-              </Button>
-            ))}
+          {meId === deck.userId ? (
+            <Button
+              onClick={() => {
+                setShowModal(true)
+              }}
+            >
+              Add New Card
+            </Button>
+          ) : (
+            <Button as={NavLink} to={'#'}>
+              Learn to Pack
+            </Button>
+          )}
         </div>
         {deck.cover && (
           <div className={s.deckImg}>
             <img src={deck.cover} alt="" />
           </div>
         )}
-        {data.items.length > 0 ? (
-          <>
-            <div className={s.search}>
-              <SearchInput
-                searchValue={question}
-                onChangeSearch={onChangeSearch}
-                onClearSearch={onClearSearch}
-              />
-            </div>
-            <CardsTable data={data} isMy={meId === deck.userId} />
-            <Pagination
-              page={data.pagination.currentPage}
-              selectOptions={['10', '20', '30']}
-              selectCurrent={itemsPerPage.toString()}
-              onSelectChange={onItemsPerPageChange}
-              count={data.pagination.totalPages}
-              onChange={onPageChange}
-            />
-          </>
-        ) : (
-          <div className={s.empty}>
-            <Typography variant={'Body_1'} className={s.emptyText}>
-              This pack is empty.
-              {isMy && 'Click add new card to fill this pack'}
-            </Typography>
-            {isMy && <AddCardButton onClick={onClickAdd} />}
-          </div>
-        )}
+        <div className={s.search}>
+          <SearchInput
+            searchValue={question}
+            onChangeSearch={onChangeSearch}
+            onClearSearch={onClearSearch}
+          />
+        </div>
+        <CardsTable data={data} isMy={meId === deck.userId} />
+        <Pagination
+          page={data.pagination.currentPage}
+          selectOptions={['10', '20', '30']}
+          selectCurrent={itemsPerPage.toString()}
+          onSelectChange={onItemsPerPageChange}
+          count={data.pagination.totalPages}
+          onChange={onPageChange}
+        />
       </div>
     </>
   )
-}
-type Props = {
-  onClick: () => void
-}
-const AddCardButton: FC<Props> = ({ onClick }) => {
-  return <Button onClick={onClick}>Add New Card</Button>
 }
