@@ -7,6 +7,7 @@ import { Button, Cell, EditBlock, Table } from '@/components/ui'
 import { DeleteModal } from '@/pages/decks/decks-table/delete-modal/delete-modal.tsx'
 import { EditModal } from '@/pages/decks/decks-table/edit-modal/edit-modal.tsx'
 import s from '@/pages/decks/decks.module.scss'
+import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { DecksRes } from '@/services/decks/types.ts'
 import { useAppDispatch, useAppSelector } from '@/services/store.ts'
@@ -24,7 +25,8 @@ type Props = {
 }
 
 const DecksTable: FC<Props> = memo(({ data }) => {
-  const meId = useAppSelector(state => state.authSlice.id)
+  //const meId = useAppSelector(state => state.authSlice.id)
+  const { data: meData } = useAuthMeQuery()
   const dispatch = useAppDispatch()
   const onClickEdit = (id: string) => {
     dispatch(decksSlice.actions.setEditedDeckId(id))
@@ -51,7 +53,7 @@ const DecksTable: FC<Props> = memo(({ data }) => {
               <Cell>
                 <EditBlock>
                   <Learn size={16} />
-                  {meId === el.author.id && (
+                  {meData?.id === el.author.id && (
                     <>
                       <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>
                         <Edit size={16} />

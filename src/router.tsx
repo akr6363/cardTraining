@@ -1,5 +1,3 @@
-import { useEffect } from 'react'
-
 import {
   createBrowserRouter,
   Navigate,
@@ -14,8 +12,6 @@ import { Decks } from '@/pages/decks/decks.tsx'
 import SignInPage from '@/pages/sign-in/sign-in.tsx'
 import { SignUpPage } from '@/pages/sign-up/sign-up.tsx'
 import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
-import { authSlice } from '@/services/auth/auth-slice.ts'
-import { useAppDispatch } from '@/services/store.ts'
 const Container = () => {
   return (
     <div className={'authContainer'}>
@@ -80,14 +76,14 @@ export const Router = () => {
 }
 
 function PrivateRoutes() {
-  const dispatch = useAppDispatch()
+  // const dispatch = useAppDispatch()
   const { data, isLoading } = useAuthMeQuery()
 
-  useEffect(() => {
-    if (data) {
-      dispatch(authSlice.actions.setAuthData(data))
-    }
-  }, [data])
+  // useEffect(() => {
+  //   if (data) {
+  //     dispatch(authSlice.actions.setAuthData(data))
+  //   }
+  // }, [data])
   if (isLoading) return <div>Loading...</div>
 
   const isAuthenticated = !!data

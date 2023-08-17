@@ -10,6 +10,7 @@ import { Tabs, TabType } from '@/components/ui/tabs'
 import { AddNewPackForm } from '@/pages/decks/add-deck/add-deck.tsx'
 import DecksTable from '@/pages/decks/decks-table/decks-table.tsx'
 import { SearchInput } from '@/pages/decks/search-input/search-input.tsx'
+import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
 import { useCreateDecksMutation, useGetDecksQuery } from '@/services/decks/decks-api.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { useAppDispatch, useAppSelector } from '@/services/store.ts'
@@ -123,12 +124,13 @@ export const Decks = () => {
 }
 
 const DecksTabs = () => {
+  const { data } = useAuthMeQuery()
   const dispatch = useAppDispatch()
-  const meId = useAppSelector(state => state.authSlice.id)
+  // const meId = useAppSelector(state => state.authSlice.id)
   const authorId = useAppSelector(state => state.decksSlice.authorId)
   const onPacksCardsChange = (value: string) => {
-    if (value === 'my-cards') {
-      dispatch(decksSlice.actions.setAuthorId(meId))
+    if (value === 'my-cards' && data) {
+      dispatch(decksSlice.actions.setAuthorId(data.id))
     }
     if (value === 'all-cards') {
       dispatch(decksSlice.actions.setAuthorId(''))

@@ -77,6 +77,7 @@ export const AddNewPackForm: FC<AddNewPackFormProps> = ({
         </div>
       )}
       <InputFile
+        id={'cover'}
         {...register('cover')}
         onSelect={handleFileChange}
         errorMessage={errors.cover?.message?.toString()}

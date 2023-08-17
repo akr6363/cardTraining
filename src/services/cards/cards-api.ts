@@ -1,3 +1,4 @@
+import { createFormData } from '@/common/utilis/createFormData.ts'
 import { baseApi } from '@/services/base-api.ts'
 import { Card, CardRes, CreateCardArgs, GetCardsArgs } from '@/services/cards/types.ts'
 
@@ -23,11 +24,13 @@ const cardsApi = baseApi.injectEndpoints({
         },
       }),
       addCard: builder.mutation<Card, CreateCardArgs>({
-        query: ({ id, answer, question }) => {
+        query: ({ id, ...data }) => {
+          const formData = createFormData({ ...data })
+
           return {
             url: `v1/decks/${id}/cards`,
             method: 'POST',
-            body: { answer, question },
+            body: formData,
           }
         },
         invalidatesTags: ['Cards'],

@@ -8,10 +8,11 @@ import { Button, Typography } from '@/components/ui'
 export type InputFileProps = {
   onSelect: (e: ChangeEvent<HTMLInputElement>) => void
   errorMessage?: string
+  id: string
 } & ComponentProps<'input'>
 
 export const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
-  ({ onChange, onSelect, errorMessage, ...rest }, ref) => {
+  ({ onChange, onSelect, errorMessage, id, ...rest }, ref) => {
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
       if (onChange) {
         onChange(e)
@@ -21,8 +22,8 @@ export const InputFile = forwardRef<HTMLInputElement, InputFileProps>(
 
     return (
       <div className={s.root}>
-        <input type="file" hidden ref={ref} {...rest} id={'cover'} onChange={handleFileChange} />
-        <label htmlFor={'cover'}>
+        <input type="file" hidden ref={ref} {...rest} id={id} onChange={handleFileChange} />
+        <label htmlFor={id}>
           <Button variant={'secondary'} fullWidth={true} icon={<Image />} as={'span'}>
             Change Cover
           </Button>
