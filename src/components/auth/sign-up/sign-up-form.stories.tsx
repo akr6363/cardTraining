@@ -1,7 +1,7 @@
 import { action } from '@storybook/addon-actions'
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { SignUp, SignUpProps } from '@/components/auth/sign-up/sign-up.tsx'
+import { SignUp, SignUpProps } from '@/components/auth/sign-up/sign-up-form.tsx'
 
 const meta = {
   title: 'Auth/SignUp',

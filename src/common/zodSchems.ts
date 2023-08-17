@@ -22,3 +22,7 @@ export const password = z.object({
 export const email = z.object({
   email: z.string().nonempty('The field is required').email(),
 })
+
+export const name = z.object({
+  name: z.string().nonempty('The field is required').min(3),
+})

@@ -72,6 +72,7 @@ export const TextField: FC<TextFieldProps> = ({
           data-icon={dataIcon}
           placeholder={placeholder}
           disabled={rest.disabled}
+          autoComplete={'off'}
           {...rest}
         />
         {iconStart && <span className={s.iconStart}>{iconStart}</span>}

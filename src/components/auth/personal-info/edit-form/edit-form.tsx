@@ -4,12 +4,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { name } from '@/common/zodSchems.ts'
 import s from '@/components/auth/personal-info/personal-info.module.scss'
 import { Button, ControlledTextField } from '@/components/ui'
 
-const logoutSchema = z.object({
-  name: z.string().nonempty('The field is required').min(3),
-})
+const logoutSchema = name
 
 type FormValues = z.infer<typeof logoutSchema>
 export type EditFormProps = {
