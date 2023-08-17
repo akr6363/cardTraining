@@ -9,12 +9,11 @@ import { Button } from '../../ui/button'
 
 import s from './recover-password.module.scss'
 
+import { email } from '@/common/zodSchems.ts'
 import { Card, Typography } from '@/components/ui'
 import { ControlledTextField } from '@/components/ui/controlled/controlled-text-field/controlled-text-field.tsx'
 
-const logoutSchema = z.object({
-  email: z.string().nonempty('The field is required').email(),
-})
+const logoutSchema = email
 
 type FormValues = z.infer<typeof logoutSchema>
 

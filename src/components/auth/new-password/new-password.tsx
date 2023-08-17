@@ -8,15 +8,11 @@ import { Button } from '../../ui/button'
 
 import s from './new-password.module.scss'
 
+import { password } from '@/common/zodSchems.ts'
 import { Card, Typography } from '@/components/ui'
 import { ControlledTextField } from '@/components/ui/controlled/controlled-text-field/controlled-text-field.tsx'
 
-const logoutSchema = z.object({
-  password: z
-    .string()
-    .nonempty('The field is required')
-    .min(3, 'Password must be more than 3 characters'),
-})
+const logoutSchema = password
 
 type FormValues = z.infer<typeof logoutSchema>
 

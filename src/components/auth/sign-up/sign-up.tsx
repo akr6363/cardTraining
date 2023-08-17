@@ -8,17 +8,18 @@ import { z } from 'zod'
 
 import { Button } from '../../ui/button'
 
-import s from './logout-form.module.scss'
+import s from './sign-up.module.scss'
 
+import { email, password } from '@/common/zodSchems.ts'
 import { Card, Typography } from '@/components/ui'
 import { ControlledTextField } from '@/components/ui/controlled/controlled-text-field/controlled-text-field.tsx'
 
 const logoutSchema = z
   .object({
-    email: z.string().nonempty('The field is required').email(),
-    password: z.string().nonempty('The field is required').min(3),
     confirm: z.string(),
   })
+  .merge(password)
+  .merge(email)
   .refine(data => data.password === data.confirm, {
     message: 'Passwords do not match',
     path: ['confirm'],
@@ -26,10 +27,10 @@ const logoutSchema = z
 
 type FormValues = z.infer<typeof logoutSchema>
 
-export type LogoutFormProps = {
+export type SignUpProps = {
   onLogout: (data: FormValues) => void
 }
-export const LogoutForm: FC<LogoutFormProps> = ({ onLogout }) => {
+export const SignUp: FC<SignUpProps> = ({ onLogout }) => {
   const {
     handleSubmit,
     control,

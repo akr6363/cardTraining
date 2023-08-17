@@ -1,20 +1,20 @@
 import { action } from '@storybook/addon-actions'
 import type { Meta, StoryObj } from '@storybook/react'
 
-import { LogoutForm, LogoutFormProps } from '@/components/auth/logout-from/logout-form.tsx'
+import { SignUp, SignUpProps } from '@/components/auth/sign-up/sign-up.tsx'
 
 const meta = {
-  title: 'Auth/LogoutForm',
-  component: LogoutForm,
+  title: 'Auth/SignUp',
+  component: SignUp,
   tags: ['autodocs'],
-} satisfies Meta<typeof LogoutForm>
+} satisfies Meta<typeof SignUp>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const Primary: Story = {
-  render: (args: LogoutFormProps) => {
-    return <LogoutForm onLogout={args.onLogout} />
+  render: (args: SignUpProps) => {
+    return <SignUp onLogout={args.onLogout} />
   },
   args: {
     onLogout: action('logout'),
