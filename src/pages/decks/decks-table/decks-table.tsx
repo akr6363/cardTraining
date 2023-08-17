@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, memo } from 'react'
 
 import { NavLink } from 'react-router-dom'
 
@@ -23,10 +23,7 @@ type Props = {
   data: DecksRes
 }
 
-const DecksTable: FC<Props> = ({ data }) => {
-  // const [showModal, setShowModal] = useState(true)
-  const editedUserId = useAppSelector(state => state.decksSlice.editedDeckId)
-  const deletedUserId = useAppSelector(state => state.decksSlice.deletedDeckId)
+const DecksTable: FC<Props> = memo(({ data }) => {
   const meId = useAppSelector(state => state.authSlice.id)
   const dispatch = useAppDispatch()
   const onClickEdit = (id: string) => {
@@ -38,8 +35,7 @@ const DecksTable: FC<Props> = ({ data }) => {
 
   return (
     <>
-      {editedUserId && <EditModal deckId={editedUserId}></EditModal>}
-      {deletedUserId && <DeleteModal deckId={deletedUserId}></DeleteModal>}
+      <Modals />
       <Table columns={columns} className={s.table}>
         {data.items.map(el => {
           return (
@@ -73,6 +69,18 @@ const DecksTable: FC<Props> = ({ data }) => {
       </Table>
     </>
   )
-}
+})
 
 export default DecksTable
+
+const Modals = () => {
+  const editedUserId = useAppSelector(state => state.decksSlice.editedDeckId)
+  const deletedUserId = useAppSelector(state => state.decksSlice.deletedDeckId)
+
+  return (
+    <>
+      {editedUserId && <EditModal deckId={editedUserId}></EditModal>}
+      {deletedUserId && <DeleteModal deckId={deletedUserId}></DeleteModal>}
+    </>
+  )
+}

@@ -16,8 +16,8 @@ export const EditModal: FC<ModalProps> = ({ deckId }) => {
   const onModalClose = () => {
     dispatch(decksSlice.actions.setEditedDeckId(''))
   }
-  const onEditDeck = (name: string, isPrivate?: boolean) => {
-    updateDeck({ name, isPrivate, id: deckId })
+  const onEditDeck = (name: string, isPrivate?: boolean, cover?: File) => {
+    updateDeck({ name, isPrivate, id: deckId, cover })
     onModalClose()
   }
 
@@ -32,7 +32,7 @@ export const EditModal: FC<ModalProps> = ({ deckId }) => {
       <AddNewPackForm
         isEdit
         onCreate={onEditDeck}
-        defaultValue={{ name: data.name, private: data.isPrivate }}
+        defaultValue={{ name: data.name, private: data.isPrivate, cover: data.cover }}
       />
     </Modal>
   )

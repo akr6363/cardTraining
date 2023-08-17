@@ -35,9 +35,6 @@ export type Deck = {
 export type CreateDeckArgs = {
   name: string
   isPrivate?: boolean
-  cover?: string
+  cover?: File
 }
-export type UpdateDeckArgs = {
-  name: string
-  isPrivate?: boolean
-} & { id: string }
+export type UpdateDeckArgs = CreateDeckArgs & { id: string }

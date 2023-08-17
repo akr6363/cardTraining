@@ -24,12 +24,11 @@ export const Decks = () => {
   const minCardsCount = useAppSelector(state => state.decksSlice.minCardsCount)
   const maxCardsCount = useAppSelector(state => state.decksSlice.maxCardsCount)
   const authorId = useAppSelector(state => state.decksSlice.authorId)
-  //const orderBy = useAppSelector(state => state.decksSlice.orderBy)
   const name = useAppSelector(state => state.decksSlice.name)
   const itemsPerPage = useAppSelector(state => state.decksSlice.itemsPerPage)
   const currentPage = useAppSelector(state => state.decksSlice.currentPage)
   const orderBy = useAppSelector(state => state.decksSlice.orderBy)
-  const meId = useAppSelector(state => state.authSlice.id)
+  //const meId = useAppSelector(state => state.authSlice.id)
 
   const { isLoading, data } = useGetDecksQuery({
     minCardsCount,
@@ -49,14 +48,6 @@ export const Decks = () => {
     }
   }, [data?.maxCardsCount])
 
-  const onPacksCardsChange = (value: string) => {
-    if (value === 'my-cards') {
-      dispatch(decksSlice.actions.setAuthorId(meId))
-    }
-    if (value === 'all-cards') {
-      dispatch(decksSlice.actions.setAuthorId(''))
-    }
-  }
   const onNumberOfCardsChange = (values: [number, number]) => {
     dispatch(decksSlice.actions.setMinCardsCount(values[0]))
     dispatch(decksSlice.actions.setMaxCardsCount(values[1]))
@@ -75,8 +66,8 @@ export const Decks = () => {
   }
 
   const [createDeck] = useCreateDecksMutation()
-  const onAddPack = (packName: string, isPrivate?: boolean) => {
-    createDeck({ name: packName, isPrivate: isPrivate })
+  const onAddPack = (packName: string, isPrivate?: boolean, cover?: File) => {
+    createDeck({ name: packName, isPrivate, cover })
     setShowModal(false)
   }
 
@@ -105,13 +96,7 @@ export const Decks = () => {
             onClearSearch={onClearSearch}
             onChangeSearch={onChangeSearch}
           />
-          <Tabs
-            tabs={tabs}
-            value={authorId ? 'my-cards' : 'all-cards'}
-            title={'Show packs cards'}
-            onValueChange={onPacksCardsChange}
-            defaultValue={'all-cards'}
-          />
+          <DecksTabs />
           <Slider
             defaultValue={[minCardsCount, data.maxCardsCount]}
             value={[minCardsCount, maxCardsCount]}
@@ -134,5 +119,29 @@ export const Decks = () => {
         />
       </div>
     </>
+  )
+}
+
+const DecksTabs = () => {
+  const dispatch = useAppDispatch()
+  const meId = useAppSelector(state => state.authSlice.id)
+  const authorId = useAppSelector(state => state.decksSlice.authorId)
+  const onPacksCardsChange = (value: string) => {
+    if (value === 'my-cards') {
+      dispatch(decksSlice.actions.setAuthorId(meId))
+    }
+    if (value === 'all-cards') {
+      dispatch(decksSlice.actions.setAuthorId(''))
+    }
+  }
+
+  return (
+    <Tabs
+      tabs={tabs}
+      value={authorId ? 'my-cards' : 'all-cards'}
+      title={'Show packs cards'}
+      onValueChange={onPacksCardsChange}
+      defaultValue={'all-cards'}
+    />
   )
 }

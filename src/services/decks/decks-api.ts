@@ -1,3 +1,4 @@
+import { createFormData } from '@/common/utilis/createFormData.ts'
 import { baseApi } from '@/services/base-api.ts'
 import {
   CreateDeckArgs,
@@ -31,21 +32,26 @@ const decksApi = baseApi.injectEndpoints({
         providesTags: ['Deck'],
       }),
       createDecks: builder.mutation<Deck, CreateDeckArgs>({
-        query: ({ name }) => {
+        query: data => {
+          const formData = createFormData(data)
+
           return {
             url: `v1/decks`,
             method: 'POST',
-            body: { name },
+            body: formData,
           }
         },
+
         invalidatesTags: ['Decks'],
       }),
       updateDecks: builder.mutation<Deck, UpdateDeckArgs>({
-        query: ({ name, isPrivate, id }) => {
+        query: ({ id, ...data }) => {
+          const formData = createFormData({ ...data })
+
           return {
             url: `v1/decks/${id}`,
             method: 'PATCH',
-            body: { name, isPrivate },
+            body: formData,
           }
         },
         invalidatesTags: ['Decks', 'Deck'],
@@ -53,7 +59,7 @@ const decksApi = baseApi.injectEndpoints({
       deleteDecks: builder.mutation<Omit<Deck, 'author'>, { id: string }>({
         query: ({ id }) => {
           return {
-            url: `v1/decs/${id}`,
+            url: `v1/decks/${id}`,
             method: 'DELETE',
           }
         },
