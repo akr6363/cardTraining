@@ -57,10 +57,6 @@ export const AddCardForm: FC<AddCardFormProps> = ({ onAdd, defaultValue, isEdit 
         errorMessage={errors.question?.message}
         className={s.inputName}
       />
-
-      {/*<input type="file" {...register('questionImg')} />*/}
-      {/*{errors.questionImg?.message}*/}
-
       <ControlledTextField
         control={control}
         name={'answer'}

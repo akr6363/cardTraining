@@ -6,8 +6,6 @@ import { Typography } from '../typography'
 
 import s from './drop-down.module.scss'
 
-import userPhotoDefault from '@/assets/img/userPhoto.png'
-
 export const DropDown: FC<DropDownProps> = ({
   children,
   trigger,
@@ -46,44 +44,11 @@ export const DropDownItem: FC<DropDownItemProps> = ({ icon, children }) => {
   )
 }
 
-export const DropDownUserInfo: FC<DropDownUserInfoProps> = ({ email, name }) => {
-  return (
-    <>
-      <DropdownMenu.Item className={s.DropdownMenuItem}>
-        <UserPhoto></UserPhoto>
-        <div className={s.infoContainer}>
-          <Typography variant={'Subtitle_2'}>{name}</Typography>
-          <Typography variant={'Caption'} color="var(--color-dark-100)">
-            {email}
-          </Typography>
-        </div>
-      </DropdownMenu.Item>
-      <DropdownMenu.Separator className={s.DropdownMenuSeparator} />
-    </>
-  )
-}
-
-export const UserPhoto: FC<UserPhotoProps> = () => {
-  return (
-    <div className={s.userPhoto}>
-      <img src={userPhotoDefault} alt="" className={s.userPhoto} />
-    </div>
-  )
-}
-
-type UserPhotoProps = {
-  photo?: string
-}
 type DropDownProps = {
   children: ReactNode
   trigger: ReactNode
   sideOffset?: number
   alignOffset?: number
-}
-type DropDownUserInfoProps = {
-  photo?: string
-  email: string
-  name: string
 }
 type DropDownItemProps = {
   children: ReactNode

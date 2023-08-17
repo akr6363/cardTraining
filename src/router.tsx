@@ -34,9 +34,11 @@ const privateRoutes: RouteObject[] = [
   },
 ]
 const Layout = () => {
+  const { data } = useAuthMeQuery()
+
   return (
     <>
-      <Header />
+      <Header isLogin={!!data} />
       <Outlet />
     </>
   )
