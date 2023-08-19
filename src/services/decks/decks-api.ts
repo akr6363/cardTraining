@@ -54,6 +54,38 @@ const decksApi = baseApi.injectEndpoints({
             body: formData,
           }
         },
+        async onQueryStarted({ id, ...data }, { dispatch, getState, queryFulfilled }) {
+          const state = getState() as RootState
+          const {
+            name,
+            minCardsCount,
+            maxCardsCount,
+            authorId,
+            orderBy,
+            itemsPerPage,
+            currentPage,
+          } = state.decksSlice
+          const patchResult = dispatch(
+            decksApi.util.updateQueryData(
+              'getDecks',
+              { name, minCardsCount, maxCardsCount, authorId, orderBy, itemsPerPage, currentPage },
+              draft => {
+                const index = draft.items.findIndex(deck => deck.id === id)
+
+                if (index !== -1) {
+                  draft.items[index].name = data.name
+                  if (data.cover) draft.items[index].cover = URL.createObjectURL(data.cover)
+                }
+              }
+            )
+          )
+
+          try {
+            await queryFulfilled
+          } catch {
+            patchResult.undo()
+          }
+        },
         invalidatesTags: ['Decks', 'Deck'],
       }),
       deleteDecks: builder.mutation<Omit<Deck, 'author'>, { id: string }>({

@@ -1,0 +1,33 @@
+.img {
+  overflow: hidden;
+  width: 100%;
+  height: 119px;
+  margin-bottom: 40px;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.question {
+  align-self: start;
+  margin-bottom: 40px;
+
+  p {
+    display: inline;
+  }
+}
+
+.rate {
+  align-self: start;
+  margin-bottom: 40px;
+}

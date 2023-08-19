@@ -1,6 +1,7 @@
 import { FC } from 'react'
 
 import * as RG from '@radix-ui/react-radio-group'
+import { clsx } from 'clsx'
 
 import s from './radio-group.module.scss'
 
@@ -15,11 +16,16 @@ export type RadioGroupProps = {
   items: RadioItemType[]
   defaultValue?: string
   onChange?: (value: string) => void
+  className?: string
 }
 
-export const RadioGroup: FC<RadioGroupProps> = ({ items, defaultValue, onChange }) => {
+export const RadioGroup: FC<RadioGroupProps> = ({ items, defaultValue, onChange, className }) => {
   return (
-    <RG.Root className={s.root} defaultValue={defaultValue} onValueChange={onChange}>
+    <RG.Root
+      className={clsx(s.root, className)}
+      defaultValue={defaultValue}
+      onValueChange={onChange}
+    >
       {items.map(i => (
         <div key={i.value}>
           <label className={s.label}>
