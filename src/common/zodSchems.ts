@@ -26,5 +26,5 @@ export const email = z.object({
 })
 
 export const name = z.object({
-  name: z.string().nonempty('The field is required').min(3),
+  name: z.string().nonempty('The field is required').min(3).max(20),
 })

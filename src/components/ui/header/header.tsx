@@ -79,7 +79,7 @@ const HeaderDropDown = () => {
       alignOffset={-6}
     >
       <DropDownUserInfo email={data.email} name={data.name} photo={data.avatar}></DropDownUserInfo>
-      <NavLink to={'#'} className={s.link}>
+      <NavLink to={'/profile'} className={s.link}>
         <DropDownItem icon={<User size={16} />}>My Profile</DropDownItem>
       </NavLink>
       <button className={s.btn} onClick={onLogoutHandler}>

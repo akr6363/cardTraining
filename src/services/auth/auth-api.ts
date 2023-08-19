@@ -1,4 +1,10 @@
-import { meResponse, signUpArgs, signUpResponse } from '@/services/auth/types.ts'
+import { createFormData } from '@/common/utilis/createFormData.ts'
+import {
+  meResponse,
+  signUpArgs,
+  signUpResponse,
+  updateUserDataArgs,
+} from '@/services/auth/types.ts'
 import { baseApi } from '@/services/base-api.ts'
 
 const authApi = baseApi.injectEndpoints({
@@ -58,8 +64,44 @@ const authApi = baseApi.injectEndpoints({
           }
         },
       }),
+      updateUserData: builder.mutation<signUpResponse, updateUserDataArgs>({
+        query: data => {
+          const formData = createFormData(data)
+
+          return {
+            url: `v1/auth/me`,
+            method: 'PATCH',
+            body: formData,
+          }
+        },
+        async onQueryStarted(data, { dispatch, queryFulfilled }) {
+          const patchResult = dispatch(
+            authApi.util.updateQueryData('authMe', undefined, draft => {
+              if (data.name) {
+                draft!.name = data.name
+              }
+              if (data.avatar) {
+                draft!.avatar = URL.createObjectURL(data.avatar)
+              }
+            })
+          )
+
+          try {
+            await queryFulfilled
+          } catch {
+            patchResult.undo()
+          }
+        },
+        invalidatesTags: ['Me'],
+      }),
     }
   },
 })
 
-export const { useAuthMeQuery, useLoginMutation, useLogoutMutation, useSignupMutation } = authApi
+export const {
+  useAuthMeQuery,
+  useLoginMutation,
+  useLogoutMutation,
+  useSignupMutation,
+  useUpdateUserDataMutation,
+} = authApi

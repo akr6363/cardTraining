@@ -5,6 +5,7 @@ import { Button } from '../../ui/button'
 import s from './personal-info.module.scss'
 
 import { Edit, LogOut } from '@/assets/icons/components'
+import userPhotoDefault from '@/assets/img/userPhoto.png'
 import { EditForm } from '@/components/auth/personal-info/edit-form/edit-form.tsx'
 import { UploadingImagesBtn } from '@/components/auth/personal-info/uploading-img-btn/uploading-img-btn.tsx'
 import { Card, Typography } from '@/components/ui'
@@ -27,13 +28,14 @@ export const PersonalInfo: FC<PersonalInfoProps> = ({
 }) => {
   const [isEdit, setIsEdit] = useState<boolean>(false)
 
+  if (!photo) photo = userPhotoDefault
   const onEditName = () => {
     setIsEdit(true)
   }
 
   const onNameChangeHandler = (name: string) => {
-    setIsEdit(false)
     onNameChange(name)
+    setIsEdit(false)
   }
 
   const onPhotoChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {

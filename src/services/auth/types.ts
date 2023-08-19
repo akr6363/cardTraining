@@ -26,3 +26,14 @@ export type signUpResponse = {
   created: string
   updated: string
 }
+
+export type updateUserDataArgs = {
+  avatar?: File
+  email?: string
+  name?: string
+}
+// export type updatePhotoArgs = {
+//   avatar?: File
+//   email?: string
+//   name?: string
+// }

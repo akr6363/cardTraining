@@ -9,6 +9,7 @@ import {
 import { Header } from '@/components/ui'
 import { Cards } from '@/pages/cards/cards.tsx'
 import { Decks } from '@/pages/decks/decks.tsx'
+import { ProfilePage } from '@/pages/profile/profile.tsx'
 import SignInPage from '@/pages/sign-in/sign-in.tsx'
 import { SignUpPage } from '@/pages/sign-up/sign-up.tsx'
 import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
@@ -40,6 +41,15 @@ const publicRoutes: RouteObject[] = [
 ]
 
 const privateRoutes: RouteObject[] = [
+  {
+    element: <Container />,
+    children: [
+      {
+        path: '/profile',
+        element: <ProfilePage />,
+      },
+    ],
+  },
   {
     path: '/',
     element: <Decks />,
