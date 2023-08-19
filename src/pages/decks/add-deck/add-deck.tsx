@@ -17,11 +17,11 @@ const logoutSchema = z
   })
   .merge(cover)
 
-type FormValues = z.infer<typeof logoutSchema>
+export type AddDeckFormValues = z.infer<typeof logoutSchema>
 
 export type AddNewPackFormProps = {
-  onCreate: (name: string, isPrivate?: boolean, cover?: File) => void
-  defaultValue?: FormValues
+  onCreate: (data: AddDeckFormValues) => void
+  defaultValue?: AddDeckFormValues
   isEdit?: boolean
 }
 
@@ -37,10 +37,10 @@ export const AddNewPackForm: FC<AddNewPackFormProps> = ({
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<AddDeckFormValues>({
     resolver: zodResolver(logoutSchema),
     mode: 'onSubmit',
-    defaultValues: { name: '', private: false, cover: null },
+    defaultValues: { name: '', private: false, cover: defaultValue?.cover },
   })
 
   useEffect(() => {
@@ -51,8 +51,8 @@ export const AddNewPackForm: FC<AddNewPackFormProps> = ({
     }
   }, [])
 
-  const onSubmit = (data: FormValues) => {
-    onCreate(data.name, data.private, data.cover[0])
+  const onSubmit = (data: AddDeckFormValues) => {
+    onCreate(data)
   }
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {

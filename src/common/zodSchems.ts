@@ -5,11 +5,20 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/web
 
 export const imgValidation = z
   .any()
-  .refine(
-    files => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
-    'The file type is not supported'
-  )
-  .refine(files => files?.[0]?.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
+  .refine(files => {
+    if (!files || !files[0] || typeof files === 'string') {
+      return true
+    }
+
+    return ACCEPTED_IMAGE_TYPES.includes(files[0].type)
+  }, 'The file type is not supported')
+  .refine(files => {
+    if (!files || !files[0] || typeof files === 'string') {
+      return true
+    }
+
+    return files[0].size <= MAX_FILE_SIZE
+  }, 'Max file size is 5MB.')
 
 export const cover = z.object({
   cover: imgValidation,

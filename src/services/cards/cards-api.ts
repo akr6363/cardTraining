@@ -22,6 +22,7 @@ const cardsApi = baseApi.injectEndpoints({
             method: 'GET',
           }
         },
+        providesTags: ['Card'],
       }),
       addCard: builder.mutation<Card, CreateCardArgs>({
         query: ({ id, ...data }) => {
@@ -36,14 +37,16 @@ const cardsApi = baseApi.injectEndpoints({
         invalidatesTags: ['Cards'],
       }),
       editCard: builder.mutation<Card, CreateCardArgs>({
-        query: ({ id, answer, question }) => {
+        query: ({ id, ...data }) => {
+          const formData = createFormData(data)
+
           return {
             url: `v1/cards/${id}`,
             method: 'PATCH',
-            body: { answer, question },
+            body: formData,
           }
         },
-        invalidatesTags: ['Cards'],
+        invalidatesTags: ['Cards', 'Card'],
       }),
       deleteCard: builder.mutation<any, { cardId: string }>({
         query: ({ cardId }) => {

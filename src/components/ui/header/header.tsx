@@ -34,12 +34,6 @@ export const Header: FC<HeaderProps> = () => {
 
         {data ? (
           <div className={s.rightBlock}>
-            <Typography
-              variant={'Subtitle_1'}
-              style={{ borderBottom: '1px dashed var(--color-light-100)' }}
-            >
-              {data.name}
-            </Typography>
             <HeaderDropDown />
           </div>
         ) : (
@@ -72,6 +66,7 @@ const HeaderDropDown = () => {
     <DropDown
       trigger={
         <button className={s.triggerBtn}>
+          <Typography variant={'Subtitle_1'}>{data.name}</Typography>
           <UserPhotoContainer photo={data.avatar} />
         </button>
       }

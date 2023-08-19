@@ -17,11 +17,11 @@ const logoutSchema = z.object({
   answerImg: imgValidation,
 })
 
-type FormValues = z.infer<typeof logoutSchema>
+export type AddCardFormValues = z.infer<typeof logoutSchema>
 
 export type AddCardFormProps = {
-  onAdd: (question: string, answer: string, answerImg: File, questionImg: File) => void
-  defaultValue?: FormValues
+  onAdd: (data: AddCardFormValues) => void
+  defaultValue?: AddCardFormValues
   isEdit?: boolean
 }
 
@@ -35,10 +35,15 @@ export const AddCardForm: FC<AddCardFormProps> = ({ onAdd, defaultValue, isEdit 
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<FormValues>({
+  } = useForm<AddCardFormValues>({
     resolver: zodResolver(logoutSchema),
     mode: 'onSubmit',
-    defaultValues: { question: '', answer: '', questionImg: null, answerImg: null },
+    defaultValues: {
+      question: '',
+      answer: '',
+      questionImg: defaultValue?.questionImg,
+      answerImg: defaultValue?.answerImg,
+    },
   })
 
   useEffect(() => {
@@ -50,8 +55,8 @@ export const AddCardForm: FC<AddCardFormProps> = ({ onAdd, defaultValue, isEdit 
     }
   }, [])
 
-  const onSubmit = (data: FormValues) => {
-    onAdd(data.question, data.answer, data.answerImg[0], data.questionImg[0])
+  const onSubmit = (data: AddCardFormValues) => {
+    onAdd(data)
   }
 
   const onAnswerImgChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -85,11 +90,11 @@ export const AddCardForm: FC<AddCardFormProps> = ({ onAdd, defaultValue, isEdit 
           <img src={URL.createObjectURL(selectedQuestionImg)} alt="Preview" />
         </div>
       )}
-      {/*{!selectedQuestionImg && defaultValue?.questionImg && (*/}
-      {/*  <div className={s.coverPreview}>*/}
-      {/*    <img src={defaultValue?.questionImg} alt="Preview" />*/}
-      {/*  </div>*/}
-      {/*)}*/}
+      {!selectedQuestionImg && defaultValue?.questionImg && (
+        <div className={s.coverPreview}>
+          <img src={defaultValue?.questionImg} alt="Preview" />
+        </div>
+      )}
       <InputFile
         id={'question-img'}
         {...register('questionImg')}
@@ -108,11 +113,11 @@ export const AddCardForm: FC<AddCardFormProps> = ({ onAdd, defaultValue, isEdit 
           <img src={URL.createObjectURL(selectedAnswerImg)} alt="Preview" />
         </div>
       )}
-      {/*{!selectedAnswerImg && defaultValue?.answerImg && (*/}
-      {/*  <div className={s.coverPreview}>*/}
-      {/*    <img src={defaultValue?.answerImg} alt="Preview" />*/}
-      {/*  </div>*/}
-      {/*)}*/}
+      {!selectedAnswerImg && defaultValue?.answerImg && (
+        <div className={s.coverPreview}>
+          <img src={defaultValue?.answerImg} alt="Preview" />
+        </div>
+      )}
       <InputFile
         {...register('answerImg')}
         id={'answer-img'}

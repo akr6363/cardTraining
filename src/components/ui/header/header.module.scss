@@ -14,23 +14,26 @@
     height: 2.25rem;
   }
 
-  .rightBlock {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-
-  }
 }
 
 
 
 .triggerBtn {
   all: unset;
+
   cursor: pointer;
+
   display: flex;
+  gap: 14px;
+  align-items: center;
+
+  p {
+    border-bottom: 1px dashed var(--color-light-100);
+  }
 
   &:focus {
     outline: 0.0625rem solid var(--color-info-700);
+    outline-offset: 5px;
   }
 }
 

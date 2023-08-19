@@ -7,7 +7,7 @@ import s from './decks.module.scss'
 import { Delete } from '@/assets/icons/components'
 import { Button, Modal, Pagination, Slider, Typography } from '@/components/ui'
 import { Tabs, TabType } from '@/components/ui/tabs'
-import { AddNewPackForm } from '@/pages/decks/add-deck/add-deck.tsx'
+import { AddDeckFormValues, AddNewPackForm } from '@/pages/decks/add-deck/add-deck.tsx'
 import DecksTable from '@/pages/decks/decks-table/decks-table.tsx'
 import { SearchInput } from '@/pages/decks/search-input/search-input.tsx'
 import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
@@ -67,8 +67,8 @@ export const Decks = () => {
   }
 
   const [createDeck] = useCreateDecksMutation()
-  const onAddPack = (packName: string, isPrivate?: boolean, cover?: File) => {
-    createDeck({ name: packName, isPrivate, cover })
+  const onAddPack = (data: AddDeckFormValues) => {
+    createDeck({ name: data.name, cover: data.cover[0], isPrivate: data.private })
     setShowModal(false)
   }
 

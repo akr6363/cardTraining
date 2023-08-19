@@ -63,9 +63,10 @@ form {
 }
 
 .authContainer {
+  flex-direction: column;
   height: calc(100vh - 60px);
   display: flex;
-  justify-content: center;
-  align-items: start;
-  padding-top: 50px;
+  justify-content: start;
+  align-items: center;
+  padding: 50px 3.125rem 0;
 }
