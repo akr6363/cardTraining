@@ -37,3 +37,9 @@ export type CreateCardArgs = {
 //   name: string
 //   isPrivate?: boolean
 // } & { id: string }
+
+export type SaveGradeArgs = {
+  deckId: string
+  cardId: string
+  grade: number
+}

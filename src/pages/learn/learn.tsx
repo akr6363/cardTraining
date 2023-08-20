@@ -1,20 +1,13 @@
 import { FC, useState } from 'react'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import s from './learn.module.scss'
 
 import { ArrowBackLong } from '@/assets/icons/components/ArrowBackLong.tsx'
-import { Button, Card, ControlledCheckbox, ControlledTextField, Typography } from '@/components/ui'
-import { RadioGroup, RadioItemType } from '@/components/ui/radio-group'
-import {
-  GradeFormValues,
-  SetGradeForm,
-  setGradeForm,
-} from '@/pages/learn/set-grade-form/set-grade-from.tsx'
-import { useGetRandomCardQuery } from '@/services/cards/cards-api.ts'
+import { Button, Card, Typography } from '@/components/ui'
+import { GradeFormValues, SetGradeForm } from '@/pages/learn/set-grade-form/set-grade-from.tsx'
+import { useGetRandomCardQuery, useSaveGradeMutation } from '@/services/cards/cards-api.ts'
 import { useGetDecksByIdQuery } from '@/services/decks/decks-api.ts'
 
 type LearnCardProps = {}
@@ -25,7 +18,7 @@ export const LearnPage: FC<LearnCardProps> = () => {
 
   if (!params.id) return null
   const id = params.id
-  const { data, refetch } = useGetRandomCardQuery({ deckId: id })
+  const { data: cardData, refetch } = useGetRandomCardQuery({ deckId: id })
   const { data: deck } = useGetDecksByIdQuery({
     id,
   })
@@ -36,17 +29,14 @@ export const LearnPage: FC<LearnCardProps> = () => {
     setIsShowAnswer(true)
   }
 
-  // const onRate = (value: string) => {
-  //   console.log(value)
-  // }
-
+  const [saveGrade] = useSaveGradeMutation()
   const onSetGrade = (data: GradeFormValues) => {
-    // refetch()
-    console.log(data)
-    // setIsShowAnswer(false)
+    saveGrade({ deckId: id, cardId: cardData!.id, grade: Number(data.rate) })
+    setIsShowAnswer(false)
+    refetch()
   }
 
-  return data && deck ? (
+  return cardData && deck ? (
     <>
       <Button
         onClick={() => {
@@ -62,27 +52,30 @@ export const LearnPage: FC<LearnCardProps> = () => {
       <Card title={`Learn ${deck.name}`} className={s.card}>
         <div className={s.question}>
           <Typography variant={'Subtitle_1'}>Question:</Typography>
-          <Typography variant={'Body_1'}>{data.question}</Typography>
+          <Typography variant={'Body_1'}>{cardData.question}</Typography>
         </div>
-        {data.questionImg && (
+        {cardData.questionImg && (
           <div className={s.img}>
-            <img src={data.questionImg} alt="Preview" />
+            <img src={cardData.questionImg} alt="Preview" />
           </div>
         )}
         {isShowAnswer && (
           <>
             <div className={s.question}>
               <Typography variant={'Subtitle_1'}>Answer: </Typography>
-              <Typography variant={'Body_1'}>{data.answer}</Typography>
+              <Typography variant={'Body_1'}>{cardData.answer}</Typography>
             </div>
-            {data.answerImg && (
+            {cardData.answerImg && (
               <div className={s.img}>
-                <img src={data.answerImg} alt="Preview" />
+                <img src={cardData.answerImg} alt="Preview" />
               </div>
             )}
+            <Typography variant={'Subtitle_1'} className={s.rateLabel}>
+              Rate yourself:
+            </Typography>
             <SetGradeForm
               onSetGrade={onSetGrade}
-              defaultValue={data.grade ? data.grade.toString() : '1'}
+              defaultValue={cardData.grade ? cardData.grade.toString() : '1'}
             />
           </>
         )}
