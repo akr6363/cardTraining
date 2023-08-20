@@ -7,3 +7,17 @@
   bottom: -23px;
   color: var(--color-danger-300);
 }
+
+.coverPreview {
+  overflow: hidden;
+  width: 100%;
+  height: 119px;
+  margin-bottom: 20px;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

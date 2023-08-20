@@ -91,14 +91,8 @@ export const Router = () => {
 }
 
 function PrivateRoutes() {
-  // const dispatch = useAppDispatch()
   const { data, isLoading } = useAuthMeQuery()
 
-  // useEffect(() => {
-  //   if (data) {
-  //     dispatch(authSlice.actions.setAuthData(data))
-  //   }
-  // }, [data])
   if (isLoading) return <div>Loading...</div>
 
   const isAuthenticated = !!data
