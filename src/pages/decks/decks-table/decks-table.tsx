@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, memo } from 'react'
 
 import { NavLink } from 'react-router-dom'
 
@@ -7,6 +7,7 @@ import { Button, Cell, EditBlock, Table } from '@/components/ui'
 import { DeleteModal } from '@/pages/decks/decks-table/delete-modal/delete-modal.tsx'
 import { EditModal } from '@/pages/decks/decks-table/edit-modal/edit-modal.tsx'
 import s from '@/pages/decks/decks.module.scss'
+import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { DecksRes } from '@/services/decks/types.ts'
 import { useAppDispatch, useAppSelector } from '@/services/store.ts'
@@ -23,11 +24,9 @@ type Props = {
   data: DecksRes
 }
 
-const DecksTable: FC<Props> = ({ data }) => {
-  // const [showModal, setShowModal] = useState(true)
-  const editedUserId = useAppSelector(state => state.decksSlice.editedDeckId)
-  const deletedUserId = useAppSelector(state => state.decksSlice.deletedDeckId)
-  const meId = useAppSelector(state => state.authSlice.id)
+const DecksTable: FC<Props> = memo(({ data }) => {
+  //const meId = useAppSelector(state => state.authSlice.id)
+  const { data: meData } = useAuthMeQuery()
   const dispatch = useAppDispatch()
   const onClickEdit = (id: string) => {
     dispatch(decksSlice.actions.setEditedDeckId(id))
@@ -38,8 +37,7 @@ const DecksTable: FC<Props> = ({ data }) => {
 
   return (
     <>
-      {editedUserId && <EditModal deckId={editedUserId}></EditModal>}
-      {deletedUserId && <DeleteModal deckId={deletedUserId}></DeleteModal>}
+      <Modals />
       <Table columns={columns} className={s.table}>
         {data.items.map(el => {
           return (
@@ -55,7 +53,7 @@ const DecksTable: FC<Props> = ({ data }) => {
               <Cell>
                 <EditBlock>
                   <Learn size={16} />
-                  {meId === el.author.id && (
+                  {meData?.id === el.author.id && (
                     <>
                       <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>
                         <Edit size={16} />
@@ -73,6 +71,18 @@ const DecksTable: FC<Props> = ({ data }) => {
       </Table>
     </>
   )
-}
+})
 
 export default DecksTable
+
+const Modals = () => {
+  const editedUserId = useAppSelector(state => state.decksSlice.editedDeckId)
+  const deletedUserId = useAppSelector(state => state.decksSlice.deletedDeckId)
+
+  return (
+    <>
+      {editedUserId && <EditModal deckId={editedUserId}></EditModal>}
+      {deletedUserId && <DeleteModal deckId={deletedUserId}></DeleteModal>}
+    </>
+  )
+}

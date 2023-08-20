@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -10,15 +10,24 @@ import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { useAppDispatch } from '@/services/store.ts'
 type ModalProps = {
   deckId: string
+  // deleteDeck: (id: string) => void
 }
+
 export const DeleteModal: FC<ModalProps> = ({ deckId }) => {
   const dispatch = useAppDispatch()
-  const [deleteDeck] = useDeleteDecksMutation()
+  const [deleteDeck, { error }] = useDeleteDecksMutation()
   const { isLoading, data } = useGetDecksByIdQuery({
     id: deckId,
   })
   const params = useParams()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (error) {
+      //@ts-ignore
+      alert(error?.data?.message)
+    }
+  }, [error])
 
   const onModalClose = () => {
     if (params.id) navigate('/')
@@ -26,7 +35,13 @@ export const DeleteModal: FC<ModalProps> = ({ deckId }) => {
   }
   const onDeleteDeck = () => {
     deleteDeck({ id: deckId })
-    onModalClose()
+      .unwrap()
+      .then(() => {
+        onModalClose()
+      })
+      .catch(() => {
+        return
+      })
   }
 
   return isLoading || !data ? (

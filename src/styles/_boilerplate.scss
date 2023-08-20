@@ -61,3 +61,12 @@ img {
 form {
   width: 100%;
 }
+
+.authContainer {
+  flex-direction: column;
+  height: calc(100vh - 60px);
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 50px 3.125rem 0;
+}

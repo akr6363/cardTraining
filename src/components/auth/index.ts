@@ -1,5 +1,5 @@
 export * from './login-form'
-export * from './logout-from'
+export * from './sign-up'
 export * from './recover-password'
 export * from './check-email'
 export * from './new-password'

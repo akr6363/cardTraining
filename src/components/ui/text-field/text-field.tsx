@@ -72,6 +72,7 @@ export const TextField: FC<TextFieldProps> = ({
           data-icon={dataIcon}
           placeholder={placeholder}
           disabled={rest.disabled}
+          autoComplete={'off'}
           {...rest}
         />
         {iconStart && <span className={s.iconStart}>{iconStart}</span>}
@@ -86,12 +87,14 @@ export const TextField: FC<TextFieldProps> = ({
             {<Close size={20} color={'var(--color-dark-100)'} />}
           </button>
         )}
+        <div className={s.errorContainer}>
+          {errorMessage && (
+            <Typography variant={'Caption'} className={s.error}>
+              {errorMessage}
+            </Typography>
+          )}
+        </div>
       </div>
-      {errorMessage && (
-        <Typography variant={'Caption'} className={s.error}>
-          {errorMessage}
-        </Typography>
-      )}
     </div>
   )
 }

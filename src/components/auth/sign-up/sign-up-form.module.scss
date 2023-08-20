@@ -1,18 +1,12 @@
 .form {
   display: flex;
   flex-direction: column;
+  gap: 1.125rem;
   margin-bottom: 20px;
 
-  .inputEmail {
-    margin-bottom: 1.125rem;
-  }
-
-  .inputPassword {
-    margin-bottom: 1.125rem;
-  }
 
   .inputConfirmPassword {
-    margin-bottom: 3.375rem;
+    margin-bottom: 2.25rem;
   }
 }
 

@@ -9,10 +9,6 @@
       color: var(--color-dark-300);
     }
   }
-
-  .error {
-    color: var(--color-danger-300)
-  }
 }
 
 .inputContainer {
@@ -20,7 +16,11 @@
   display: flex;
   align-items: center;
 
-  //margin-bottom: 0.375rem;
+.errorContainer {
+  position: absolute;
+    bottom: -23px;
+   color: var(--color-danger-300);
+}
 
   .input {
     width: 100%;

@@ -14,22 +14,74 @@
     height: 2.25rem;
   }
 
-  .rightBlock {
+}
+
+
+
+.triggerBtn {
+  all: unset;
+
+  cursor: pointer;
+
+  display: flex;
+  gap: 14px;
+  align-items: center;
+
+  p {
+    border-bottom: 1px dashed var(--color-light-100);
+  }
+
+  &:focus {
+    outline: 0.0625rem solid var(--color-info-700);
+    outline-offset: 5px;
+  }
+}
+
+.userPhoto {
+  overflow: hidden;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding: 0.75rem;
+
+
+  .infoContainer {
     display: flex;
-    align-items: center;
+    flex-direction: column;
 
-    .userPhoto {
-      all: unset;
+    margin-right: 1.75rem;
+    margin-left: 0.5rem;
 
-      cursor: pointer;
+    color: var(--color-light-100);
 
-      overflow: hidden;
-
-      width: 2.25rem;
-      height: 2.25rem;
-      margin-left: 0.875rem;
-
-      border-radius: 50%;
+    .email {
+      color: var(--color-dark-100);
     }
   }
+}
+
+.btn {
+  all: unset;
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.link {
+  position: relative;
+  width: 100%;
+  text-decoration: none;
 }
