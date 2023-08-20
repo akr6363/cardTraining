@@ -1,10 +1,10 @@
 import type { Meta } from '@storybook/react'
 
 import s from './drop-down.module.scss'
-import { DropDown, DropDownItem, DropDownUserInfo } from './drop-down.tsx'
+import { DropDown, DropDownItem } from './drop-down.tsx'
 
 import { Delete, Edit, Learn, LogOut, More, User } from '@/assets/icons/components'
-import { UserPhotoContainer } from '@/components/ui'
+import { DropDownUserInfo, UserPhotoContainer } from '@/components/ui'
 const meta = {
   title: 'Components/DropDownMenu',
   component: DropDown,

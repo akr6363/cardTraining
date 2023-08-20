@@ -14,9 +14,9 @@ type Story = StoryObj<typeof meta>
 
 export const Primary: Story = {
   render: (args: SignUpProps) => {
-    return <SignUp onLogout={args.onLogout} />
+    return <SignUp onSignUp={args.onSignUp} />
   },
   args: {
-    onLogout: action('logout'),
+    onSignUp: action('logout'),
   },
 }

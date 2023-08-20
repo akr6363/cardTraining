@@ -88,3 +88,15 @@
     opacity: 1;
   }
 }
+
+.triggerBtn {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+
+
+  &:focus {
+    outline: 0.0625rem solid var(--color-info-700);
+    outline-offset: 5px;
+  }
+}
