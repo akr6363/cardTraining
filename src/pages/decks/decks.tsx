@@ -7,9 +7,10 @@ import s from './decks.module.scss'
 import { Delete } from '@/assets/icons/components'
 import { Button, Modal, Pagination, Slider, Typography } from '@/components/ui'
 import { Tabs, TabType } from '@/components/ui/tabs'
-import { AddNewPackForm } from '@/pages/decks/add-deck/add-deck.tsx'
+import { AddDeckFormValues, AddNewPackForm } from '@/pages/decks/add-deck/add-deck.tsx'
 import DecksTable from '@/pages/decks/decks-table/decks-table.tsx'
 import { SearchInput } from '@/pages/decks/search-input/search-input.tsx'
+import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
 import { useCreateDecksMutation, useGetDecksQuery } from '@/services/decks/decks-api.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { useAppDispatch, useAppSelector } from '@/services/store.ts'
@@ -24,17 +25,17 @@ export const Decks = () => {
   const minCardsCount = useAppSelector(state => state.decksSlice.minCardsCount)
   const maxCardsCount = useAppSelector(state => state.decksSlice.maxCardsCount)
   const authorId = useAppSelector(state => state.decksSlice.authorId)
-  //const orderBy = useAppSelector(state => state.decksSlice.orderBy)
   const name = useAppSelector(state => state.decksSlice.name)
   const itemsPerPage = useAppSelector(state => state.decksSlice.itemsPerPage)
   const currentPage = useAppSelector(state => state.decksSlice.currentPage)
-  const meId = useAppSelector(state => state.authSlice.id)
+  const orderBy = useAppSelector(state => state.decksSlice.orderBy)
+  //const meId = useAppSelector(state => state.authSlice.id)
 
   const { isLoading, data } = useGetDecksQuery({
     minCardsCount,
     maxCardsCount,
     authorId,
-    orderBy: 'created-desc',
+    orderBy,
     name,
     itemsPerPage,
     currentPage,
@@ -48,14 +49,6 @@ export const Decks = () => {
     }
   }, [data?.maxCardsCount])
 
-  const onPacksCardsChange = (value: string) => {
-    if (value === 'my-cards') {
-      dispatch(decksSlice.actions.setAuthorId(meId))
-    }
-    if (value === 'all-cards') {
-      dispatch(decksSlice.actions.setAuthorId(''))
-    }
-  }
   const onNumberOfCardsChange = (values: [number, number]) => {
     dispatch(decksSlice.actions.setMinCardsCount(values[0]))
     dispatch(decksSlice.actions.setMaxCardsCount(values[1]))
@@ -74,8 +67,8 @@ export const Decks = () => {
   }
 
   const [createDeck] = useCreateDecksMutation()
-  const onAddPack = (packName: string, isPrivate?: boolean) => {
-    createDeck({ name: packName, isPrivate: isPrivate })
+  const onAddPack = (data: AddDeckFormValues) => {
+    createDeck({ name: data.name, cover: data.cover[0], isPrivate: data.private })
     setShowModal(false)
   }
 
@@ -104,13 +97,7 @@ export const Decks = () => {
             onClearSearch={onClearSearch}
             onChangeSearch={onChangeSearch}
           />
-          <Tabs
-            tabs={tabs}
-            value={authorId ? 'my-cards' : 'all-cards'}
-            title={'Show packs cards'}
-            onValueChange={onPacksCardsChange}
-            defaultValue={'all-cards'}
-          />
+          <DecksTabs />
           <Slider
             defaultValue={[minCardsCount, data.maxCardsCount]}
             value={[minCardsCount, maxCardsCount]}
@@ -133,5 +120,30 @@ export const Decks = () => {
         />
       </div>
     </>
+  )
+}
+
+const DecksTabs = () => {
+  const { data } = useAuthMeQuery()
+  const dispatch = useAppDispatch()
+  // const meId = useAppSelector(state => state.authSlice.id)
+  const authorId = useAppSelector(state => state.decksSlice.authorId)
+  const onPacksCardsChange = (value: string) => {
+    if (value === 'my-cards' && data) {
+      dispatch(decksSlice.actions.setAuthorId(data.id))
+    }
+    if (value === 'all-cards') {
+      dispatch(decksSlice.actions.setAuthorId(''))
+    }
+  }
+
+  return (
+    <Tabs
+      tabs={tabs}
+      value={authorId ? 'my-cards' : 'all-cards'}
+      title={'Show packs cards'}
+      onValueChange={onPacksCardsChange}
+      defaultValue={'all-cards'}
+    />
   )
 }

@@ -38,7 +38,7 @@ const CardsDropDown: FC<Props> = ({ deckId }) => {
         alignOffset={-9}
         sideOffset={6}
       >
-        <NavLink to={'#'} className={s.link}>
+        <NavLink to={`/${deckId}/learn`} className={s.link}>
           <DropDownItem icon={<Learn size={16} />}>Learn</DropDownItem>
         </NavLink>
         <button className={s.btn} onClick={onClickEdit}>

@@ -28,8 +28,8 @@ export type CreateCardArgs = {
   id: string
   question: string
   answer: string
-  questionImg?: string
-  answerImg?: string
+  questionImg?: File
+  answerImg?: File
   questionVideo?: string
   answerVideo?: string
 }

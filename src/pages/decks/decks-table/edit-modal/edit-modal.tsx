@@ -1,9 +1,10 @@
 import { FC } from 'react'
 
 import { Modal } from '@/components/ui'
-import { AddNewPackForm } from '@/pages/decks/add-deck/add-deck.tsx'
+import { AddDeckFormValues, AddNewPackForm } from '@/pages/decks/add-deck/add-deck.tsx'
 import { useGetDecksByIdQuery, useUpdateDecksMutation } from '@/services/decks/decks-api.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
+import { UpdateDeckArgs } from '@/services/decks/types.ts'
 import { useAppDispatch } from '@/services/store.ts'
 
 type ModalProps = {
@@ -16,8 +17,11 @@ export const EditModal: FC<ModalProps> = ({ deckId }) => {
   const onModalClose = () => {
     dispatch(decksSlice.actions.setEditedDeckId(''))
   }
-  const onEditDeck = (name: string, isPrivate?: boolean) => {
-    updateDeck({ name, isPrivate, id: deckId })
+  const onEditDeck = (data: AddDeckFormValues) => {
+    const deckData: UpdateDeckArgs = { name: data.name, id: deckId, isPrivate: data.private }
+
+    if (data.cover[0]) deckData.cover = data.cover[0]
+    updateDeck(deckData)
     onModalClose()
   }
 
@@ -32,7 +36,7 @@ export const EditModal: FC<ModalProps> = ({ deckId }) => {
       <AddNewPackForm
         isEdit
         onCreate={onEditDeck}
-        defaultValue={{ name: data.name, private: data.isPrivate }}
+        defaultValue={{ name: data.name, private: data.isPrivate, cover: data.cover }}
       />
     </Modal>
   )

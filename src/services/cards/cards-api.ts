@@ -1,3 +1,4 @@
+import { createFormData } from '@/common/utilis/createFormData.ts'
 import { baseApi } from '@/services/base-api.ts'
 import { Card, CardRes, CreateCardArgs, GetCardsArgs } from '@/services/cards/types.ts'
 
@@ -12,7 +13,7 @@ const cardsApi = baseApi.injectEndpoints({
             params: args,
           }
         },
-        providesTags: ['CreateCard', 'EditCard', 'DeleteCard'],
+        providesTags: ['Cards'],
       }),
       getCardById: builder.query<Card, { id: string }>({
         query: ({ id }) => {
@@ -21,26 +22,31 @@ const cardsApi = baseApi.injectEndpoints({
             method: 'GET',
           }
         },
+        providesTags: ['Card'],
       }),
       addCard: builder.mutation<Card, CreateCardArgs>({
-        query: ({ id, answer, question }) => {
+        query: ({ id, ...data }) => {
+          const formData = createFormData({ ...data })
+
           return {
             url: `v1/decks/${id}/cards`,
             method: 'POST',
-            body: { answer, question },
+            body: formData,
           }
         },
-        invalidatesTags: ['CreateCard'],
+        invalidatesTags: ['Cards'],
       }),
       editCard: builder.mutation<Card, CreateCardArgs>({
-        query: ({ id, answer, question }) => {
+        query: ({ id, ...data }) => {
+          const formData = createFormData(data)
+
           return {
             url: `v1/cards/${id}`,
             method: 'PATCH',
-            body: { answer, question },
+            body: formData,
           }
         },
-        invalidatesTags: ['EditCard'],
+        invalidatesTags: ['Cards', 'Card'],
       }),
       deleteCard: builder.mutation<any, { cardId: string }>({
         query: ({ cardId }) => {
@@ -49,7 +55,16 @@ const cardsApi = baseApi.injectEndpoints({
             method: 'DELETE',
           }
         },
-        invalidatesTags: ['DeleteCard'],
+        invalidatesTags: ['Cards'],
+      }),
+      getRandomCard: builder.query<Card, { deckId: string }>({
+        query: ({ deckId }) => {
+          return {
+            url: `v1/decks/${deckId}/learn`,
+            method: 'GET',
+          }
+        },
+        // invalidatesTags: ['Cards'],
       }),
     }
   },
@@ -61,4 +76,5 @@ export const {
   useEditCardMutation,
   useGetCardByIdQuery,
   useDeleteCardMutation,
+  useGetRandomCardQuery,
 } = cardsApi

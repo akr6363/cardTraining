@@ -1,0 +1,9 @@
+.root {
+  position: relative;
+}
+
+.errorContainer {
+  position: absolute;
+  bottom: -23px;
+  color: var(--color-danger-300);
+}

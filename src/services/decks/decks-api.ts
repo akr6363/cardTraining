@@ -1,3 +1,4 @@
+import { createFormData } from '@/common/utilis/createFormData.ts'
 import { baseApi } from '@/services/base-api.ts'
 import {
   CreateDeckArgs,
@@ -6,6 +7,7 @@ import {
   GetDecksArgs,
   UpdateDeckArgs,
 } from '@/services/decks/types.ts'
+import { RootState } from '@/services/store.ts'
 
 const decksApi = baseApi.injectEndpoints({
   endpoints: builder => {
@@ -18,7 +20,7 @@ const decksApi = baseApi.injectEndpoints({
             params: args,
           }
         },
-        providesTags: ['Decks', 'DecksUpdate', 'DecksDelete'],
+        providesTags: ['Decks'],
       }),
       getDecksById: builder.query<Deck, { id: string }>({
         query: ({ id }) => {
@@ -30,24 +32,61 @@ const decksApi = baseApi.injectEndpoints({
         providesTags: ['Deck'],
       }),
       createDecks: builder.mutation<Deck, CreateDeckArgs>({
-        query: ({ name }) => {
+        query: data => {
+          const formData = createFormData(data)
+
           return {
             url: `v1/decks`,
             method: 'POST',
-            body: { name },
+            body: formData,
           }
         },
+
         invalidatesTags: ['Decks'],
       }),
       updateDecks: builder.mutation<Deck, UpdateDeckArgs>({
-        query: ({ name, isPrivate, id }) => {
+        query: ({ id, ...data }) => {
+          const formData = createFormData({ ...data })
+
           return {
             url: `v1/decks/${id}`,
             method: 'PATCH',
-            body: { name, isPrivate },
+            body: formData,
           }
         },
-        invalidatesTags: ['DecksUpdate', 'Deck'],
+        async onQueryStarted({ id, ...data }, { dispatch, getState, queryFulfilled }) {
+          const state = getState() as RootState
+          const {
+            name,
+            minCardsCount,
+            maxCardsCount,
+            authorId,
+            orderBy,
+            itemsPerPage,
+            currentPage,
+          } = state.decksSlice
+          const patchResult = dispatch(
+            decksApi.util.updateQueryData(
+              'getDecks',
+              { name, minCardsCount, maxCardsCount, authorId, orderBy, itemsPerPage, currentPage },
+              draft => {
+                const index = draft.items.findIndex(deck => deck.id === id)
+
+                if (index !== -1) {
+                  draft.items[index].name = data.name
+                  if (data.cover) draft.items[index].cover = URL.createObjectURL(data.cover)
+                }
+              }
+            )
+          )
+
+          try {
+            await queryFulfilled
+          } catch {
+            patchResult.undo()
+          }
+        },
+        invalidatesTags: ['Decks', 'Deck'],
       }),
       deleteDecks: builder.mutation<Omit<Deck, 'author'>, { id: string }>({
         query: ({ id }) => {
@@ -56,7 +95,34 @@ const decksApi = baseApi.injectEndpoints({
             method: 'DELETE',
           }
         },
-        invalidatesTags: ['DecksDelete'],
+        async onQueryStarted({ id }, { dispatch, getState, queryFulfilled }) {
+          const state = getState() as RootState
+          const {
+            name,
+            minCardsCount,
+            maxCardsCount,
+            authorId,
+            orderBy,
+            itemsPerPage,
+            currentPage,
+          } = state.decksSlice
+          const patchResult = dispatch(
+            decksApi.util.updateQueryData(
+              'getDecks',
+              { name, minCardsCount, maxCardsCount, authorId, orderBy, itemsPerPage, currentPage },
+              draft => {
+                draft.items = draft.items.filter(deck => deck.id !== id)
+              }
+            )
+          )
+
+          try {
+            await queryFulfilled
+          } catch {
+            patchResult.undo()
+          }
+        },
+        invalidatesTags: ['Decks'],
       }),
     }
   },

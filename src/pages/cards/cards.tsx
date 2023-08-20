@@ -7,23 +7,25 @@ import s from './cards.module.scss'
 
 import { ArrowBackLong } from '@/assets/icons/components/ArrowBackLong.tsx'
 import { Button, Modal, Pagination, Typography } from '@/components/ui'
-import { AddCardForm } from '@/pages/cards/add-card-form/add-card-form.tsx'
+import { AddCardForm, AddCardFormValues } from '@/pages/cards/add-card-form/add-card-form.tsx'
 import CardsDropDown from '@/pages/cards/cards-drop-down/cards-drop-down.tsx'
 import { CardsTable } from '@/pages/cards/cards-table/cards-table.tsx'
 import { SearchInput } from '@/pages/decks/search-input/search-input.tsx'
+import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
 import { useAddCardMutation, useGetCardsQuery } from '@/services/cards/cards-api.ts'
 import { cardsSlice } from '@/services/cards/cards.slice.ts'
+import { CreateCardArgs } from '@/services/cards/types.ts'
 import { useGetDecksByIdQuery } from '@/services/decks/decks-api.ts'
 import { useAppDispatch, useAppSelector } from '@/services/store.ts'
 
 export const Cards = () => {
   const dispatch = useAppDispatch()
+  const { data: meData } = useAuthMeQuery()
   const params = useParams()
   const id = params.id ? params.id : ''
   const itemsPerPage = useAppSelector(state => state.cardsSlice.itemsPerPage)
   const currentPage = useAppSelector(state => state.cardsSlice.currentPage)
   const question = useAppSelector(state => state.cardsSlice.question)
-  const meId = useAppSelector(state => state.authSlice.id)
   const { isLoading, data } = useGetCardsQuery({
     id,
     itemsPerPage,
@@ -48,15 +50,20 @@ export const Cards = () => {
     dispatch(cardsSlice.actions.setQuestion(''))
   }
   const [addCard] = useAddCardMutation()
-  const onAddCard = (question: string, answer: string) => {
-    addCard({ id, answer, question })
+  const onAddCard = (data: AddCardFormValues) => {
+    const cardData: CreateCardArgs = { id, answer: data.answer, question: data.question }
+
+    if (data.answerImg[0]) cardData.answerImg = data.answerImg[0]
+    if (data.questionImg[0]) cardData.questionImg = data.questionImg[0]
+    addCard(cardData)
     setShowModal(false)
   }
 
   const onClickAdd = () => {
     setShowModal(true)
   }
-  const isMy = meId === deck?.userId
+
+  const isMy = meData && meData.id === deck?.userId
 
   return isLoading || !data || !deck || isLoadingDeck ? (
     <div>Loading...</div>
@@ -103,7 +110,7 @@ export const Cards = () => {
                 onClearSearch={onClearSearch}
               />
             </div>
-            <CardsTable data={data} isMy={meId === deck.userId} />
+            <CardsTable data={data} isMy={!!isMy} />
             <Pagination
               page={data.pagination.currentPage}
               selectOptions={['10', '20', '30']}

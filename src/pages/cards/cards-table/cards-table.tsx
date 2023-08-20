@@ -32,8 +32,8 @@ export const CardsTable: FC<Props> = ({ data, isMy }) => {
         {data.items.map(el => {
           return (
             <tr key={el.id}>
-              {el.questionImg ? <Cell img={el.questionImg}></Cell> : <Cell>{el.question}</Cell>}
-              {el.answerImg ? <Cell img={el.answerImg}></Cell> : <Cell>{el.answer}</Cell>}
+              <Cell img={el.questionImg}>{el.question}</Cell>
+              <Cell img={el.answerImg}>{el.answer}</Cell>
               <Cell>{new Date(el.updated).toLocaleDateString('en-GB')}</Cell>
               <Cell>
                 <Rating value={el.grade} />
