@@ -52,18 +52,3 @@
   padding: 2px 0;
 }
 
-.empty {
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  gap: 30px;
-  align-items: center;
-  justify-content: center;
-
-  width: 100%;
-
-  .emptyText {
-    color: var(--color-dark-100);
-  }
-}

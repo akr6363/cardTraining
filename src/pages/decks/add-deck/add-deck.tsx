@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useState } from 'react'
+import { FC, useEffect } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -6,16 +6,15 @@ import { z } from 'zod'
 
 import s from './add-deck.module.scss'
 
-import { cover } from '@/common/zodSchems.ts'
+import { imgValidation } from '@/common/zodSchems.ts'
 import { Button, ControlledCheckbox, ControlledTextField } from '@/components/ui'
-import { InputFile } from '@/components/ui/inputFile/input-file.tsx'
+import { InputFileWithPreview } from '@/components/ui/inputFile/input-file-with-preview.tsx'
 
-const logoutSchema = z
-  .object({
-    name: z.string().nonempty('The field is required').min(3),
-    private: z.boolean(),
-  })
-  .merge(cover)
+const logoutSchema = z.object({
+  name: z.string().nonempty('The field is required').min(3),
+  private: z.boolean(),
+  cover: imgValidation,
+})
 
 export type AddDeckFormValues = z.infer<typeof logoutSchema>
 
@@ -30,7 +29,6 @@ export const AddNewPackForm: FC<AddNewPackFormProps> = ({
   defaultValue,
   isEdit = false,
 }) => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const {
     register,
     setValue,
@@ -47,7 +45,6 @@ export const AddNewPackForm: FC<AddNewPackFormProps> = ({
     if (defaultValue) {
       setValue('name', defaultValue.name)
       setValue('private', defaultValue.private)
-      setValue('cover', defaultValue.cover)
     }
   }, [])
 
@@ -55,31 +52,12 @@ export const AddNewPackForm: FC<AddNewPackFormProps> = ({
     onCreate(data)
   }
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    let file: File | null = null
-
-    if (e.target.files) {
-      file = e.target.files[0]
-    }
-    setSelectedFile(file)
-  }
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
-      {selectedFile && (
-        <div className={s.coverPreview}>
-          <img src={URL.createObjectURL(selectedFile)} alt="Preview" />
-        </div>
-      )}
-      {!selectedFile && defaultValue?.cover && (
-        <div className={s.coverPreview}>
-          <img src={defaultValue?.cover} alt="Preview" />
-        </div>
-      )}
-      <InputFile
+      <InputFileWithPreview
+        defaultValue={defaultValue?.cover}
         id={'cover'}
         {...register('cover')}
-        onSelect={handleFileChange}
         errorMessage={errors.cover?.message?.toString()}
       />
       <ControlledTextField

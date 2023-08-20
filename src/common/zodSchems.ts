@@ -20,9 +20,9 @@ export const imgValidation = z
     return files[0].size <= MAX_FILE_SIZE
   }, 'Max file size is 5MB.')
 
-export const cover = z.object({
-  cover: imgValidation,
-})
+// export const cover = z.object({
+//   cover: imgValidation,
+// })
 
 export const password = z.object({
   password: z

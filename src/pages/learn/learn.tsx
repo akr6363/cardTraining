@@ -1,10 +1,11 @@
 import { FC, useState } from 'react'
 
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 import s from './learn.module.scss'
 
-import { ArrowBackLong } from '@/assets/icons/components/ArrowBackLong.tsx'
+import { BackBtn } from '@/components/common/back-btn/back-btn.tsx'
+import { EmptyPage } from '@/components/common/empty-page/empty-page.tsx'
 import { Button, Card, Typography } from '@/components/ui'
 import { GradeFormValues, SetGradeForm } from '@/pages/learn/set-grade-form/set-grade-from.tsx'
 import { useGetRandomCardQuery, useSaveGradeMutation } from '@/services/cards/cards-api.ts'
@@ -14,7 +15,6 @@ type LearnCardProps = {}
 
 export const LearnPage: FC<LearnCardProps> = () => {
   const params = useParams()
-  const navigate = useNavigate()
 
   if (!params.id) return null
   const id = params.id
@@ -36,55 +36,51 @@ export const LearnPage: FC<LearnCardProps> = () => {
     refetch()
   }
 
-  return cardData && deck ? (
+  return (
     <>
-      <Button
-        onClick={() => {
-          navigate(-1)
-        }}
-        variant={'link'}
-        style={{ alignSelf: 'start' }}
-        icon={<ArrowBackLong size={16} color={'var(--color-accent-500)'} />}
-      >
-        Back
-      </Button>
-
-      <Card title={`Learn ${deck.name}`} className={s.card}>
-        <div className={s.question}>
-          <Typography variant={'Subtitle_1'}>Question:</Typography>
-          <Typography variant={'Body_1'}>{cardData.question}</Typography>
-        </div>
-        {cardData.questionImg && (
-          <div className={s.img}>
-            <img src={cardData.questionImg} alt="Preview" />
+      <BackBtn />
+      {cardData && deck ? (
+        <Card title={`Learn ${deck.name}`} className={s.card}>
+          <div className={s.question}>
+            <Typography variant={'Subtitle_1'}>Question:</Typography>
+            <Typography variant={'Body_1'}>{cardData.question}</Typography>
           </div>
-        )}
-        {isShowAnswer && (
-          <>
-            <div className={s.question}>
-              <Typography variant={'Subtitle_1'}>Answer: </Typography>
-              <Typography variant={'Body_1'}>{cardData.answer}</Typography>
+          {cardData.questionImg && (
+            <div className={s.img}>
+              <img src={cardData.questionImg} alt="Preview" />
             </div>
-            {cardData.answerImg && (
-              <div className={s.img}>
-                <img src={cardData.answerImg} alt="Preview" />
+          )}
+          {isShowAnswer && (
+            <>
+              <div className={s.question}>
+                <Typography variant={'Subtitle_1'}>Answer: </Typography>
+                <Typography variant={'Body_1'}>{cardData.answer}</Typography>
               </div>
-            )}
-            <Typography variant={'Subtitle_1'} className={s.rateLabel}>
-              Rate yourself:
-            </Typography>
-            <SetGradeForm
-              onSetGrade={onSetGrade}
-              defaultValue={cardData.grade ? cardData.grade.toString() : '1'}
-            />
-          </>
-        )}
-        {!isShowAnswer && (
-          <Button variant={'primary'} fullWidth={true} onClick={onShowAnswer}>
-            Show Answer
-          </Button>
-        )}
-      </Card>
+              {cardData.answerImg && (
+                <div className={s.img}>
+                  <img src={cardData.answerImg} alt="Preview" />
+                </div>
+              )}
+              <Typography variant={'Subtitle_1'} className={s.rateLabel}>
+                Rate yourself:
+              </Typography>
+              <SetGradeForm
+                onSetGrade={onSetGrade}
+                defaultValue={cardData.grade ? cardData.grade.toString() : '1'}
+              />
+            </>
+          )}
+          {!isShowAnswer && (
+            <Button variant={'primary'} fullWidth={true} onClick={onShowAnswer}>
+              Show Answer
+            </Button>
+          )}
+        </Card>
+      ) : (
+        <EmptyPage>
+          <Typography variant={'Body_1'}>There is nothing to learn here yet</Typography>
+        </EmptyPage>
+      )}
     </>
-  ) : null
+  )
 }

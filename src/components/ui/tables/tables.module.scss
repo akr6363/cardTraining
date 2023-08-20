@@ -53,6 +53,7 @@
 }
 
 .editBlock {
+  z-index: 1000;
   display: flex;
   gap: 0.625rem;
   margin: 0 auto;

@@ -40,11 +40,9 @@ const DecksTable: FC<Props> = memo(({ data }) => {
       <Table columns={columns} className={s.table}>
         {data.items.map(el => {
           return (
-            <tr key={el.id}>
+            <tr key={el.id} className={s.deckTr}>
               <Cell className={s.nameCell} img={el.cover}>
-                {/*<Button as={NavLink} to={`/${el.id}`} variant={'link'}>*/}
                 {el.name}
-                {/*</Button>*/}
               </Cell>
               <Cell>{el.cardsCount}</Cell>
               <Cell>{new Date(el.updated).toLocaleDateString('en-GB')}</Cell>
@@ -66,6 +64,9 @@ const DecksTable: FC<Props> = memo(({ data }) => {
                   )}
                 </EditBlock>
               </Cell>
+              <td className={s.cellLink}>
+                <NavLink to={`/${el.id}`}></NavLink>
+              </td>
             </tr>
           )
         })}

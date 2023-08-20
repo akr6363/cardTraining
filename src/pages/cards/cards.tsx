@@ -6,6 +6,7 @@ import { NavLink, useParams } from 'react-router-dom'
 import s from './cards.module.scss'
 
 import { ArrowBackLong } from '@/assets/icons/components/ArrowBackLong.tsx'
+import { EmptyPage } from '@/components/common/empty-page/empty-page.tsx'
 import { Button, Modal, Pagination, Typography } from '@/components/ui'
 import { AddCardForm, AddCardFormValues } from '@/pages/cards/add-card-form/add-card-form.tsx'
 import CardsDropDown from '@/pages/cards/cards-drop-down/cards-drop-down.tsx'
@@ -121,13 +122,13 @@ export const Cards = () => {
             />
           </>
         ) : (
-          <div className={s.empty}>
-            <Typography variant={'Body_1'} className={s.emptyText}>
+          <EmptyPage>
+            <Typography variant={'Body_1'}>
               This pack is empty.
               {isMy && 'Click add new card to fill this pack'}
             </Typography>
             {isMy && <AddCardButton onClick={onClickAdd} />}
-          </div>
+          </EmptyPage>
         )}
       </div>
     </>
