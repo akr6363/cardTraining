@@ -14,10 +14,10 @@ import { useAppDispatch, useAppSelector } from '@/services/store.ts'
 
 const columns = [
   { title: 'Name', sortKey: 'name', width: '26%' },
-  { title: 'Cards', sortKey: 'cards', width: '14%' },
-  { title: 'Last Update', sortKey: 'update', width: '20%' },
-  { title: 'Created by', sortKey: 'author', width: '29%' },
-  { title: '', sortKey: 'edit', width: '11%' },
+  { title: 'Cards', sortKey: 'cardsCount', width: '14%' },
+  { title: 'Last Update', sortKey: 'updated', width: '20%' },
+  { title: 'Created by', width: '29%' },
+  { title: '', width: '11%' },
 ]
 
 type Props = {
@@ -25,7 +25,6 @@ type Props = {
 }
 
 const DecksTable: FC<Props> = memo(({ data }) => {
-  //const meId = useAppSelector(state => state.authSlice.id)
   const { data: meData } = useAuthMeQuery()
   const dispatch = useAppDispatch()
   const onClickEdit = (id: string) => {
@@ -43,16 +42,18 @@ const DecksTable: FC<Props> = memo(({ data }) => {
           return (
             <tr key={el.id}>
               <Cell className={s.nameCell} img={el.cover}>
-                <Button as={NavLink} to={`/${el.id}`} variant={'link'}>
-                  {el.name}
-                </Button>
+                {/*<Button as={NavLink} to={`/${el.id}`} variant={'link'}>*/}
+                {el.name}
+                {/*</Button>*/}
               </Cell>
               <Cell>{el.cardsCount}</Cell>
               <Cell>{new Date(el.updated).toLocaleDateString('en-GB')}</Cell>
               <Cell>{el.author.name}</Cell>
               <Cell>
                 <EditBlock>
-                  <Learn size={16} />
+                  <Button variant={'icon'} as={NavLink} to={`/${el.id}/learn`}>
+                    <Learn size={16} />
+                  </Button>
                   {meData?.id === el.author.id && (
                     <>
                       <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>

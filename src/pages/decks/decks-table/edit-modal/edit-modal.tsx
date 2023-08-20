@@ -20,7 +20,9 @@ export const EditModal: FC<ModalProps> = ({ deckId }) => {
   const onEditDeck = (data: AddDeckFormValues) => {
     const deckData: UpdateDeckArgs = { name: data.name, id: deckId, isPrivate: data.private }
 
-    if (data.cover[0]) deckData.cover = data.cover[0]
+    if (data.cover && typeof data.cover === 'object') {
+      deckData.cover = data.cover[0]
+    }
     updateDeck(deckData)
     onModalClose()
   }

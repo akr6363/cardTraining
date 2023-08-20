@@ -1,3 +1,5 @@
+@import '../../../styles/mixins';
+
 .table {
   border-collapse: collapse;
   width: 100%;
@@ -22,8 +24,10 @@
 
 .cellContainer {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.625rem;
   align-items: center;
+
   word-wrap: break-word;
 
   .imgContainer {
@@ -52,4 +56,34 @@
   display: flex;
   gap: 0.625rem;
   margin: 0 auto;
+}
+
+.sortBtn {
+cursor: pointer;
+
+  display: flex;
+  gap: 4px;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
+
+}
+
+
+
+.asc, .desc {
+  background-color:var(--color-dark-300);
+}
+
+svg {
+  @include transition(transform);
+}
+
+.asc {
+  svg {
+    @include transition(transform);
+
+    transform: rotate(180deg);
+  }
 }
