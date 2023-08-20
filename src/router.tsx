@@ -9,7 +9,7 @@ import {
 import { Header } from '@/components/ui'
 import { Cards } from '@/pages/cards/cards.tsx'
 import { Decks } from '@/pages/decks/decks.tsx'
-import { LearnPage } from '@/pages/learn/learn-card/learn-card.tsx'
+import { LearnPage } from '@/pages/learn/learn.tsx'
 import { ProfilePage } from '@/pages/profile/profile.tsx'
 import SignInPage from '@/pages/sign-in/sign-in.tsx'
 import { SignUpPage } from '@/pages/sign-up/sign-up.tsx'

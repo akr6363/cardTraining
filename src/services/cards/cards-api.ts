@@ -1,6 +1,12 @@
 import { createFormData } from '@/common/utilis/createFormData.ts'
 import { baseApi } from '@/services/base-api.ts'
-import { Card, CardRes, CreateCardArgs, GetCardsArgs } from '@/services/cards/types.ts'
+import {
+  Card,
+  CardRes,
+  CreateCardArgs,
+  GetCardsArgs,
+  SaveGradeArgs,
+} from '@/services/cards/types.ts'
 
 const cardsApi = baseApi.injectEndpoints({
   endpoints: builder => {
@@ -64,6 +70,15 @@ const cardsApi = baseApi.injectEndpoints({
             method: 'GET',
           }
         },
+      }),
+      saveGrade: builder.mutation<{}, SaveGradeArgs>({
+        query: ({ deckId, cardId, grade }) => {
+          return {
+            url: `v1/decks/${deckId}/learn`,
+            method: 'POST',
+            body: { cardId, grade },
+          }
+        },
         // invalidatesTags: ['Cards'],
       }),
     }
@@ -77,4 +92,5 @@ export const {
   useGetCardByIdQuery,
   useDeleteCardMutation,
   useGetRandomCardQuery,
+  useSaveGradeMutation,
 } = cardsApi
