@@ -7,8 +7,6 @@ import { Typography } from '../typography'
 import s from './tables.module.scss'
 
 import { ArrowDown } from '@/assets/icons/components'
-import { decksSlice } from '@/services/decks/decks.slice.ts'
-import { useAppDispatch, useAppSelector } from '@/services/store.ts'
 
 type Column = {
   title: string
@@ -20,28 +18,19 @@ export type TableProps = {
   columns: Column[]
   children?: ReactNode
   className?: string
+  onSort: (sortKey: string) => void
+  sortName: string
+  sortDirection: string
 }
 
-export const Table: FC<TableProps> = ({ columns, children, className }) => {
-  const dispatch = useAppDispatch()
-
-  const orderBy = useAppSelector(state => state.decksSlice.orderBy)
-  const sortName = orderBy.split('-')[0]
-  const sortDirection = orderBy.split('-')[1]
-  const onSort = (sortKey: string) => {
-    if (sortName !== sortKey) {
-      dispatch(decksSlice.actions.setOrderBy(`${sortKey}-asc`))
-    }
-    if (sortName === sortKey) {
-      if (sortDirection === 'asc') {
-        dispatch(decksSlice.actions.setOrderBy(`${sortKey}-desc`))
-      }
-      if (sortDirection === 'desc') {
-        dispatch(decksSlice.actions.setOrderBy(''))
-      }
-    }
-  }
-
+export const Table: FC<TableProps> = ({
+  columns,
+  children,
+  className,
+  onSort,
+  sortName,
+  sortDirection,
+}) => {
   return (
     <table className={clsx(s.table, className)}>
       <thead>

@@ -79,7 +79,6 @@ const cardsApi = baseApi.injectEndpoints({
             body: { cardId, grade },
           }
         },
-        // invalidatesTags: ['Cards'],
       }),
     }
   },

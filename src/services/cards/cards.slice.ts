@@ -31,5 +31,8 @@ export const cardsSlice = createSlice({
     setDeletedCardId: (state, action: PayloadAction<string>) => {
       state.deletedCardId = action.payload
     },
+    setOrderBy: (state, action: PayloadAction<string>) => {
+      state.orderBy = action.payload
+    },
   },
 })

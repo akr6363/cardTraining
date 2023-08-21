@@ -27,12 +27,13 @@ export const Cards = () => {
   const itemsPerPage = useAppSelector(state => state.cardsSlice.itemsPerPage)
   const currentPage = useAppSelector(state => state.cardsSlice.currentPage)
   const question = useAppSelector(state => state.cardsSlice.question)
+  const orderBy = useAppSelector(state => state.cardsSlice.orderBy)
   const { isLoading, data } = useGetCardsQuery({
     id,
     itemsPerPage,
     currentPage,
     question,
-    orderBy: 'created-desc',
+    orderBy,
   })
   const { isLoading: isLoadingDeck, data: deck } = useGetDecksByIdQuery({
     id,
@@ -70,7 +71,7 @@ export const Cards = () => {
     <div>Loading...</div>
   ) : (
     <>
-      <Modal isOpen={showModal} title={'Add New Pack'} onClose={() => setShowModal(false)}>
+      <Modal isOpen={showModal} title={'Add New Card'} onClose={() => setShowModal(false)}>
         <AddCardForm onAdd={onAddCard} />
       </Modal>
       <div className={clsx('container', s.container)}>

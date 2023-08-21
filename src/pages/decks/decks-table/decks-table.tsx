@@ -33,11 +33,33 @@ const DecksTable: FC<Props> = memo(({ data }) => {
   const onClickDelete = (id: string) => {
     dispatch(decksSlice.actions.setDeletedDeckId(id))
   }
+  const orderBy = useAppSelector(state => state.decksSlice.orderBy)
+  const sortName = orderBy.split('-')[0]
+  const sortDirection = orderBy.split('-')[1]
+  const onSortHandler = (sortKey: string) => {
+    if (sortName !== sortKey) {
+      dispatch(decksSlice.actions.setOrderBy(`${sortKey}-asc`))
+    }
+    if (sortName === sortKey) {
+      if (sortDirection === 'asc') {
+        dispatch(decksSlice.actions.setOrderBy(`${sortKey}-desc`))
+      }
+      if (sortDirection === 'desc') {
+        dispatch(decksSlice.actions.setOrderBy(''))
+      }
+    }
+  }
 
   return (
     <>
       <Modals />
-      <Table columns={columns} className={s.table}>
+      <Table
+        columns={columns}
+        className={s.table}
+        onSort={onSortHandler}
+        sortName={sortName}
+        sortDirection={sortDirection}
+      >
         {data.items.map(el => {
           return (
             <tr key={el.id} className={s.deckTr}>
