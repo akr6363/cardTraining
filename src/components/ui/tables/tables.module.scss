@@ -8,6 +8,10 @@
     background-color: var(--color-dark-500);
   }
 
+  tbody {
+    position: relative;
+  }
+
   tr {
     border: 0.0625rem solid var(--color-dark-500);
   }

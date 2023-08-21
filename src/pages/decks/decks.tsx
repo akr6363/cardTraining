@@ -5,10 +5,11 @@ import { clsx } from 'clsx'
 import s from './decks.module.scss'
 
 import { Delete } from '@/assets/icons/components'
+import { EmptyPage } from '@/components/common/empty-page/empty-page.tsx'
 import { Button, Modal, Pagination, Slider, Typography } from '@/components/ui'
 import { Tabs, TabType } from '@/components/ui/tabs'
 import { AddDeckFormValues, AddNewPackForm } from '@/pages/decks/add-deck/add-deck.tsx'
-import DecksTable from '@/pages/decks/decks-table/decks-table.tsx'
+import { DecksTable } from '@/pages/decks/decks-table/decks-table.tsx'
 import { SearchInput } from '@/pages/decks/search-input/search-input.tsx'
 import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
 import { useCreateDecksMutation, useGetDecksQuery } from '@/services/decks/decks-api.ts'
@@ -30,7 +31,7 @@ export const Decks = () => {
   const currentPage = useAppSelector(state => state.decksSlice.currentPage)
   const orderBy = useAppSelector(state => state.decksSlice.orderBy)
 
-  const { isLoading, data } = useGetDecksQuery({
+  const { data, isLoading, status } = useGetDecksQuery({
     minCardsCount,
     maxCardsCount,
     authorId,
@@ -78,9 +79,9 @@ export const Decks = () => {
     dispatch(decksSlice.actions.setName(''))
   }
 
-  return isLoading || !data ? (
-    <div>Loading...</div>
-  ) : (
+  if (isLoading) return <div>Loading...</div>
+
+  return data ? (
     <>
       <Modal isOpen={showModal} title={'Add New Pack'} onClose={() => setShowModal(false)}>
         <AddNewPackForm onCreate={onAddPack} />
@@ -108,7 +109,13 @@ export const Decks = () => {
             Clear Filter
           </Button>
         </div>
-        <DecksTable data={data} />
+        {data.items.length !== 0 ? (
+          <DecksTable data={data} status={status} />
+        ) : (
+          <EmptyPage>
+            <Typography variant={'Body_1'}>There are no decks here</Typography>
+          </EmptyPage>
+        )}
         <Pagination
           page={data.pagination.currentPage}
           selectOptions={['10', '20', '30']}
@@ -119,13 +126,12 @@ export const Decks = () => {
         />
       </div>
     </>
-  )
+  ) : null
 }
 
 const DecksTabs = () => {
   const { data } = useAuthMeQuery()
   const dispatch = useAppDispatch()
-  // const meId = useAppSelector(state => state.authSlice.id)
   const authorId = useAppSelector(state => state.decksSlice.authorId)
   const onPacksCardsChange = (value: string) => {
     if (value === 'my-cards' && data) {

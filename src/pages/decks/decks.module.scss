@@ -1,6 +1,8 @@
 .container {
   display: flex;
   flex-direction: column;
+
+  min-height: calc(100vh - 60px);
   padding-top: 2.0625rem;
   padding-bottom: 2.0625rem;
 }
@@ -48,3 +50,5 @@
     height: 100%;
   }
 }
+
+

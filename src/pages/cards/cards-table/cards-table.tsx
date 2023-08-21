@@ -1,6 +1,7 @@
 import { FC } from 'react'
 
 import { Delete, Edit } from '@/assets/icons/components'
+import { TableDataPreloader } from '@/components/common/table-data-preloader/table-data-preloader.tsx'
 import { Button, Cell, Rating, Table } from '@/components/ui'
 import { DeleteCardModal } from '@/pages/cards/cards-table/deleted-card-modal/delete-card-modal.tsx'
 import { EditCardModal } from '@/pages/cards/cards-table/edit-card-modal/edit-card-modal.tsx'
@@ -12,17 +13,12 @@ import { useAppDispatch, useAppSelector } from '@/services/store.ts'
 type Props = {
   data: CardRes
   isMy?: boolean
+  status: string
 }
-export const CardsTable: FC<Props> = ({ data, isMy }) => {
+export const CardsTable: FC<Props> = ({ data, isMy = false, status }) => {
   const dispatch = useAppDispatch()
   const editedCardId = useAppSelector(state => state.cardsSlice.editedCardId)
   const deletedCardId = useAppSelector(state => state.cardsSlice.deletedCardId)
-  const onClickEdit = (id: string) => {
-    dispatch(cardsSlice.actions.setEditedCardId(id))
-  }
-  const onClickDelete = (id: string) => {
-    dispatch(cardsSlice.actions.setDeletedCardId(id))
-  }
 
   const orderBy = useAppSelector(state => state.cardsSlice.orderBy)
   const sortName = orderBy.split('-')[0]
@@ -52,29 +48,50 @@ export const CardsTable: FC<Props> = ({ data, isMy }) => {
         sortDirection={sortDirection}
         sortName={sortName}
       >
-        {data.items.map(el => {
-          return (
-            <tr key={el.id}>
-              <Cell img={el.questionImg}>{el.question}</Cell>
-              <Cell img={el.answerImg}>{el.answer}</Cell>
-              <Cell>{new Date(el.updated).toLocaleDateString('en-GB')}</Cell>
-              <Cell>
-                <Rating value={el.grade} />
-              </Cell>
-              {isMy && (
-                <Cell>
-                  <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>
-                    <Edit size={16} />
-                  </Button>
-                  <Button variant={'icon'} onClick={() => onClickDelete(el.id)}>
-                    <Delete size={16} />
-                  </Button>
-                </Cell>
-              )}
-            </tr>
-          )
-        })}
+        <MappedItems data={data} isMy={isMy}></MappedItems>
+        {status === 'pending' && <TableDataPreloader />}
       </Table>
+    </>
+  )
+}
+
+type MappedItemsProps = {
+  data: CardRes
+  isMy: boolean
+}
+const MappedItems: FC<MappedItemsProps> = ({ data, isMy }) => {
+  const dispatch = useAppDispatch()
+  const onClickEdit = (id: string) => {
+    dispatch(cardsSlice.actions.setEditedCardId(id))
+  }
+  const onClickDelete = (id: string) => {
+    dispatch(cardsSlice.actions.setDeletedCardId(id))
+  }
+
+  return (
+    <>
+      {data.items.map(el => {
+        return (
+          <tr key={el.id}>
+            <Cell img={el.questionImg}>{el.question}</Cell>
+            <Cell img={el.answerImg}>{el.answer}</Cell>
+            <Cell>{new Date(el.updated).toLocaleDateString('en-GB')}</Cell>
+            <Cell>
+              <Rating value={el.grade} />
+            </Cell>
+            {isMy && (
+              <Cell>
+                <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>
+                  <Edit size={16} />
+                </Button>
+                <Button variant={'icon'} onClick={() => onClickDelete(el.id)}>
+                  <Delete size={16} />
+                </Button>
+              </Cell>
+            )}
+          </tr>
+        )
+      })}
     </>
   )
 }
