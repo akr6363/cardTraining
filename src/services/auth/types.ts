@@ -32,8 +32,12 @@ export type updateUserDataArgs = {
   email?: string
   name?: string
 }
-// export type updatePhotoArgs = {
-//   avatar?: File
-//   email?: string
-//   name?: string
-// }
+export type RecoverPasswordArgs = {
+  html?: string
+  email: string
+  subject?: string
+}
+export type ResetPasswordArgs = {
+  password: string
+  token: string
+}

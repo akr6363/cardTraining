@@ -1,6 +1,8 @@
 import { createFormData } from '@/common/utilis/createFormData.ts'
 import {
   meResponse,
+  RecoverPasswordArgs,
+  ResetPasswordArgs,
   signUpArgs,
   signUpResponse,
   updateUserDataArgs,
@@ -64,6 +66,24 @@ const authApi = baseApi.injectEndpoints({
           }
         },
       }),
+      recoverPassword: builder.mutation<any, RecoverPasswordArgs>({
+        query: args => {
+          return {
+            url: `/v1/auth/recover-password`,
+            method: 'POST',
+            body: args,
+          }
+        },
+      }),
+      resetPassword: builder.mutation<any, ResetPasswordArgs>({
+        query: ({ token, password }) => {
+          return {
+            url: `/v1/auth/reset-password/${token}`,
+            method: 'POST',
+            body: { password },
+          }
+        },
+      }),
       updateUserData: builder.mutation<signUpResponse, updateUserDataArgs>({
         query: data => {
           const formData = createFormData(data)
@@ -104,4 +124,6 @@ export const {
   useLogoutMutation,
   useSignupMutation,
   useUpdateUserDataMutation,
+  useRecoverPasswordMutation,
+  useResetPasswordMutation,
 } = authApi

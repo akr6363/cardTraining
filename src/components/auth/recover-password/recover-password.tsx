@@ -18,7 +18,7 @@ const logoutSchema = email
 type FormValues = z.infer<typeof logoutSchema>
 
 export type RecoverPasswordProps = {
-  onSend: (data: FormValues) => void
+  onSend: (email: string) => void
 }
 export const RecoverPassword: FC<RecoverPasswordProps> = ({ onSend }) => {
   const {
@@ -34,7 +34,7 @@ export const RecoverPassword: FC<RecoverPasswordProps> = ({ onSend }) => {
   })
 
   const onSubmit = (data: FormValues) => {
-    onSend(data)
+    onSend(data.email)
   }
 
   return (
@@ -55,7 +55,7 @@ export const RecoverPassword: FC<RecoverPasswordProps> = ({ onSend }) => {
       <Typography variant={'Body_2'} className={s.text}>
         Did you remember your password?
       </Typography>
-      <Button as={Link} variant={'link'} className={s.link} to={'/login-in'}>
+      <Button as={Link} variant={'link'} className={s.link} to={'/login'}>
         Try logging in
       </Button>
     </Card>
