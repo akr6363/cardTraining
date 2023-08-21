@@ -28,13 +28,14 @@ export const Cards = () => {
   const currentPage = useAppSelector(state => state.cardsSlice.currentPage)
   const question = useAppSelector(state => state.cardsSlice.question)
   const orderBy = useAppSelector(state => state.cardsSlice.orderBy)
-  const { isLoading, data } = useGetCardsQuery({
+  const { isLoading, data, status } = useGetCardsQuery({
     id,
     itemsPerPage,
     currentPage,
     question,
     orderBy,
   })
+
   const { isLoading: isLoadingDeck, data: deck } = useGetDecksByIdQuery({
     id,
   })
@@ -66,10 +67,11 @@ export const Cards = () => {
   }
 
   const isMy = meData && meData.id === deck?.userId
+  const isItems = data?.items && data.items.length > 0
 
-  return isLoading || !data || !deck || isLoadingDeck ? (
-    <div>Loading...</div>
-  ) : (
+  if (isLoading || isLoadingDeck) return <div>Loading...</div>
+
+  return (
     <>
       <Modal isOpen={showModal} title={'Add New Card'} onClose={() => setShowModal(false)}>
         <AddCardForm onAdd={onAddCard} />
@@ -86,10 +88,10 @@ export const Cards = () => {
         </Button>
         <div className={s.top}>
           <div className={s.title}>
-            <Typography variant={'Large'}>{deck.name}</Typography>
+            <Typography variant={'Large'}>{deck?.name}</Typography>
             {isMy && <CardsDropDown deckId={id} />}
           </div>
-          {data.items.length > 0 &&
+          {isItems &&
             (isMy ? (
               <AddCardButton onClick={onClickAdd} />
             ) : (
@@ -98,12 +100,12 @@ export const Cards = () => {
               </Button>
             ))}
         </div>
-        {deck.cover && (
+        {deck?.cover && (
           <div className={s.deckImg}>
-            <img src={deck.cover} alt="" />
+            <img src={deck?.cover} alt="" />
           </div>
         )}
-        {data.items.length > 0 ? (
+        {(isItems || question) && (
           <>
             <div className={s.search}>
               <SearchInput
@@ -112,17 +114,24 @@ export const Cards = () => {
                 onClearSearch={onClearSearch}
               />
             </div>
-            <CardsTable data={data} isMy={!!isMy} />
+            {isItems ? (
+              <CardsTable data={data} isMy={!!isMy} status={status} />
+            ) : (
+              <EmptyPage>
+                <Typography variant={'Body_1'}>There are no cards here</Typography>
+              </EmptyPage>
+            )}
             <Pagination
-              page={data.pagination.currentPage}
+              page={data!.pagination.currentPage}
               selectOptions={['10', '20', '30']}
               selectCurrent={itemsPerPage.toString()}
               onSelectChange={onItemsPerPageChange}
-              count={data.pagination.totalPages}
+              count={data!.pagination.totalPages}
               onChange={onPageChange}
             />
           </>
-        ) : (
+        )}
+        {!isItems && !question && (
           <EmptyPage>
             <Typography variant={'Body_1'}>
               This pack is empty.

@@ -3,6 +3,7 @@ import { FC, memo } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { Delete, Edit, Learn } from '@/assets/icons/components'
+import { TableDataPreloader } from '@/components/common/table-data-preloader/table-data-preloader.tsx'
 import { Button, Cell, EditBlock, Table } from '@/components/ui'
 import { DeleteModal } from '@/pages/decks/decks-table/delete-modal/delete-modal.tsx'
 import { EditModal } from '@/pages/decks/decks-table/edit-modal/edit-modal.tsx'
@@ -22,17 +23,12 @@ const columns = [
 
 type Props = {
   data: DecksRes
+  status: string
 }
 
-const DecksTable: FC<Props> = memo(({ data }) => {
-  const { data: meData } = useAuthMeQuery()
+export const DecksTable: FC<Props> = memo(({ data, status }) => {
   const dispatch = useAppDispatch()
-  const onClickEdit = (id: string) => {
-    dispatch(decksSlice.actions.setEditedDeckId(id))
-  }
-  const onClickDelete = (id: string) => {
-    dispatch(decksSlice.actions.setDeletedDeckId(id))
-  }
+
   const orderBy = useAppSelector(state => state.decksSlice.orderBy)
   const sortName = orderBy.split('-')[0]
   const sortDirection = orderBy.split('-')[1]
@@ -60,44 +56,12 @@ const DecksTable: FC<Props> = memo(({ data }) => {
         sortName={sortName}
         sortDirection={sortDirection}
       >
-        {data.items.map(el => {
-          return (
-            <tr key={el.id} className={s.deckTr}>
-              <Cell className={s.nameCell} img={el.cover}>
-                {el.name}
-              </Cell>
-              <Cell>{el.cardsCount}</Cell>
-              <Cell>{new Date(el.updated).toLocaleDateString('en-GB')}</Cell>
-              <Cell>{el.author.name}</Cell>
-              <Cell>
-                <EditBlock>
-                  <Button variant={'icon'} as={NavLink} to={`/${el.id}/learn`}>
-                    <Learn size={16} />
-                  </Button>
-                  {meData?.id === el.author.id && (
-                    <>
-                      <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>
-                        <Edit size={16} />
-                      </Button>
-                      <Button variant={'icon'} onClick={() => onClickDelete(el.id)}>
-                        <Delete size={16} />
-                      </Button>
-                    </>
-                  )}
-                </EditBlock>
-              </Cell>
-              <td className={s.cellLink}>
-                <NavLink to={`/${el.id}`}></NavLink>
-              </td>
-            </tr>
-          )
-        })}
+        <MappedItems data={data} />
+        {status === 'pending' && <TableDataPreloader />}
       </Table>
     </>
   )
 })
-
-export default DecksTable
 
 const Modals = () => {
   const editedUserId = useAppSelector(state => state.decksSlice.editedDeckId)
@@ -107,6 +71,58 @@ const Modals = () => {
     <>
       {editedUserId && <EditModal deckId={editedUserId}></EditModal>}
       {deletedUserId && <DeleteModal deckId={deletedUserId}></DeleteModal>}
+    </>
+  )
+}
+
+type MappedItemsProps = {
+  data: DecksRes
+}
+const MappedItems: FC<MappedItemsProps> = ({ data }) => {
+  const { data: meData } = useAuthMeQuery()
+
+  const dispatch = useAppDispatch()
+  const onClickEdit = (id: string) => {
+    dispatch(decksSlice.actions.setEditedDeckId(id))
+  }
+  const onClickDelete = (id: string) => {
+    dispatch(decksSlice.actions.setDeletedDeckId(id))
+  }
+
+  return (
+    <>
+      {data.items.map(el => {
+        return (
+          <tr key={el.id} className={s.deckTr}>
+            <Cell className={s.nameCell} img={el.cover}>
+              {el.name}
+            </Cell>
+            <Cell>{el.cardsCount}</Cell>
+            <Cell>{new Date(el.updated).toLocaleDateString('en-GB')}</Cell>
+            <Cell>{el.author.name}</Cell>
+            <Cell>
+              <EditBlock>
+                <Button variant={'icon'} as={NavLink} to={`/${el.id}/learn`}>
+                  <Learn size={16} />
+                </Button>
+                {meData?.id === el.author.id && (
+                  <>
+                    <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>
+                      <Edit size={16} />
+                    </Button>
+                    <Button variant={'icon'} onClick={() => onClickDelete(el.id)}>
+                      <Delete size={16} />
+                    </Button>
+                  </>
+                )}
+              </EditBlock>
+            </Cell>
+            <td className={s.cellLink}>
+              <NavLink to={`/${el.id}`}></NavLink>
+            </td>
+          </tr>
+        )
+      })}
     </>
   )
 }

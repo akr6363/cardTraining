@@ -12,6 +12,11 @@ export const SignInPage = () => {
 
   const handleSignIn = (data: any) => {
     signIn(data)
+      .unwrap()
+      .then(() => {})
+      .catch(e => {
+        console.log(e)
+      })
   }
 
   return <LoginForm onLogin={handleSignIn} isSubmit={isSignInLoading || isLoading}></LoginForm>
