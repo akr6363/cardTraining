@@ -9,6 +9,10 @@
 
   width: 100%;
 
+
   color: var(--color-dark-100);
 
+  a, button {
+    color: var(--color-light-100);
+  }
 }

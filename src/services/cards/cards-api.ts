@@ -79,6 +79,17 @@ const cardsApi = baseApi.injectEndpoints({
             body: { cardId, grade },
           }
         },
+        async onQueryStarted({ deckId }, { dispatch, queryFulfilled }) {
+          try {
+            const res = await queryFulfilled
+
+            dispatch(
+              cardsApi.util.updateQueryData('getRandomCard', { deckId }, draft => {
+                return { ...draft, ...res.data }
+              })
+            )
+          } catch {}
+        },
       }),
     }
   },
