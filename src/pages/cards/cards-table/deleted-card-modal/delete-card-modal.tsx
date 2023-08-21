@@ -2,6 +2,8 @@ import { FC } from 'react'
 
 import s from './delete-card-modal.module.scss'
 
+import { Overlay } from '@/components/common/overlay/overlay.tsx'
+import { Preloader } from '@/components/common/preloader/preloader.tsx'
 import { Button, Modal, Typography } from '@/components/ui'
 import { useDeleteCardMutation, useGetCardByIdQuery } from '@/services/cards/cards-api.ts'
 import { cardsSlice } from '@/services/cards/cards.slice.ts'
@@ -24,19 +26,23 @@ export const DeleteCardModal: FC<ModalProps> = ({ cardId }) => {
     onModalClose()
   }
 
-  return isLoading || !data ? (
-    <div>Loading...</div>
-  ) : (
+  return (
     <Modal isOpen={true} title={'Delete Pack'} onClose={onModalClose}>
-      <div className={s.container}>
-        <Typography variant={'Body_1'} className={s.text}>
-          Do you really want to remove <b>{data.answer}?</b> <br />
-          All cards will be deleted. Do you really want to remove All cards will be deleted.
-        </Typography>
-        <Button onClick={onDeleteDeck} style={{ alignSelf: 'end' }}>
-          Delete Card
-        </Button>
-      </div>
+      {isLoading ? (
+        <Overlay>
+          <Preloader />
+        </Overlay>
+      ) : (
+        <div className={s.container}>
+          <Typography variant={'Body_1'} className={s.text}>
+            Do you really want to remove <b>{data?.answer}?</b> <br />
+            All cards will be deleted. Do you really want to remove All cards will be deleted.
+          </Typography>
+          <Button onClick={onDeleteDeck} style={{ alignSelf: 'end' }}>
+            Delete Card
+          </Button>
+        </div>
+      )}
     </Modal>
   )
 }

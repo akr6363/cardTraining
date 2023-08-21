@@ -7,6 +7,8 @@ import s from './cards.module.scss'
 
 import { ArrowBackLong } from '@/assets/icons/components/ArrowBackLong.tsx'
 import { EmptyPage } from '@/components/common/empty-page/empty-page.tsx'
+import { Overlay } from '@/components/common/overlay/overlay.tsx'
+import { Preloader } from '@/components/common/preloader/preloader.tsx'
 import { Button, Modal, Pagination, Typography } from '@/components/ui'
 import { AddCardForm, AddCardFormValues } from '@/pages/cards/add-card-form/add-card-form.tsx'
 import CardsDropDown from '@/pages/cards/cards-drop-down/cards-drop-down.tsx'
@@ -52,14 +54,17 @@ export const Cards = () => {
   const onClearSearch = () => {
     dispatch(cardsSlice.actions.setQuestion(''))
   }
-  const [addCard] = useAddCardMutation()
+  const [addCard, { isLoading: isAddCardLoading }] = useAddCardMutation()
   const onAddCard = (data: AddCardFormValues) => {
     const cardData: CreateCardArgs = { id, answer: data.answer, question: data.question }
 
     if (data.answerImg[0]) cardData.answerImg = data.answerImg[0]
     if (data.questionImg[0]) cardData.questionImg = data.questionImg[0]
     addCard(cardData)
-    setShowModal(false)
+      .unwrap()
+      .then(() => {
+        setShowModal(false)
+      })
   }
 
   const onClickAdd = () => {
@@ -75,6 +80,11 @@ export const Cards = () => {
     <>
       <Modal isOpen={showModal} title={'Add New Card'} onClose={() => setShowModal(false)}>
         <AddCardForm onAdd={onAddCard} />
+        {isAddCardLoading && (
+          <Overlay>
+            <Preloader />
+          </Overlay>
+        )}
       </Modal>
       <div className={clsx('container', s.container)}>
         <Button

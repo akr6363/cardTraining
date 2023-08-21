@@ -1,5 +1,7 @@
 import { FC } from 'react'
 
+import { Overlay } from '@/components/common/overlay/overlay.tsx'
+import { Preloader } from '@/components/common/preloader/preloader.tsx'
 import { Modal } from '@/components/ui'
 import { AddCardForm, AddCardFormValues } from '@/pages/cards/add-card-form/add-card-form.tsx'
 import { useEditCardMutation, useGetCardByIdQuery } from '@/services/cards/cards-api.ts'
@@ -35,20 +37,24 @@ export const EditCardModal: FC<ModalProps> = ({ cardId }) => {
     id: cardId,
   })
 
-  return isLoading || !data ? (
-    <div>Loading...</div>
-  ) : (
+  return (
     <Modal isOpen={true} title={'Edit Card'} onClose={onModalClose}>
-      <AddCardForm
-        isEdit
-        onAdd={onEditCard}
-        defaultValue={{
-          answer: data.answer,
-          question: data.question,
-          questionImg: data.questionImg,
-          answerImg: data.answerImg,
-        }}
-      />
+      {isLoading ? (
+        <Overlay>
+          <Preloader />
+        </Overlay>
+      ) : (
+        <AddCardForm
+          isEdit
+          onAdd={onEditCard}
+          defaultValue={{
+            answer: data!.answer,
+            question: data!.question,
+            questionImg: data?.questionImg,
+            answerImg: data?.answerImg,
+          }}
+        />
+      )}
     </Modal>
   )
 }
