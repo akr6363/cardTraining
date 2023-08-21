@@ -17,7 +17,7 @@ const logoutSchema = password
 type FormValues = z.infer<typeof logoutSchema>
 
 export type NewPasswordProps = {
-  onCreate: (data: FormValues) => void
+  onCreate: (password: string) => void
 }
 export const NewPassword: FC<NewPasswordProps> = ({ onCreate }) => {
   const {
@@ -33,7 +33,7 @@ export const NewPassword: FC<NewPasswordProps> = ({ onCreate }) => {
   })
 
   const onSubmit = (data: FormValues) => {
-    onCreate(data)
+    onCreate(data.password)
   }
 
   return (

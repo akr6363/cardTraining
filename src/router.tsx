@@ -10,8 +10,10 @@ import { Header } from '@/components/ui'
 import { Cards } from '@/pages/cards/cards.tsx'
 import { Decks } from '@/pages/decks/decks.tsx'
 import { LearnPage } from '@/pages/learn/learn.tsx'
+import { NewPasswordPage } from '@/pages/new-password/new-password.tsx'
 import { ProfilePage } from '@/pages/profile/profile.tsx'
-import SignInPage from '@/pages/sign-in/sign-in.tsx'
+import { RecoverPasswordPage } from '@/pages/recover-password/recover-password.tsx'
+import { SignInPage } from '@/pages/sign-in/sign-in.tsx'
 import { SignUpPage } from '@/pages/sign-up/sign-up.tsx'
 import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
 const Container = () => {
@@ -36,6 +38,14 @@ const publicRoutes: RouteObject[] = [
       {
         path: '/sign-up',
         element: <SignUpPage />,
+      },
+      {
+        path: '/recover-password',
+        element: <RecoverPasswordPage />,
+      },
+      {
+        path: '/new-password/:token',
+        element: <NewPasswordPage />,
       },
     ],
   },

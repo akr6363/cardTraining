@@ -38,7 +38,9 @@ export const Header: FC<HeaderProps> = () => {
           </div>
         ) : (
           <>
-            <Button>Sign In</Button>
+            <Button as={NavLink} to={'/login'}>
+              Sign In
+            </Button>
           </>
         )}
       </div>

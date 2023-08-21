@@ -62,7 +62,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onLogin, isSubmit }) => {
           className={s.inputPassword}
         />
         <ControlledCheckbox control={control} name={'rememberMe'} label={'Remember me'} />
-        <Link to={'/new-password'} className={s.forgotPasswordLink}>
+        <Link to={'/recover-password'} className={s.forgotPasswordLink}>
           <Typography variant={'Body_2'}>Forgot Password?</Typography>
         </Link>
         <Button type="submit" disabled={isSubmit}>

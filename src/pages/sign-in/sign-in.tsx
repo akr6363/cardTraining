@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom'
 import { LoginForm } from '@/components/auth'
 import { useAuthMeQuery, useLoginMutation } from '@/services/auth/auth-api.ts'
 
-const SignInPage = () => {
+export const SignInPage = () => {
   const [signIn, { isLoading: isSignInLoading }] = useLoginMutation()
   const { data, isLoading } = useAuthMeQuery()
 
@@ -16,5 +16,3 @@ const SignInPage = () => {
 
   return <LoginForm onLogin={handleSignIn} isSubmit={isSignInLoading || isLoading}></LoginForm>
 }
-
-export default SignInPage
