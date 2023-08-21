@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom'
 
 import { Header } from '@/components/ui'
+import { PageNotFound } from '@/pages/404/page-not-found.tsx'
 import { Cards } from '@/pages/cards/cards.tsx'
 import { Decks } from '@/pages/decks/decks.tsx'
 import { LearnPage } from '@/pages/learn/learn.tsx'
@@ -92,6 +93,10 @@ const router = createBrowserRouter([
         children: privateRoutes,
       },
       ...publicRoutes,
+      {
+        path: '*',
+        element: <PageNotFound />,
+      },
     ],
   },
 ])

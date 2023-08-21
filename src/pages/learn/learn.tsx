@@ -18,7 +18,7 @@ export const LearnPage: FC<LearnCardProps> = () => {
 
   if (!params.id) return null
   const id = params.id
-  const { data: cardData, refetch } = useGetRandomCardQuery({ deckId: id })
+  const { data: cardData } = useGetRandomCardQuery({ deckId: id })
   const { data: deck } = useGetDecksByIdQuery({
     id,
   })
@@ -32,8 +32,10 @@ export const LearnPage: FC<LearnCardProps> = () => {
   const [saveGrade] = useSaveGradeMutation()
   const onSetGrade = (data: GradeFormValues) => {
     saveGrade({ deckId: id, cardId: cardData!.id, grade: Number(data.rate) })
-    setIsShowAnswer(false)
-    refetch()
+      .unwrap()
+      .then(() => {
+        setIsShowAnswer(false)
+      })
   }
 
   return (
