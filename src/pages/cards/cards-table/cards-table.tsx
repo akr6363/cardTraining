@@ -24,11 +24,34 @@ export const CardsTable: FC<Props> = ({ data, isMy }) => {
     dispatch(cardsSlice.actions.setDeletedCardId(id))
   }
 
+  const orderBy = useAppSelector(state => state.cardsSlice.orderBy)
+  const sortName = orderBy.split('-')[0]
+  const sortDirection = orderBy.split('-')[1]
+  const onSortHandler = (sortKey: string) => {
+    if (sortName !== sortKey) {
+      dispatch(cardsSlice.actions.setOrderBy(`${sortKey}-asc`))
+    }
+    if (sortName === sortKey) {
+      if (sortDirection === 'asc') {
+        dispatch(cardsSlice.actions.setOrderBy(`${sortKey}-desc`))
+      }
+      if (sortDirection === 'desc') {
+        dispatch(cardsSlice.actions.setOrderBy(''))
+      }
+    }
+  }
+
   return (
     <>
       {editedCardId && <EditCardModal cardId={editedCardId}></EditCardModal>}
       {deletedCardId && <DeleteCardModal cardId={deletedCardId}></DeleteCardModal>}
-      <Table columns={isMy ? columnsMyDeck : columns} className={s.table}>
+      <Table
+        columns={isMy ? columnsMyDeck : columns}
+        className={s.table}
+        onSort={onSortHandler}
+        sortDirection={sortDirection}
+        sortName={sortName}
+      >
         {data.items.map(el => {
           return (
             <tr key={el.id}>
@@ -57,15 +80,15 @@ export const CardsTable: FC<Props> = ({ data, isMy }) => {
 }
 
 const columnsMyDeck = [
-  { title: 'Question', sortKey: 'question', width: '30%' },
-  { title: 'Answer', sortKey: 'answer', width: '30%' },
-  { title: 'Last Update', sortKey: 'update', width: '13%' },
+  { title: 'Question', width: '28%' },
+  { title: 'Answer', width: '28%' },
+  { title: 'Last Update', sortKey: 'updated', width: '17%' },
   { title: 'Grade', sortKey: 'grade', width: '17%' },
-  { title: '', sortKey: 'edit', width: '10%' },
+  { title: '', width: '10%' },
 ]
 const columns = [
-  { title: 'Question', sortKey: 'question', width: '30%' },
-  { title: 'Answer', sortKey: 'answer', width: '30%' },
-  { title: 'Last Update', sortKey: 'update', width: '20%' },
+  { title: 'Question', width: '30%' },
+  { title: 'Answer', width: '30%' },
+  { title: 'Last Update', sortKey: 'updated', width: '20%' },
   { title: 'Grade', sortKey: 'grade', width: '20%' },
 ]
