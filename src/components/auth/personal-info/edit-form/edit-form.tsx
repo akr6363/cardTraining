@@ -14,8 +14,9 @@ type FormValues = z.infer<typeof logoutSchema>
 export type EditFormProps = {
   onSave: (name: string) => void
   defaultValue: string
+  isFetching?: boolean
 }
-export const EditForm: FC<EditFormProps> = ({ onSave, defaultValue }) => {
+export const EditForm: FC<EditFormProps> = ({ onSave, defaultValue, isFetching }) => {
   const {
     handleSubmit,
     control,
@@ -40,7 +41,9 @@ export const EditForm: FC<EditFormProps> = ({ onSave, defaultValue }) => {
         errorMessage={errors.name?.message}
         className={s.inputName}
       />
-      <Button type="submit">Save Changes</Button>
+      <Button type="submit" isFetching={isFetching}>
+        Save Changes
+      </Button>
     </form>
   )
 }

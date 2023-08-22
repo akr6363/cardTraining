@@ -6,6 +6,8 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 
+import { EmptyPage } from '@/components/common/empty-page/empty-page.tsx'
+import { Preloader } from '@/components/common/preloader/preloader.tsx'
 import { Header } from '@/components/ui'
 import { PageNotFound } from '@/pages/404/page-not-found.tsx'
 import { Cards } from '@/pages/cards/cards.tsx'
@@ -108,7 +110,12 @@ export const Router = () => {
 function PrivateRoutes() {
   const { data, isLoading } = useAuthMeQuery()
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading)
+    return (
+      <EmptyPage>
+        <Preloader />
+      </EmptyPage>
+    )
 
   const isAuthenticated = !!data
 

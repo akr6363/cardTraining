@@ -18,8 +18,9 @@ type FormValues = z.infer<typeof logoutSchema>
 
 export type NewPasswordProps = {
   onCreate: (password: string) => void
+  isFetching?: boolean
 }
-export const NewPassword: FC<NewPasswordProps> = ({ onCreate }) => {
+export const NewPassword: FC<NewPasswordProps> = ({ onCreate, isFetching }) => {
   const {
     handleSubmit,
     control,
@@ -50,7 +51,9 @@ export const NewPassword: FC<NewPasswordProps> = ({ onCreate }) => {
         <Typography variant={'Body_2'} className={s.desc}>
           Create new password and we will send you further instructions to email
         </Typography>
-        <Button type="submit">Create New Password</Button>
+        <Button type="submit" isFetching={isFetching}>
+          Create New Password
+        </Button>
       </form>
     </Card>
   )

@@ -25,10 +25,10 @@ type FormValues = z.infer<typeof loginSchema>
 
 export type LoginFormProps = {
   onLogin: (data: FormValues) => void
-  isSubmit?: boolean
+  isFetching?: boolean
 }
 
-export const LoginForm: FC<LoginFormProps> = ({ onLogin, isSubmit }) => {
+export const LoginForm: FC<LoginFormProps> = ({ onLogin, isFetching }) => {
   const {
     handleSubmit,
     control,
@@ -65,7 +65,7 @@ export const LoginForm: FC<LoginFormProps> = ({ onLogin, isSubmit }) => {
         <Link to={'/recover-password'} className={s.forgotPasswordLink}>
           <Typography variant={'Body_2'}>Forgot Password?</Typography>
         </Link>
-        <Button type="submit" disabled={isSubmit}>
+        <Button type="submit" isFetching={isFetching}>
           Sign In
         </Button>
       </form>
