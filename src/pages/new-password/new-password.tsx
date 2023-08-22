@@ -5,7 +5,7 @@ import { useResetPasswordMutation } from '@/services/auth/auth-api.ts'
 import { ResetPasswordArgs } from '@/services/auth/types.ts'
 
 export const NewPasswordPage = () => {
-  const [resetPassword] = useResetPasswordMutation()
+  const [resetPassword, { isLoading }] = useResetPasswordMutation()
   const navigate = useNavigate()
   const params = useParams()
   const token = params.token ? params.token : ''
@@ -22,5 +22,5 @@ export const NewPasswordPage = () => {
       })
   }
 
-  return <NewPassword onCreate={onChangePassword} />
+  return <NewPassword onCreate={onChangePassword} isFetching={isLoading} />
 }

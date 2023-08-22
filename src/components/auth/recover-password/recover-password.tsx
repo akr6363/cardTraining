@@ -19,8 +19,9 @@ type FormValues = z.infer<typeof logoutSchema>
 
 export type RecoverPasswordProps = {
   onSend: (email: string) => void
+  isFetching?: boolean
 }
-export const RecoverPassword: FC<RecoverPasswordProps> = ({ onSend }) => {
+export const RecoverPassword: FC<RecoverPasswordProps> = ({ onSend, isFetching }) => {
   const {
     handleSubmit,
     control,
@@ -50,7 +51,9 @@ export const RecoverPassword: FC<RecoverPasswordProps> = ({ onSend }) => {
         <Typography variant={'Body_2'} className={s.desc}>
           Enter your email address and we will send you further instructions
         </Typography>
-        <Button type="submit">Send Instructions</Button>
+        <Button type="submit" isFetching={isFetching}>
+          Send Instructions
+        </Button>
       </form>
       <Typography variant={'Body_2'} className={s.text}>
         Did you remember your password?

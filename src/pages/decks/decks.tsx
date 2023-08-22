@@ -6,6 +6,7 @@ import s from './decks.module.scss'
 
 import { Delete } from '@/assets/icons/components'
 import { EmptyPage } from '@/components/common/empty-page/empty-page.tsx'
+import { Preloader } from '@/components/common/preloader/preloader.tsx'
 import { Button, Modal, Pagination, Slider, Typography } from '@/components/ui'
 import { Tabs, TabType } from '@/components/ui/tabs'
 import { AddDeckFormValues, AddNewPackForm } from '@/pages/decks/add-deck/add-deck.tsx'
@@ -82,7 +83,12 @@ export const Decks = () => {
     dispatch(decksSlice.actions.setName(''))
   }
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading)
+    return (
+      <EmptyPage>
+        <Preloader />
+      </EmptyPage>
+    )
 
   return data ? (
     <>

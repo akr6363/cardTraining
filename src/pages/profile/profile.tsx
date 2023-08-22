@@ -7,9 +7,8 @@ import {
 } from '@/services/auth/auth-api.ts'
 
 export const ProfilePage = () => {
-  const { data, isLoading } = useAuthMeQuery()
+  const { data } = useAuthMeQuery()
 
-  if (isLoading) return <div>Loading...</div>
   const [logout] = useLogoutMutation()
   const [updateUserData] = useUpdateUserDataMutation()
 
