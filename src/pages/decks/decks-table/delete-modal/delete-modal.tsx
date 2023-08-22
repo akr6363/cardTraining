@@ -22,10 +22,11 @@ export const DeleteDeckModal: FC<ModalProps> = ({ deckData }) => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (error) {
-      //@ts-ignore
-      alert(error?.data?.message)
-    }
+    // console.log()
+    // if (error) {
+    //   //@ts-ignore
+    //   alert(error?.data?.message)
+    // }
   }, [error])
 
   const onModalClose = () => {

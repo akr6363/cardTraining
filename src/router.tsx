@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import {
   createBrowserRouter,
   Navigate,
@@ -5,6 +7,7 @@ import {
   RouteObject,
   RouterProvider,
 } from 'react-router-dom'
+import { toast, ToastContainer } from 'react-toastify'
 
 import { EmptyPage } from '@/components/common/empty-page/empty-page.tsx'
 import { Preloader } from '@/components/common/preloader/preloader.tsx'
@@ -19,6 +22,8 @@ import { RecoverPasswordPage } from '@/pages/recover-password/recover-password.t
 import { SignInPage } from '@/pages/sign-in/sign-in.tsx'
 import { SignUpPage } from '@/pages/sign-up/sign-up.tsx'
 import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
+import { authSlice } from '@/services/auth/auth.slice.ts'
+import { useAppDispatch, useAppSelector } from '@/services/store.ts'
 const Container = () => {
   return (
     <div className={'authContainer'}>
@@ -78,8 +83,19 @@ const privateRoutes: RouteObject[] = [
   },
 ]
 const Layout = () => {
+  const error = useAppSelector(state => state.authSlice.error)
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error)
+    }
+    dispatch(authSlice.actions.setError(''))
+  }, [error])
+
   return (
     <>
+      <ToastContainer />
       <Header />
       <Outlet />
     </>
@@ -94,7 +110,11 @@ const router = createBrowserRouter([
         element: <PrivateRoutes />,
         children: privateRoutes,
       },
-      ...publicRoutes,
+      {
+        element: <PublicRoutes />,
+        children: publicRoutes,
+      },
+      // ...publicRoutes,
       {
         path: '*',
         element: <PageNotFound />,
@@ -120,4 +140,18 @@ function PrivateRoutes() {
   const isAuthenticated = !!data
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />
+}
+function PublicRoutes() {
+  const { data, isLoading } = useAuthMeQuery()
+
+  if (isLoading)
+    return (
+      <EmptyPage>
+        <Preloader />
+      </EmptyPage>
+    )
+
+  const isAuthenticated = !data
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/" />
 }

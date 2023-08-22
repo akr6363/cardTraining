@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 
 import { Modal } from '@/components/ui'
 import { AddCardForm, AddCardFormValues } from '@/pages/cards/add-card-form/add-card-form.tsx'
@@ -12,7 +12,7 @@ type ModalProps = {
 }
 export const EditCardModal: FC<ModalProps> = ({ cardData }) => {
   const dispatch = useAppDispatch()
-  const [editCard, { isLoading }] = useEditCardMutation()
+  const [editCard, { isLoading, error }] = useEditCardMutation()
 
   const onModalClose = () => {
     dispatch(cardsSlice.actions.setEditedCardId(''))
@@ -37,6 +37,14 @@ export const EditCardModal: FC<ModalProps> = ({ cardData }) => {
         onModalClose()
       })
   }
+
+  useEffect(() => {
+    console.log(error)
+    // if (error) {
+    //   //@ts-ignore
+    //   alert(error?.data?.message)
+    // }
+  }, [error])
 
   return (
     <Modal isOpen={true} title={'Edit Card'} onClose={onModalClose}>

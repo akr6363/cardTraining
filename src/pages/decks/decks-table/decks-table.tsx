@@ -88,6 +88,9 @@ const MappedItems: FC<MappedItemsProps> = ({ data }) => {
     deletedStatus,
   } = useChangeDecks()
 
+  console.log(editedStatus)
+  console.log(editedDeckId)
+
   return (
     <>
       {editedDeckId && editedStatus === 'fulfilled' && (

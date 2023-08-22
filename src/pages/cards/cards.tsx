@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import { clsx } from 'clsx'
 import { NavLink, useParams } from 'react-router-dom'
@@ -59,7 +59,7 @@ export const Cards = () => {
   const onClearSearch = () => {
     dispatch(cardsSlice.actions.setQuestion(''))
   }
-  const [addCard, { isLoading: isAddCardLoading }] = useAddCardMutation()
+  const [addCard, { isLoading: isAddCardLoading, error }] = useAddCardMutation()
   const onAddCard = (data: AddCardFormValues) => {
     const cardData: CreateCardArgs = { id, answer: data.answer, question: data.question }
 
@@ -71,6 +71,23 @@ export const Cards = () => {
         setShowModal(false)
       })
   }
+
+  useEffect(() => {
+    console.log(error)
+    // if (error) {
+    //   if ('data' in error) {
+    //     if (error.data && 'errorMessages' in error.data) {
+    //       setAddDeckErrors(error.data.errorMessages)
+    //     }
+    //     if (error.data && 'message' in error.data) {
+    //       dispatch(authSlice.actions.setError(error.data.message))
+    //     }
+    //   }
+    //   if ('error' in error) {
+    //     dispatch(authSlice.actions.setError(error.error))
+    //   }
+    // }
+  }, [error])
 
   const onClickAdd = () => {
     setShowModal(true)
