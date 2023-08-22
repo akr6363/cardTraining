@@ -1,14 +1,10 @@
-import { Navigate } from 'react-router-dom'
-
 import { getIsPending } from '@/common/utilis/getIsStatus.tsx'
 import { LoginForm } from '@/components/auth'
 import { useAuthMeQuery, useLoginMutation } from '@/services/auth/auth-api.ts'
 
 export const SignInPage = () => {
   const [signIn, { isLoading: isSignInLoading }] = useLoginMutation()
-  const { data, status: status } = useAuthMeQuery()
-
-  if (data) return <Navigate to={'/'} />
+  const { status: status } = useAuthMeQuery()
 
   const handleSignIn = (data: any) => {
     signIn(data)

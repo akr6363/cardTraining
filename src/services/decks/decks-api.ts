@@ -41,7 +41,6 @@ const decksApi = baseApi.injectEndpoints({
             body: formData,
           }
         },
-
         invalidatesTags: ['Decks'],
       }),
       updateDecks: builder.mutation<Deck, UpdateDeckArgs>({
@@ -86,7 +85,8 @@ const decksApi = baseApi.injectEndpoints({
             patchResult.undo()
           }
         },
-        invalidatesTags: ['Decks', 'Deck'],
+        // invalidatesTags: ['Decks', 'Deck'],
+        invalidatesTags: ['Decks'],
       }),
       deleteDecks: builder.mutation<Omit<Deck, 'author'>, { id: string }>({
         query: ({ id }) => {

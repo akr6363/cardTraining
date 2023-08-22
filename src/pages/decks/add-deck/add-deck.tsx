@@ -17,12 +17,14 @@ const logoutSchema = z.object({
 })
 
 export type AddDeckFormValues = z.infer<typeof logoutSchema>
+type FieldNames = keyof AddDeckFormValues
 
 export type AddNewPackFormProps = {
   onCreate: (data: AddDeckFormValues) => void
   defaultValue?: AddDeckFormValues
   isEdit?: boolean
   isFetching?: boolean
+  errorsMessages: { field: FieldNames; message: string }[]
 }
 
 export const AddNewPackForm: FC<AddNewPackFormProps> = ({
@@ -30,8 +32,10 @@ export const AddNewPackForm: FC<AddNewPackFormProps> = ({
   defaultValue,
   isEdit = false,
   isFetching,
+  errorsMessages,
 }) => {
   const {
+    setError,
     register,
     setValue,
     handleSubmit,
@@ -49,7 +53,13 @@ export const AddNewPackForm: FC<AddNewPackFormProps> = ({
       setValue('private', defaultValue.private)
     }
   }, [])
-
+  useEffect(() => {
+    if (errorsMessages) {
+      errorsMessages.forEach(e => {
+        setError(e.field, { type: 'custom', message: e.message })
+      })
+    }
+  }, [errorsMessages])
   const onSubmit = (data: AddDeckFormValues) => {
     onCreate(data)
   }

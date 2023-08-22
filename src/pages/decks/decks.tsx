@@ -67,14 +67,38 @@ export const Decks = () => {
     dispatch(decksSlice.actions.setItemsPerPage(Number(itemsPerPage)))
   }
 
-  const [createDeck, { isLoading: isCreateDeckLoading }] = useCreateDecksMutation()
+  const [createDeck, { isLoading: isCreateDeckLoading, error }] = useCreateDecksMutation()
+
+  const [addDeckErrors, setAddDeckErrors] = useState([])
   const onAddPack = (data: AddDeckFormValues) => {
     createDeck({ name: data.name, cover: data.cover[0], isPrivate: data.private })
       .unwrap()
       .then(() => {
         setShowModal(false)
+        setAddDeckErrors([])
+      })
+      .catch((e: any) => {
+        console.log(e)
+        // setAddDeckErrors(e.data.errorMessages)
       })
   }
+
+  useEffect(() => {
+    console.log(error)
+    // if (error) {
+    //   if ('data' in error) {
+    //     if (error.data && 'errorMessages' in error.data) {
+    //       setAddDeckErrors(error.data.errorMessages)
+    //     }
+    //     if (error.data && 'message' in error.data) {
+    //       dispatch(authSlice.actions.setError(error.data.message))
+    //     }
+    //   }
+    //   if ('error' in error) {
+    //     dispatch(authSlice.actions.setError(error.error))
+    //   }
+    // }
+  }, [error])
 
   const onChangeSearch = (value: string) => {
     dispatch(decksSlice.actions.setName(value))
@@ -93,7 +117,11 @@ export const Decks = () => {
   return data ? (
     <>
       <Modal isOpen={showModal} title={'Add New Pack'} onClose={() => setShowModal(false)}>
-        <AddNewPackForm onCreate={onAddPack} isFetching={isCreateDeckLoading} />
+        <AddNewPackForm
+          onCreate={onAddPack}
+          isFetching={isCreateDeckLoading}
+          errorsMessages={addDeckErrors}
+        />
       </Modal>
       <div className={clsx('container', s.container)}>
         <div className={s.header}>
