@@ -2,6 +2,7 @@ import { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react'
 
 import s from './button.module.scss'
 
+import { PreloaderCircle } from '@/components/common/preloader/preloader.tsx'
 import { Typography } from '@/components/ui'
 
 export type ButtonProps<T extends ElementType = 'button'> = {
@@ -11,6 +12,7 @@ export type ButtonProps<T extends ElementType = 'button'> = {
   className?: string
   children?: ReactNode
   icon?: ReactNode
+  isFetching?: boolean
 } & ComponentPropsWithoutRef<T>
 
 export const Button = <T extends ElementType = 'button'>(
@@ -23,6 +25,7 @@ export const Button = <T extends ElementType = 'button'>(
     as: Component = 'button',
     children,
     icon,
+    isFetching,
     ...rest
   } = props
 
@@ -34,6 +37,11 @@ export const Button = <T extends ElementType = 'button'>(
       <Typography variant={typography} className={s.text}>
         {children}
       </Typography>
+      {isFetching && (
+        <div className={s.btnPreloader}>
+          <PreloaderCircle />
+        </div>
+      )}
     </Component>
   )
 }

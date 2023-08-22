@@ -23,9 +23,15 @@ export type AddCardFormProps = {
   onAdd: (data: AddCardFormValues) => void
   defaultValue?: AddCardFormValues
   isEdit?: boolean
+  isFetching?: boolean
 }
 
-export const AddCardForm: FC<AddCardFormProps> = ({ onAdd, defaultValue, isEdit = false }) => {
+export const AddCardForm: FC<AddCardFormProps> = ({
+  onAdd,
+  defaultValue,
+  isEdit = false,
+  isFetching,
+}) => {
   const {
     register,
     setValue,
@@ -82,7 +88,7 @@ export const AddCardForm: FC<AddCardFormProps> = ({ onAdd, defaultValue, isEdit 
         {...register('answerImg')}
         errorMessage={errors.answerImg?.message?.toString()}
       />
-      <Button type="submit" className={s.addBtn}>
+      <Button type="submit" className={s.addBtn} isFetching={isFetching}>
         {isEdit ? 'Save Changes ' : 'Add New Card'}
       </Button>
     </form>

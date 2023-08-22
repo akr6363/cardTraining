@@ -22,12 +22,14 @@ export type AddNewPackFormProps = {
   onCreate: (data: AddDeckFormValues) => void
   defaultValue?: AddDeckFormValues
   isEdit?: boolean
+  isFetching?: boolean
 }
 
 export const AddNewPackForm: FC<AddNewPackFormProps> = ({
   onCreate,
   defaultValue,
   isEdit = false,
+  isFetching,
 }) => {
   const {
     register,
@@ -73,7 +75,7 @@ export const AddNewPackForm: FC<AddNewPackFormProps> = ({
         label={'Private pack'}
         className={s.private}
       />
-      <Button type="submit" className={s.addBtn}>
+      <Button type="submit" className={s.addBtn} isFetching={isFetching}>
         {isEdit ? 'Save Changes ' : 'Add New Pack'}
       </Button>
     </form>
