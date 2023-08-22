@@ -3,12 +3,14 @@ import { FC, memo } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { Delete, Edit, Learn } from '@/assets/icons/components'
+import { PreloaderCircle } from '@/components/common/preloader/preloader.tsx'
 import { TableDataPreloader } from '@/components/common/table-data-preloader/table-data-preloader.tsx'
 import { Button, Cell, EditBlock, Table } from '@/components/ui'
-import { DeleteModal } from '@/pages/decks/decks-table/delete-modal/delete-modal.tsx'
-import { EditModal } from '@/pages/decks/decks-table/edit-modal/edit-modal.tsx'
+import { DeleteDeckModal } from '@/pages/decks/decks-table/delete-modal/delete-modal.tsx'
+import { EditDeckModal } from '@/pages/decks/decks-table/edit-modal/edit-modal.tsx'
 import s from '@/pages/decks/decks.module.scss'
 import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
+import { useGetDecksByIdQuery } from '@/services/decks/decks-api.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { DecksRes } from '@/services/decks/types.ts'
 import { useAppDispatch, useAppSelector } from '@/services/store.ts'
@@ -48,7 +50,6 @@ export const DecksTable: FC<Props> = memo(({ data, status }) => {
 
   return (
     <>
-      <Modals />
       <Table
         columns={columns}
         className={s.table}
@@ -62,18 +63,6 @@ export const DecksTable: FC<Props> = memo(({ data, status }) => {
     </>
   )
 })
-
-const Modals = () => {
-  const editedUserId = useAppSelector(state => state.decksSlice.editedDeckId)
-  const deletedUserId = useAppSelector(state => state.decksSlice.deletedDeckId)
-
-  return (
-    <>
-      {editedUserId && <EditModal deckId={editedUserId}></EditModal>}
-      {deletedUserId && <DeleteModal deckId={deletedUserId}></DeleteModal>}
-    </>
-  )
-}
 
 type MappedItemsProps = {
   data: DecksRes
@@ -89,8 +78,23 @@ const MappedItems: FC<MappedItemsProps> = ({ data }) => {
     dispatch(decksSlice.actions.setDeletedDeckId(id))
   }
 
+  const {
+    editedDeckId,
+    deletedDeckId,
+    editedDeckData,
+    editedStatus,
+    deletedDeckData,
+    deletedStatus,
+  } = useChangeDecks()
+
   return (
     <>
+      {editedDeckId && editedStatus === 'fulfilled' && (
+        <EditDeckModal deckData={editedDeckData!}></EditDeckModal>
+      )}
+      {deletedDeckId && deletedStatus === 'fulfilled' && (
+        <DeleteDeckModal deckData={deletedDeckData!}></DeleteDeckModal>
+      )}
       {data.items.map(el => {
         return (
           <tr key={el.id} className={s.deckTr}>
@@ -107,12 +111,20 @@ const MappedItems: FC<MappedItemsProps> = ({ data }) => {
                 </Button>
                 {meData?.id === el.author.id && (
                   <>
-                    <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>
-                      <Edit size={16} />
-                    </Button>
-                    <Button variant={'icon'} onClick={() => onClickDelete(el.id)}>
-                      <Delete size={16} />
-                    </Button>
+                    {editedDeckId === el.id && editedStatus === 'pending' ? (
+                      <PreloaderCircle />
+                    ) : (
+                      <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>
+                        <Edit size={16} />
+                      </Button>
+                    )}
+                    {deletedDeckId === el.id && deletedStatus === 'pending' ? (
+                      <PreloaderCircle />
+                    ) : (
+                      <Button variant={'icon'} onClick={() => onClickDelete(el.id)}>
+                        <Delete size={16} />
+                      </Button>
+                    )}
                   </>
                 )}
               </EditBlock>
@@ -125,4 +137,34 @@ const MappedItems: FC<MappedItemsProps> = ({ data }) => {
       })}
     </>
   )
+}
+
+export const useChangeDecks = () => {
+  const editedDeckId = useAppSelector(state => state.decksSlice.editedDeckId)
+  const deletedDeckId = useAppSelector(state => state.decksSlice.deletedDeckId)
+  const { data: editedDeckData, status: editedStatus } = useGetDecksByIdQuery(
+    {
+      id: editedDeckId,
+    },
+    {
+      skip: !editedDeckId,
+    }
+  )
+  const { data: deletedDeckData, status: deletedStatus } = useGetDecksByIdQuery(
+    {
+      id: deletedDeckId,
+    },
+    {
+      skip: !deletedDeckId,
+    }
+  )
+
+  return {
+    editedDeckId,
+    deletedDeckId,
+    editedDeckData,
+    editedStatus,
+    deletedDeckData,
+    deletedStatus,
+  }
 }

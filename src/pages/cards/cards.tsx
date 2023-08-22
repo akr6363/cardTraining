@@ -7,8 +7,6 @@ import s from './cards.module.scss'
 
 import { ArrowBackLong } from '@/assets/icons/components/ArrowBackLong.tsx'
 import { EmptyPage } from '@/components/common/empty-page/empty-page.tsx'
-import { Overlay } from '@/components/common/overlay/overlay.tsx'
-import { Preloader } from '@/components/common/preloader/preloader.tsx'
 import { Button, Modal, Pagination, Typography } from '@/components/ui'
 import { AddCardForm, AddCardFormValues } from '@/pages/cards/add-card-form/add-card-form.tsx'
 import CardsDropDown from '@/pages/cards/cards-drop-down/cards-drop-down.tsx'
@@ -79,23 +77,10 @@ export const Cards = () => {
   return (
     <>
       <Modal isOpen={showModal} title={'Add New Card'} onClose={() => setShowModal(false)}>
-        <AddCardForm onAdd={onAddCard} />
-        {isAddCardLoading && (
-          <Overlay>
-            <Preloader />
-          </Overlay>
-        )}
+        <AddCardForm onAdd={onAddCard} isFetching={isAddCardLoading} />
       </Modal>
       <div className={clsx('container', s.container)}>
-        <Button
-          as={NavLink}
-          to={'/'}
-          variant={'link'}
-          icon={<ArrowBackLong size={16} color={'var(--color-accent-500)'} />}
-          className={s.btnBack}
-        >
-          Back to Packs List
-        </Button>
+        <BackButton />
         <div className={s.top}>
           <div className={s.title}>
             <Typography variant={'Large'}>{deck?.name}</Typography>
@@ -105,7 +90,7 @@ export const Cards = () => {
             (isMy ? (
               <AddCardButton onClick={onClickAdd} />
             ) : (
-              <Button as={NavLink} to={'#'}>
+              <Button as={NavLink} to={`/${id}/learn`}>
                 Learn to Pack
               </Button>
             ))}
@@ -159,4 +144,18 @@ type Props = {
 }
 const AddCardButton: FC<Props> = ({ onClick }) => {
   return <Button onClick={onClick}>Add New Card</Button>
+}
+
+const BackButton: FC = () => {
+  return (
+    <Button
+      as={NavLink}
+      to={'/'}
+      variant={'link'}
+      icon={<ArrowBackLong size={16} color={'var(--color-accent-500)'} />}
+      className={s.btnBack}
+    >
+      Back to Packs List
+    </Button>
+  )
 }

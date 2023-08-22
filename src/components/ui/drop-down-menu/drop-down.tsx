@@ -6,6 +6,8 @@ import { Typography } from '../typography'
 
 import s from './drop-down.module.scss'
 
+import { PreloaderCircle } from '@/components/common/preloader/preloader.tsx'
+
 export const DropDown: FC<DropDownProps> = ({
   children,
   trigger,
@@ -30,11 +32,11 @@ export const DropDown: FC<DropDownProps> = ({
   )
 }
 
-export const DropDownItem: FC<DropDownItemProps> = ({ icon, children }) => {
+export const DropDownItem: FC<DropDownItemProps> = ({ icon, children, isFetching }) => {
   return (
     <>
       <DropdownMenu.Item className={s.DropdownMenuItem}>
-        <div className={s.icon}>{icon}</div>
+        <div className={s.icon}>{isFetching ? <PreloaderCircle /> : icon}</div>
         <Typography variant={'Caption'} className={s.itemText}>
           {children}
         </Typography>
@@ -53,4 +55,5 @@ type DropDownProps = {
 type DropDownItemProps = {
   children: ReactNode
   icon: ReactNode
+  isFetching?: boolean
 }

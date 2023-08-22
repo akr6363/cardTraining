@@ -66,10 +66,13 @@ export const Decks = () => {
     dispatch(decksSlice.actions.setItemsPerPage(Number(itemsPerPage)))
   }
 
-  const [createDeck] = useCreateDecksMutation()
+  const [createDeck, { isLoading: isCreateDeckLoading }] = useCreateDecksMutation()
   const onAddPack = (data: AddDeckFormValues) => {
     createDeck({ name: data.name, cover: data.cover[0], isPrivate: data.private })
-    setShowModal(false)
+      .unwrap()
+      .then(() => {
+        setShowModal(false)
+      })
   }
 
   const onChangeSearch = (value: string) => {
@@ -84,7 +87,7 @@ export const Decks = () => {
   return data ? (
     <>
       <Modal isOpen={showModal} title={'Add New Pack'} onClose={() => setShowModal(false)}>
-        <AddNewPackForm onCreate={onAddPack} />
+        <AddNewPackForm onCreate={onAddPack} isFetching={isCreateDeckLoading} />
       </Modal>
       <div className={clsx('container', s.container)}>
         <div className={s.header}>
