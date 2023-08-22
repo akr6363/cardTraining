@@ -6,7 +6,10 @@ import { NavLink, useParams } from 'react-router-dom'
 import s from './cards.module.scss'
 
 import { ArrowBackLong } from '@/assets/icons/components/ArrowBackLong.tsx'
+import { getIsPending } from '@/common/utilis/getIsStatus.tsx'
 import { EmptyPage } from '@/components/common/empty-page/empty-page.tsx'
+import { Preloader } from '@/components/common/preloader/preloader.tsx'
+import { WithIconPreloader } from '@/components/common/preloader/with-icon-preloader/with-icon-preloader.tsx'
 import { Button, Modal, Pagination, Typography } from '@/components/ui'
 import { AddCardForm, AddCardFormValues } from '@/pages/cards/add-card-form/add-card-form.tsx'
 import CardsDropDown from '@/pages/cards/cards-drop-down/cards-drop-down.tsx'
@@ -36,7 +39,11 @@ export const Cards = () => {
     orderBy,
   })
 
-  const { isLoading: isLoadingDeck, data: deck } = useGetDecksByIdQuery({
+  const {
+    isLoading: isLoadingDeck,
+    data: deck,
+    status: deckStatus,
+  } = useGetDecksByIdQuery({
     id,
   })
   const [showModal, setShowModal] = useState(false)
@@ -72,7 +79,12 @@ export const Cards = () => {
   const isMy = meData && meData.id === deck?.userId
   const isItems = data?.items && data.items.length > 0
 
-  if (isLoading || isLoadingDeck) return <div>Loading...</div>
+  if (isLoading || isLoadingDeck)
+    return (
+      <EmptyPage>
+        <Preloader />
+      </EmptyPage>
+    )
 
   return (
     <>
@@ -84,7 +96,11 @@ export const Cards = () => {
         <div className={s.top}>
           <div className={s.title}>
             <Typography variant={'Large'}>{deck?.name}</Typography>
-            {isMy && <CardsDropDown deckId={id} />}
+            {isMy && (
+              <WithIconPreloader isFetching={getIsPending(deckStatus)}>
+                <CardsDropDown deckId={id} />
+              </WithIconPreloader>
+            )}
           </div>
           {isItems &&
             (isMy ? (

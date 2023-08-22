@@ -1,7 +1,8 @@
 import { FC } from 'react'
 
 import { Delete, Edit } from '@/assets/icons/components'
-import { PreloaderCircle } from '@/components/common/preloader/preloader.tsx'
+import { getIsPending } from '@/common/utilis/getIsStatus.tsx'
+import { WithIconPreloader } from '@/components/common/preloader/with-icon-preloader/with-icon-preloader.tsx'
 import { TableDataPreloader } from '@/components/common/table-data-preloader/table-data-preloader.tsx'
 import { Button, Cell, Rating, Table } from '@/components/ui'
 import { DeleteCardModal } from '@/pages/cards/cards-table/deleted-card-modal/delete-card-modal.tsx'
@@ -103,20 +104,20 @@ const MappedItems: FC<MappedItemsProps> = ({ data, isMy }) => {
             </Cell>
             {isMy && (
               <Cell>
-                {editedCardId === el.id && EditedStatus === 'pending' ? (
-                  <PreloaderCircle />
-                ) : (
+                <WithIconPreloader
+                  isFetching={editedCardId === el.id && getIsPending(EditedStatus)}
+                >
                   <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>
                     <Edit size={16} />
                   </Button>
-                )}
-                {deletedCardId === el.id && DeletedStatus === 'pending' ? (
-                  <PreloaderCircle />
-                ) : (
+                </WithIconPreloader>
+                <WithIconPreloader
+                  isFetching={deletedCardId === el.id && getIsPending(DeletedStatus)}
+                >
                   <Button variant={'icon'} onClick={() => onClickDelete(el.id)}>
                     <Delete size={16} />
                   </Button>
-                )}
+                </WithIconPreloader>
               </Cell>
             )}
           </tr>

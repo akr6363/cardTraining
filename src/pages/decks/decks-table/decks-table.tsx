@@ -3,7 +3,8 @@ import { FC, memo } from 'react'
 import { NavLink } from 'react-router-dom'
 
 import { Delete, Edit, Learn } from '@/assets/icons/components'
-import { PreloaderCircle } from '@/components/common/preloader/preloader.tsx'
+import { getIsPending } from '@/common/utilis/getIsStatus.tsx'
+import { WithIconPreloader } from '@/components/common/preloader/with-icon-preloader/with-icon-preloader.tsx'
 import { TableDataPreloader } from '@/components/common/table-data-preloader/table-data-preloader.tsx'
 import { Button, Cell, EditBlock, Table } from '@/components/ui'
 import { DeleteDeckModal } from '@/pages/decks/decks-table/delete-modal/delete-modal.tsx'
@@ -111,20 +112,20 @@ const MappedItems: FC<MappedItemsProps> = ({ data }) => {
                 </Button>
                 {meData?.id === el.author.id && (
                   <>
-                    {editedDeckId === el.id && editedStatus === 'pending' ? (
-                      <PreloaderCircle />
-                    ) : (
+                    <WithIconPreloader
+                      isFetching={editedDeckId === el.id && getIsPending(editedStatus)}
+                    >
                       <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>
                         <Edit size={16} />
                       </Button>
-                    )}
-                    {deletedDeckId === el.id && deletedStatus === 'pending' ? (
-                      <PreloaderCircle />
-                    ) : (
+                    </WithIconPreloader>
+                    <WithIconPreloader
+                      isFetching={deletedDeckId === el.id && getIsPending(deletedStatus)}
+                    >
                       <Button variant={'icon'} onClick={() => onClickDelete(el.id)}>
                         <Delete size={16} />
                       </Button>
-                    )}
+                    </WithIconPreloader>
                   </>
                 )}
               </EditBlock>
