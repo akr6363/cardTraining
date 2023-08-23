@@ -1,1 +1,1 @@
-export { ControlledCheckbox } from './controlled-radio-group.tsx'
+export { ControlledRadioGroup } from './controlled-radio-group.tsx'

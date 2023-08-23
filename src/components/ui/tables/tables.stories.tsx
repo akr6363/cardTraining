@@ -1,12 +1,14 @@
+import { action } from '@storybook/addon-actions'
 import type { Meta } from '@storybook/react'
 import { StoryObj } from '@storybook/react'
 
-import { Delete, Edit, Learn } from '../../../assets/icons/components'
-
-import { EditBlock } from './edit-block/edit-block.tsx'
 import { Rating } from './rating/rating.tsx'
 
 import { Cell, Table, TableProps } from './'
+
+import { Delete, Edit, Learn } from '@/assets/icons/components'
+import { EditBlock } from '@/components/ui'
+
 const meta = {
   title: 'Components/Table',
   component: Table,
@@ -34,7 +36,12 @@ const columnsCards = [
 export const Example1: Story = {
   render: (args: TableProps) => {
     return (
-      <Table columns={args.columns}>
+      <Table
+        columns={args.columns}
+        onSort={args.onSort}
+        sortDirection={args.sortDirection}
+        sortName={args.sortName}
+      >
         {dataPacks.map(el => {
           return (
             <tr key={el.id}>
@@ -57,13 +64,21 @@ export const Example1: Story = {
   },
   args: {
     columns: columnsPacks,
+    onSort: action('onSort'),
+    sortDirection: '',
+    sortName: '',
   },
 }
 
 export const Example2: Story = {
   render: (args: TableProps) => {
     return (
-      <Table columns={args.columns}>
+      <Table
+        columns={args.columns}
+        onSort={args.onSort}
+        sortDirection={args.sortDirection}
+        sortName={args.sortName}
+      >
         {dataCards.map(el => {
           return (
             <tr key={el.id}>
@@ -87,6 +102,9 @@ export const Example2: Story = {
   },
   args: {
     columns: columnsCards,
+    onSort: action('onSort'),
+    sortDirection: '',
+    sortName: '',
   },
 }
 
