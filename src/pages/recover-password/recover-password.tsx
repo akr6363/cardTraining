@@ -10,7 +10,7 @@ export const RecoverPasswordPage = () => {
   const onRecoverPassword = (email: string) => {
     const data: RecoverPasswordArgs = {
       email,
-      html: '<h1>Hi,</h1><p>Click <a href="http://localhost:5173/new-password/##token##">here</a> to recover your password</p>',
+      html: '<h1>Hi,</h1><p>Click <a href="https://card-training-nine.vercel.app/new-password/##token##">here</a> to recover your password</p>',
     }
 
     recoverPassword(data)
