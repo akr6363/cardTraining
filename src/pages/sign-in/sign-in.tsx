@@ -1,11 +1,8 @@
-import { getIsPending } from '@/common/utilis/getIsStatus.tsx'
 import { LoginForm } from '@/components/auth'
-import { useAuthMeQuery, useLoginMutation } from '@/services/auth/auth-api.ts'
+import { useLoginMutation } from '@/services/auth/auth-api.ts'
 
 export const SignInPage = () => {
   const [signIn, { isLoading: isSignInLoading }] = useLoginMutation()
-  const { status: status } = useAuthMeQuery()
-
   const handleSignIn = (data: any) => {
     signIn(data)
       .unwrap()
@@ -15,10 +12,5 @@ export const SignInPage = () => {
       })
   }
 
-  return (
-    <LoginForm
-      onLogin={handleSignIn}
-      isFetching={isSignInLoading || getIsPending(status)}
-    ></LoginForm>
-  )
+  return <LoginForm onLogin={handleSignIn} isFetching={isSignInLoading}></LoginForm>
 }
