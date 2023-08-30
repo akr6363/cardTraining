@@ -24,7 +24,7 @@ export type AddNewPackFormProps = {
   defaultValue?: AddDeckFormValues
   isEdit?: boolean
   isFetching?: boolean
-  errorsMessages: { field: FieldNames; message: string }[]
+  errorsMessages?: { field: FieldNames; message: string }[]
 }
 
 export const AddNewPackForm: FC<AddNewPackFormProps> = ({

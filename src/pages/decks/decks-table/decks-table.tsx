@@ -11,7 +11,7 @@ import { DeleteDeckModal } from '@/pages/decks/decks-table/delete-modal/delete-m
 import { EditDeckModal } from '@/pages/decks/decks-table/edit-modal/edit-modal.tsx'
 import s from '@/pages/decks/decks.module.scss'
 import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
-import { useGetDecksByIdQuery } from '@/services/decks/decks-api.ts'
+import { useGetDecksByIdQuery, useLazyGetDecksByIdQuery } from '@/services/decks/decks-api.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { DecksRes } from '@/services/decks/types.ts'
 import { useAppDispatch, useAppSelector } from '@/services/store.ts'
@@ -71,34 +71,10 @@ type MappedItemsProps = {
 const MappedItems: FC<MappedItemsProps> = ({ data }) => {
   const { data: meData } = useAuthMeQuery()
 
-  const dispatch = useAppDispatch()
-  const onClickEdit = (id: string) => {
-    dispatch(decksSlice.actions.setEditedDeckId(id))
-  }
-  const onClickDelete = (id: string) => {
-    dispatch(decksSlice.actions.setDeletedDeckId(id))
-  }
-
-  const {
-    editedDeckId,
-    deletedDeckId,
-    editedDeckData,
-    editedStatus,
-    deletedDeckData,
-    deletedStatus,
-  } = useChangeDecks()
-
-  console.log(editedStatus)
-  console.log(editedDeckId)
-
   return (
     <>
-      {editedDeckId && editedStatus === 'fulfilled' && (
-        <EditDeckModal deckData={editedDeckData!}></EditDeckModal>
-      )}
-      {deletedDeckId && deletedStatus === 'fulfilled' && (
-        <DeleteDeckModal deckData={deletedDeckData!}></DeleteDeckModal>
-      )}
+      <EditDeckModal />
+      <DeleteDeckModal />
       {data.items.map(el => {
         return (
           <tr key={el.id} className={s.deckTr}>
@@ -115,20 +91,8 @@ const MappedItems: FC<MappedItemsProps> = ({ data }) => {
                 </Button>
                 {meData?.id === el.author.id && (
                   <>
-                    <WithIconPreloader
-                      isFetching={editedDeckId === el.id && getIsPending(editedStatus)}
-                    >
-                      <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>
-                        <Edit size={16} />
-                      </Button>
-                    </WithIconPreloader>
-                    <WithIconPreloader
-                      isFetching={deletedDeckId === el.id && getIsPending(deletedStatus)}
-                    >
-                      <Button variant={'icon'} onClick={() => onClickDelete(el.id)}>
-                        <Delete size={16} />
-                      </Button>
-                    </WithIconPreloader>
+                    <EditButton id={el.id} />
+                    <DeleteButton id={el.id} />
                   </>
                 )}
               </EditBlock>
@@ -143,32 +107,79 @@ const MappedItems: FC<MappedItemsProps> = ({ data }) => {
   )
 }
 
-export const useChangeDecks = () => {
-  const editedDeckId = useAppSelector(state => state.decksSlice.editedDeckId)
-  const deletedDeckId = useAppSelector(state => state.decksSlice.deletedDeckId)
-  const { data: editedDeckData, status: editedStatus } = useGetDecksByIdQuery(
-    {
-      id: editedDeckId,
-    },
-    {
-      skip: !editedDeckId,
-    }
-  )
-  const { data: deletedDeckData, status: deletedStatus } = useGetDecksByIdQuery(
-    {
-      id: deletedDeckId,
-    },
-    {
-      skip: !deletedDeckId,
-    }
-  )
-
-  return {
-    editedDeckId,
-    deletedDeckId,
-    editedDeckData,
-    editedStatus,
-    deletedDeckData,
-    deletedStatus,
-  }
+type BtnProps = {
+  id: string
 }
+const EditButton: FC<BtnProps> = ({ id }) => {
+  const [getData, { status }] = useLazyGetDecksByIdQuery()
+
+  const dispatch = useAppDispatch()
+  const onClickEdit = () => {
+    getData({ id })
+      .unwrap()
+      .then(() => {
+        dispatch(decksSlice.actions.setEditedDeckId(id))
+      })
+  }
+
+  return (
+    <>
+      <WithIconPreloader isFetching={getIsPending(status)}>
+        <Button variant={'icon'} onClick={onClickEdit}>
+          <Edit size={16} />
+        </Button>
+      </WithIconPreloader>
+    </>
+  )
+}
+
+const DeleteButton: FC<BtnProps> = ({ id }) => {
+  const [getData, { status }] = useLazyGetDecksByIdQuery()
+
+  const dispatch = useAppDispatch()
+  const onClickDelete = () => {
+    getData({ id })
+      .unwrap()
+      .then(() => {
+        dispatch(decksSlice.actions.setDeletedDeckId(id))
+      })
+  }
+
+  return (
+    <WithIconPreloader isFetching={getIsPending(status)}>
+      <Button variant={'icon'} onClick={onClickDelete}>
+        <Delete size={16} />
+      </Button>
+    </WithIconPreloader>
+  )
+}
+
+// export const useChangeDecks = () => {
+//   const editedDeckId = useAppSelector(state => state.decksSlice.editedDeckId)
+//   const deletedDeckId = useAppSelector(state => state.decksSlice.deletedDeckId)
+//   const { data: editedDeckData, status: editedStatus } = useGetDecksByIdQuery(
+//     {
+//       id: editedDeckId,
+//     },
+//     {
+//       skip: !editedDeckId,
+//     }
+//   )
+//   const { data: deletedDeckData, status: deletedStatus } = useGetDecksByIdQuery(
+//     {
+//       id: deletedDeckId,
+//     },
+//     {
+//       skip: !deletedDeckId,
+//     }
+//   )
+//
+//   return {
+//     editedDeckId,
+//     deletedDeckId,
+//     editedDeckData,
+//     editedStatus,
+//     deletedDeckData,
+//     deletedStatus,
+//   }
+// }

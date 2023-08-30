@@ -22,7 +22,7 @@ const decksApi = baseApi.injectEndpoints({
         },
         providesTags: ['Decks'],
       }),
-      getDecksById: builder.query<Deck, { id: string }>({
+      getDecksById: builder.query<Deck | null, { id: string }>({
         query: ({ id }) => {
           return {
             url: `v1/decks/${id}`,
@@ -48,7 +48,7 @@ const decksApi = baseApi.injectEndpoints({
           const formData = createFormData({ ...data })
 
           return {
-            url: `v1/decks/${id}`,
+            url: `v1/deck/${id}`,
             method: 'PATCH',
             body: formData,
           }
@@ -85,8 +85,7 @@ const decksApi = baseApi.injectEndpoints({
             patchResult.undo()
           }
         },
-        // invalidatesTags: ['Decks', 'Deck'],
-        invalidatesTags: ['Decks'],
+        invalidatesTags: ['Decks', 'Deck'],
       }),
       deleteDecks: builder.mutation<Omit<Deck, 'author'>, { id: string }>({
         query: ({ id }) => {
@@ -134,4 +133,5 @@ export const {
   useGetDecksByIdQuery,
   useUpdateDecksMutation,
   useDeleteDecksMutation,
+  useLazyGetDecksByIdQuery,
 } = decksApi
