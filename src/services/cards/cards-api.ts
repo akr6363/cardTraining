@@ -103,4 +103,5 @@ export const {
   useDeleteCardMutation,
   useGetRandomCardQuery,
   useSaveGradeMutation,
+  useLazyGetCardByIdQuery,
 } = cardsApi

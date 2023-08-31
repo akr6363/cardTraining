@@ -48,7 +48,7 @@ const decksApi = baseApi.injectEndpoints({
           const formData = createFormData({ ...data })
 
           return {
-            url: `v1/deck/${id}`,
+            url: `v1/decks/${id}`,
             method: 'PATCH',
             body: formData,
           }

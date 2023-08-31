@@ -6,13 +6,14 @@ import { NavLink, useParams } from 'react-router-dom'
 import s from './cards.module.scss'
 
 import { ArrowBackLong } from '@/assets/icons/components/ArrowBackLong.tsx'
+import { errorHandler, errorMessagesType } from '@/common/utilis/errorHandler.tsx'
 import { getIsPending } from '@/common/utilis/getIsStatus.tsx'
 import { EmptyPage } from '@/components/common/empty-page/empty-page.tsx'
 import { Preloader } from '@/components/common/preloader/preloader.tsx'
 import { WithIconPreloader } from '@/components/common/preloader/with-icon-preloader/with-icon-preloader.tsx'
 import { Button, Modal, Pagination, Typography } from '@/components/ui'
 import { AddCardForm, AddCardFormValues } from '@/pages/cards/add-card-form/add-card-form.tsx'
-import CardsDropDown from '@/pages/cards/cards-drop-down/cards-drop-down.tsx'
+import { CardsDropDown } from '@/pages/cards/cards-drop-down/cards-drop-down.tsx'
 import { CardsTable } from '@/pages/cards/cards-table/cards-table.tsx'
 import { SearchInput } from '@/pages/decks/search-input/search-input.tsx'
 import { useAuthMeQuery } from '@/services/auth/auth-api.ts'
@@ -60,6 +61,8 @@ export const Cards = () => {
     dispatch(cardsSlice.actions.setQuestion(''))
   }
   const [addCard, { isLoading: isAddCardLoading, error }] = useAddCardMutation()
+  const [cardsErrors, setCardsErrors] = useState<errorMessagesType[]>([])
+
   const onAddCard = (data: AddCardFormValues) => {
     const cardData: CreateCardArgs = { id, answer: data.answer, question: data.question }
 
@@ -73,20 +76,9 @@ export const Cards = () => {
   }
 
   useEffect(() => {
-    console.log(error)
-    // if (error) {
-    //   if ('data' in error) {
-    //     if (error.data && 'errorMessages' in error.data) {
-    //       setAddDeckErrors(error.data.errorMessages)
-    //     }
-    //     if (error.data && 'message' in error.data) {
-    //       dispatch(authSlice.actions.setError(error.data.message))
-    //     }
-    //   }
-    //   if ('error' in error) {
-    //     dispatch(authSlice.actions.setError(error.error))
-    //   }
-    // }
+    if (error) {
+      errorHandler(error, dispatch, setCardsErrors)
+    }
   }, [error])
 
   const onClickAdd = () => {
@@ -103,10 +95,15 @@ export const Cards = () => {
       </EmptyPage>
     )
 
+  const onModalClose = () => {
+    setShowModal(false)
+    setCardsErrors([])
+  }
+
   return (
     <>
-      <Modal isOpen={showModal} title={'Add New Card'} onClose={() => setShowModal(false)}>
-        <AddCardForm onAdd={onAddCard} isFetching={isAddCardLoading} />
+      <Modal isOpen={showModal} title={'Add New Card'} onClose={onModalClose}>
+        <AddCardForm onAdd={onAddCard} isFetching={isAddCardLoading} errorsMessages={cardsErrors} />
       </Modal>
       <div className={clsx('container', s.container)}>
         <BackButton />

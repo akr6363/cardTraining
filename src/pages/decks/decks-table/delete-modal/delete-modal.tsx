@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import s from './delete-modal.module.scss'
 
+import { errorHandler } from '@/common/utilis/errorHandler.tsx'
 import { Button, Modal, Typography } from '@/components/ui'
 import { useDeleteDecksMutation, useGetDecksByIdQuery } from '@/services/decks/decks-api.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
@@ -24,13 +25,10 @@ export const DeleteDeckModal: FC<ModalProps> = () => {
   })
 
   useEffect(() => {
-    // console.log()
-    // if (error) {
-    //   //@ts-ignore
-    //   alert(error?.data?.message)
-    // }
+    if (error) {
+      errorHandler(error, dispatch)
+    }
   }, [error])
-
   const onModalClose = () => {
     dispatch(decksSlice.actions.setDeletedDeckId(''))
   }

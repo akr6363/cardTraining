@@ -1,14 +1,11 @@
 import { FC } from 'react'
 
-import { Delete, Edit } from '@/assets/icons/components'
-import { getIsPending } from '@/common/utilis/getIsStatus.tsx'
-import { WithIconPreloader } from '@/components/common/preloader/with-icon-preloader/with-icon-preloader.tsx'
+import { ActionButton } from '@/components/common/action-button/action-button.tsx'
 import { TableDataPreloader } from '@/components/common/table-data-preloader/table-data-preloader.tsx'
-import { Button, Cell, Rating, Table } from '@/components/ui'
+import { Cell, Rating, Table } from '@/components/ui'
 import { DeleteCardModal } from '@/pages/cards/cards-table/deleted-card-modal/delete-card-modal.tsx'
 import { EditCardModal } from '@/pages/cards/cards-table/edit-card-modal/edit-card-modal.tsx'
 import s from '@/pages/cards/cards.module.scss'
-import { useGetCardByIdQuery } from '@/services/cards/cards-api.ts'
 import { cardsSlice } from '@/services/cards/cards.slice.ts'
 import { CardRes } from '@/services/cards/types.ts'
 import { useAppDispatch, useAppSelector } from '@/services/store.ts'
@@ -59,40 +56,10 @@ type MappedItemsProps = {
   isMy: boolean
 }
 const MappedItems: FC<MappedItemsProps> = ({ data, isMy }) => {
-  const dispatch = useAppDispatch()
-  const onClickEdit = (id: string) => {
-    dispatch(cardsSlice.actions.setEditedCardId(id))
-  }
-  const onClickDelete = (id: string) => {
-    dispatch(cardsSlice.actions.setDeletedCardId(id))
-  }
-  const editedCardId = useAppSelector(state => state.cardsSlice.editedCardId)
-  const deletedCardId = useAppSelector(state => state.cardsSlice.deletedCardId)
-  const { data: EditedCardData, status: EditedStatus } = useGetCardByIdQuery(
-    {
-      id: editedCardId,
-    },
-    {
-      skip: !editedCardId,
-    }
-  )
-  const { data: DeletedCardData, status: DeletedStatus } = useGetCardByIdQuery(
-    {
-      id: deletedCardId,
-    },
-    {
-      skip: !deletedCardId,
-    }
-  )
-
   return (
     <>
-      {editedCardId && EditedStatus === 'fulfilled' && (
-        <EditCardModal cardData={EditedCardData!}></EditCardModal>
-      )}
-      {deletedCardId && DeletedStatus === 'fulfilled' && (
-        <DeleteCardModal cardData={DeletedCardData!}></DeleteCardModal>
-      )}
+      <EditCardModal />
+      <DeleteCardModal />
       {data.items.map(el => {
         return (
           <tr key={el.id}>
@@ -104,20 +71,8 @@ const MappedItems: FC<MappedItemsProps> = ({ data, isMy }) => {
             </Cell>
             {isMy && (
               <Cell>
-                <WithIconPreloader
-                  isFetching={editedCardId === el.id && getIsPending(EditedStatus)}
-                >
-                  <Button variant={'icon'} onClick={() => onClickEdit(el.id)}>
-                    <Edit size={16} />
-                  </Button>
-                </WithIconPreloader>
-                <WithIconPreloader
-                  isFetching={deletedCardId === el.id && getIsPending(DeletedStatus)}
-                >
-                  <Button variant={'icon'} onClick={() => onClickDelete(el.id)}>
-                    <Delete size={16} />
-                  </Button>
-                </WithIconPreloader>
+                <ActionButton id={el.id} type={'edit'} tableType={'cards'} />
+                <ActionButton id={el.id} type={'delete'} tableType={'cards'} />
               </Cell>
             )}
           </tr>

@@ -1,26 +1,36 @@
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 
+import { errorHandler, errorMessagesType } from '@/common/utilis/errorHandler.tsx'
 import { Modal } from '@/components/ui'
 import { AddCardForm, AddCardFormValues } from '@/pages/cards/add-card-form/add-card-form.tsx'
-import { useEditCardMutation } from '@/services/cards/cards-api.ts'
+import { useEditCardMutation, useGetCardByIdQuery } from '@/services/cards/cards-api.ts'
 import { cardsSlice } from '@/services/cards/cards.slice.ts'
-import { Card, CreateCardArgs } from '@/services/cards/types.ts'
-import { useAppDispatch } from '@/services/store.ts'
+import { CreateCardArgs } from '@/services/cards/types.ts'
+import { useAppDispatch, useAppSelector } from '@/services/store.ts'
 
-type ModalProps = {
-  cardData: Card
-}
-export const EditCardModal: FC<ModalProps> = ({ cardData }) => {
+type ModalProps = {}
+export const EditCardModal: FC<ModalProps> = ({}) => {
   const dispatch = useAppDispatch()
   const [editCard, { isLoading, error }] = useEditCardMutation()
 
+  const [cardsErrors, setCardsErrors] = useState<errorMessagesType[]>([])
+
+  const editedCardId = useAppSelector(state => state.cardsSlice.editedCardId)
+  const { data: editedCardData } = useGetCardByIdQuery(
+    {
+      id: editedCardId,
+    },
+    { skip: !editedCardId }
+  )
+
   const onModalClose = () => {
     dispatch(cardsSlice.actions.setEditedCardId(''))
+    setCardsErrors([])
   }
 
   const onEditCard = (data: AddCardFormValues) => {
     const editCardArgs: CreateCardArgs = {
-      id: cardData.id,
+      id: editedCardData!.id,
       answer: data.answer,
       question: data.question,
     }
@@ -39,26 +49,25 @@ export const EditCardModal: FC<ModalProps> = ({ cardData }) => {
   }
 
   useEffect(() => {
-    console.log(error)
-    // if (error) {
-    //   //@ts-ignore
-    //   alert(error?.data?.message)
-    // }
+    if (error) {
+      errorHandler(error, dispatch, setCardsErrors)
+    }
   }, [error])
 
-  return (
+  return editedCardId && editedCardData ? (
     <Modal isOpen={true} title={'Edit Card'} onClose={onModalClose}>
       <AddCardForm
+        errorsMessages={cardsErrors}
         isFetching={isLoading}
         isEdit
         onAdd={onEditCard}
         defaultValue={{
-          answer: cardData.answer,
-          question: cardData.question,
-          questionImg: cardData.questionImg,
-          answerImg: cardData.answerImg,
+          answer: editedCardData.answer,
+          question: editedCardData.question,
+          questionImg: editedCardData.questionImg,
+          answerImg: editedCardData.answerImg,
         }}
       />
     </Modal>
-  )
+  ) : null
 }

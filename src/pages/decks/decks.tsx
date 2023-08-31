@@ -5,6 +5,7 @@ import { clsx } from 'clsx'
 import s from './decks.module.scss'
 
 import { Delete } from '@/assets/icons/components'
+import { errorHandler, errorMessagesType } from '@/common/utilis/errorHandler.tsx'
 import { EmptyPage } from '@/components/common/empty-page/empty-page.tsx'
 import { Preloader } from '@/components/common/preloader/preloader.tsx'
 import { Button, Modal, Pagination, Slider, Typography } from '@/components/ui'
@@ -69,7 +70,7 @@ export const Decks = () => {
 
   const [createDeck, { isLoading: isCreateDeckLoading, error }] = useCreateDecksMutation()
 
-  const [addDeckErrors, setAddDeckErrors] = useState([])
+  const [addDeckErrors, setAddDeckErrors] = useState<errorMessagesType[]>([])
   const onAddPack = (data: AddDeckFormValues) => {
     createDeck({ name: data.name, cover: data.cover[0], isPrivate: data.private })
       .unwrap()
@@ -77,27 +78,12 @@ export const Decks = () => {
         setShowModal(false)
         setAddDeckErrors([])
       })
-      .catch((e: any) => {
-        console.log(e)
-        // setAddDeckErrors(e.data.errorMessages)
-      })
   }
 
   useEffect(() => {
-    console.log(error)
-    // if (error) {
-    //   if ('data' in error) {
-    //     if (error.data && 'errorMessages' in error.data) {
-    //       setAddDeckErrors(error.data.errorMessages)
-    //     }
-    //     if (error.data && 'message' in error.data) {
-    //       dispatch(authSlice.actions.setError(error.data.message))
-    //     }
-    //   }
-    //   if ('error' in error) {
-    //     dispatch(authSlice.actions.setError(error.error))
-    //   }
-    // }
+    if (error) {
+      errorHandler(error, dispatch, setAddDeckErrors)
+    }
   }, [error])
 
   const onChangeSearch = (value: string) => {
@@ -105,6 +91,11 @@ export const Decks = () => {
   }
   const onClearSearch = () => {
     dispatch(decksSlice.actions.setName(''))
+  }
+
+  const onModalClose = () => {
+    setShowModal(false)
+    setAddDeckErrors([])
   }
 
   if (isLoading)
@@ -116,7 +107,7 @@ export const Decks = () => {
 
   return data ? (
     <>
-      <Modal isOpen={showModal} title={'Add New Pack'} onClose={() => setShowModal(false)}>
+      <Modal isOpen={showModal} title={'Add New Pack'} onClose={onModalClose}>
         <AddNewPackForm
           onCreate={onAddPack}
           isFetching={isCreateDeckLoading}

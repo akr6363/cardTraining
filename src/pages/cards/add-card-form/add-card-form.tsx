@@ -6,6 +6,7 @@ import { z } from 'zod'
 
 import s from './add-card-form.module.scss'
 
+import { errorMessagesType } from '@/common/utilis/errorHandler.tsx'
 import { imgValidation } from '@/common/zodSchems.ts'
 import { Button, ControlledTextField } from '@/components/ui'
 import { InputFileWithPreview } from '@/components/ui/inputFile/input-file-with-preview.tsx'
@@ -18,12 +19,14 @@ const logoutSchema = z.object({
 })
 
 export type AddCardFormValues = z.infer<typeof logoutSchema>
+type FieldNames = keyof AddCardFormValues
 
 export type AddCardFormProps = {
   onAdd: (data: AddCardFormValues) => void
   defaultValue?: AddCardFormValues
   isEdit?: boolean
   isFetching?: boolean
+  errorsMessages?: errorMessagesType[]
 }
 
 export const AddCardForm: FC<AddCardFormProps> = ({
@@ -31,8 +34,10 @@ export const AddCardForm: FC<AddCardFormProps> = ({
   defaultValue,
   isEdit = false,
   isFetching,
+  errorsMessages,
 }) => {
   const {
+    setError,
     register,
     setValue,
     handleSubmit,
@@ -55,6 +60,18 @@ export const AddCardForm: FC<AddCardFormProps> = ({
       setValue('answer', defaultValue.answer)
     }
   }, [])
+
+  console.log(errorsMessages)
+
+  useEffect(() => {
+    console.log(errorsMessages)
+    if (errorsMessages) {
+      errorsMessages.forEach(e => {
+        console.log(e)
+        setError(e.field as FieldNames, { type: 'custom', message: e.message })
+      })
+    }
+  }, [errorsMessages])
 
   const onSubmit = (data: AddCardFormValues) => {
     onAdd(data)
@@ -79,7 +96,7 @@ export const AddCardForm: FC<AddCardFormProps> = ({
         control={control}
         name={'answer'}
         label={'Answer'}
-        errorMessage={errors.question?.message}
+        errorMessage={errors.answer?.message}
         className={s.inputAnsw}
       />
       <InputFileWithPreview

@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from 'react'
 
+import { errorHandler, errorMessagesType } from '@/common/utilis/errorHandler.tsx'
 import { Modal } from '@/components/ui'
 import { AddDeckFormValues, AddNewPackForm } from '@/pages/decks/add-deck/add-deck.tsx'
-import { authSlice } from '@/services/auth/auth.slice.ts'
 import { useGetDecksByIdQuery, useUpdateDecksMutation } from '@/services/decks/decks-api.ts'
 import { decksSlice } from '@/services/decks/decks.slice.ts'
 import { UpdateDeckArgs } from '@/services/decks/types.ts'
@@ -12,7 +12,7 @@ type ModalProps = {}
 export const EditDeckModal: FC<ModalProps> = () => {
   const dispatch = useAppDispatch()
   const [updateDeck, { isLoading: isUpdateDeckLoading, error }] = useUpdateDecksMutation()
-  const [addDeckErrors, setAddDeckErrors] = useState([])
+  const [addDeckErrors, setAddDeckErrors] = useState<errorMessagesType[]>([])
 
   const editedDeckId = useAppSelector(state => state.decksSlice.editedDeckId)
   const { data: editedDeckData } = useGetDecksByIdQuery({
@@ -21,6 +21,7 @@ export const EditDeckModal: FC<ModalProps> = () => {
 
   const onModalClose = () => {
     dispatch(decksSlice.actions.setEditedDeckId(''))
+    setAddDeckErrors([])
   }
   const onEditDeck = (data: AddDeckFormValues) => {
     const editDeckArgs: UpdateDeckArgs = {
@@ -37,24 +38,11 @@ export const EditDeckModal: FC<ModalProps> = () => {
       .then(() => {
         onModalClose()
       })
-      .catch(e => {
-        console.log(e)
-      })
   }
 
   useEffect(() => {
     if (error) {
-      if ('data' in error) {
-        if (error.data && 'errorMessages' in error.data) {
-          setAddDeckErrors(error.data.errorMessages)
-        }
-        if (error.data && 'message' in error.data) {
-          dispatch(authSlice.actions.setError(error.data.message))
-        }
-      }
-      if ('error' in error) {
-        dispatch(authSlice.actions.setError(error.error))
-      }
+      errorHandler(error, dispatch, setAddDeckErrors)
     }
   }, [error])
 

@@ -6,6 +6,7 @@ import { z } from 'zod'
 
 import s from './add-deck.module.scss'
 
+import { errorMessagesType } from '@/common/utilis/errorHandler.tsx'
 import { imgValidation } from '@/common/zodSchems.ts'
 import { Button, ControlledCheckbox, ControlledTextField } from '@/components/ui'
 import { InputFileWithPreview } from '@/components/ui/inputFile/input-file-with-preview.tsx'
@@ -24,7 +25,7 @@ export type AddNewPackFormProps = {
   defaultValue?: AddDeckFormValues
   isEdit?: boolean
   isFetching?: boolean
-  errorsMessages?: { field: FieldNames; message: string }[]
+  errorsMessages?: errorMessagesType[]
 }
 
 export const AddNewPackForm: FC<AddNewPackFormProps> = ({
@@ -56,7 +57,7 @@ export const AddNewPackForm: FC<AddNewPackFormProps> = ({
   useEffect(() => {
     if (errorsMessages) {
       errorsMessages.forEach(e => {
-        setError(e.field, { type: 'custom', message: e.message })
+        setError(e.field as FieldNames, { type: 'custom', message: e.message })
       })
     }
   }, [errorsMessages])
